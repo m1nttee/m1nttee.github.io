@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maven Project Directory Management | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/maven-catalogue/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Maven Project Directory Management</h1>
+    <time>June 5, 2020</time>
+  </header>
+  <div class="post-content">
+    <p>Recently I&rsquo;ve been trying to write projects with Maven, but unfortunately my skills aren&rsquo;t good enough. I got stuck at the beginning by the Maven project directory arrangement.</p>
+<p><img alt="img" src="/img/00678B33.jpg"></p>
+<p>Let me first introduce the situation. My project will be divided into several modules.</p>
+<p>It&rsquo;s roughly like this:</p>
+<pre tabindex="0"><code>- project
+	- module 1
+	- module 2
+	- module 3
+</code></pre><p>And after thinking about it carefully, this problem can actually be divided into several small problems:</p>
+<ul>
+<li>How to name the project&rsquo;s groupId and artifactId.</li>
+<li>The relationship between child Maven projects and parent Maven projects.</li>
+</ul>
+<p>Without further ado, let&rsquo;s get to the point.</p>
+<hr>
+<h1 id="how-to-name-projects-groupid-and-artifactid">How to Name Project&rsquo;s groupId and artifactId</h1>
+<p>First, what we need to know is that groupId and artifactId here actually represent the project&rsquo;s coordinates.</p>
+<p>For example,</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;artifactId&gt;</span>maven-compiler-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span></code></pre></div><p>These two lines can actually help us locate this project. It will be in the folder org/apache/maven/plugins/maven-compiler-plugin/.</p>
+<p>So actually our problem is easily solved. For example, if I want to create a project named proj under the domain aiinirii.xyz.</p>
+<p><img alt="image-20200608145503912" src="/img/image-20200608145503912.png"></p>
+<p>Note that Location here actually has no relationship with GroupId. It&rsquo;s actually just the storage path for source code. After the Maven project is installed, it will be directly loaded into the local Maven repository under the directory xyz/aiinirii/proj. As long as it doesn&rsquo;t conflict with other coordinates, it&rsquo;s fine.</p>
+<hr>
+<h1 id="relationship-between-child-maven-projects-and-parent-maven-projects">Relationship Between Child Maven Projects and Parent Maven Projects</h1>
+<p>After clarifying how to name projects, let me introduce what to do if, like me, there are parent-child dependency relationships between multiple projects?</p>
+<p>First, we need to create a parent project. For example, set groupId and artifactId respectively as:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;groupId&gt;</span>xyz.aiinirii<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;artifactId&gt;</span>learn<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span></code></pre></div><p>This parent project will have several child projects. Here I create a new project named spring as an example:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;parent&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;artifactId&gt;</span>learn<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;groupId&gt;</span>xyz.aiinirii<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;version&gt;</span>1.0-SNAPSHOT<span style="color:#000080">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/parent&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;modelVersion&gt;</span>4.0.0<span style="color:#000080">&lt;/modelVersion&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;groupId&gt;</span>xyz.aiinirii.learn<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;artifactId&gt;</span>spring<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span></code></pre></div><p>After creating this child project, you need to change the parent project&rsquo;s pom.xml to:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;groupId&gt;</span>xyz.aiinirii<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;artifactId&gt;</span>learn<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;version&gt;</span>1.0-SNAPSHOT<span style="color:#000080">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;modules&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;module&gt;</span>spring<span style="color:#000080">&lt;/module&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/modules&gt;</span>
+</span></span></code></pre></div><p>As you can see, the relationship between the two has been established. After the Maven software is deployed, the newly created project named spring will become a child project under the parent project learn&rsquo;s directory based on its groupId.</p>
+<p>The relationship between them is that packages introduced in the parent project don&rsquo;t need to be reconfigured in the child project. We can find that this method can ensure the consistency of the environment of various child projects under the same parent project, while also facilitating management.</p>
+<hr>
+<h1 id="summary">Summary</h1>
+<ol>
+<li>The path after the project is packaged (groupId) uses the reverse domain name method.</li>
+<li>artifactId and the project name will ultimately be placed under the groupId path.</li>
+<li>Using multi-module development can unifiedly manage the Maven project environment.</li>
+</ol>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

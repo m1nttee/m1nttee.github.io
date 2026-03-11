@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DSA on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/categories/dsa/</link>
+    <description>Recent content in DSA on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Thu, 02 Apr 2020 12:52:44 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/categories/dsa/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Binary Tree Traversal - Pre-order, In-order, and Post-order</title>
+      <link>https://m1nttee.github.io/posts/preorder-inorder-and-postorder/</link>
+      <pubDate>Thu, 02 Apr 2020 12:52:44 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/preorder-inorder-and-postorder/</guid>
+      <description>Introduction It&amp;rsquo;s been almost a month since I set up this blog.&#xA;But&amp;hellip; why can&amp;rsquo;t I write a single blog post!?&#xA;I really wanted to be a blogger, you know!&#xA;I decided to start writing technical posts. I&amp;rsquo;m currently studying binary trees, so let me share my understanding of Pre-order, In-order, and Post-order traversal!&#xA;Binary Tree Structure To talk about the three traversal methods, we must first understand binary trees.</description>
+    </item>
+  </channel>
+</rss>

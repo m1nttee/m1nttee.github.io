@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/linux/</link>
+    <description>Recent content in Linux on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Mon, 10 May 2021 16:58:42 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL 致命错误</title>
+      <link>https://m1nttee.github.io/zh/posts/mysql-deadly-problem/</link>
+      <pubDate>Mon, 10 May 2021 16:58:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/mysql-deadly-problem/</guid>
+      <description>今天遇到了一个MySQL有关的错误，记录一下。&#xA;root@iZ2ze2hwhau036810z3eyrZ:/opt/web# systemctl start mysql Job for mysql.service failed because the control process exited with error code. See &amp;#34;systemctl status mysql.service&amp;#34; and &amp;#34;journalctl -xe&amp;#34; for details. ● mysql.service - MySQL Community Server Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled) Active: failed (Result: exit-code) since Mon 2021-05-10 15:58:54 CST; 3min 28s ago Process: 3330 ExecStartPre=/usr/share/mysql/mysql-systemd-start pre (code=exited, status=0/SUCCESS) Process: 3368 ExecStart=/usr/sbin/mysqld --daemonize --pid-file=/var/run/mysqld/mysqld.pid (code=exited, status=1/F 后来无论如何重启都无法运行MySQL服务。&#xA;最后转了一圈论坛也没发现自己的问题所在。&#xA;结果：&#xA;root@iZ2ze2hwhau036810z3eyrZ:~# df Filesystem 1K-blocks Used Available Use% Mounted on udev 953472 0 953472 0% /dev tmpfs 193720 484 193236 1% /run /dev/vda1 41152812 41115388 0 100% / tmpfs 968596 0 968596 0% /dev/shm tmpfs 5120 0 5120 0% /run/lock tmpfs 968596 0 968596 0% /sys/fs/cgroup tmpfs 193716 0 193716 0% /run/user/0 好吧，原来是硬盘占用的问题。。。</description>
+    </item>
+  </channel>
+</rss>

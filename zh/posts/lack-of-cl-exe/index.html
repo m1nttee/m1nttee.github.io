@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>「解决」anaconda下cl.exe缺失的报错 | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/lack-of-cl-exe/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>「解决」anaconda下cl.exe缺失的报错</h1>
+    <time>April 14, 2020</time>
+  </header>
+  <div class="post-content">
+    <p>今天很崩溃，为了配置<a href="https://github.com/open-mmlab/mmdetection">mmdetection</a>所需的环境，我真可谓是煞费苦心。这里记录一个让我止步不前的报错。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>    cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD <span style="color:#d14">&#34;-ID:\Program Files\anaconda\envs\open_mmlab\lib\site-packages\numpy\core\include&#34;</span> <span style="color:#d14">&#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&#34;</span> <span style="color:#d14">&#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&#34;</span> /EHsc /Tp./mmcv/video/optflow_warp/flow_warp.cpp /Fobuild<span style="color:#d14">\t</span>emp.win-amd64-3.7<span style="color:#d14">\R</span>elease<span style="color:#d14">\.</span>/mmcv/video/optflow_warp/flow_warp.obj
+</span></span><span style="display:flex;"><span>    error: <span style="color:#0086b3">command</span> <span style="color:#d14">&#39;cl.exe&#39;</span> failed: No such file or directory
+</span></span></code></pre></div><p>奇怪了啊，为什么会报错找不到cl.exe呢？我是装了vstool的啊？？？</p>
+<p>在网上找了一圈之后，也没有任何解答。</p>
+<p>后来突然，当我不小心没activate就进行安装指令的时候。。。我发现。。他他他可以了？？</p>
+<p>原来是anaconda的锅。</p>
+<p>于是去网上就这个问题找了一会儿，发现原理其实很简单，就是anaconda环境里没有Cpython。于是：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>pip install cpython
+</span></span></code></pre></div><p>就解决了。</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring MVC on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/spring-mvc/</link>
+    <description>Recent content in Spring MVC on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Fri, 12 Jun 2020 11:47:13 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/spring-mvc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring MVC</title>
+      <link>https://m1nttee.github.io/zh/posts/springmvc-note-1/</link>
+      <pubDate>Fri, 12 Jun 2020 11:47:13 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/springmvc-note-1/</guid>
+      <description>三层架构 REVIEW 表现层 Spring MVC 业务层 Spring 持久层 Mybatis 表现层需要做：&#xA;接收请求 响应结果 MVC REVIEW Model （模型） java bean View （视图） jsp || HTML Controller （控制器） servlet Spring MVC 优势 角色划分清晰 前端控制器（DispatcherServlet） 请求到处理器映射（HandlerMapping） 处理器适配器（HandlerAdapter） 视图解析器（ViewResolver） 处理器或页面控制器（Controller） 验证器（ Validator） 命令对象（Command 请求参数绑定到的对象就叫命令对象） 表单对象（Form Object 提供给表单展示和提交到的对象就叫表单对象） 执行流程 Client &amp;ndash; Request -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for Handler -&amp;gt; HandlerMapping HandllerMapping find the Method position HandlerMapping &amp;ndash; Response an executable chain -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for execute -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Execute -&amp;gt; Handler/Controller Handler/Controller &amp;ndash; Response Model and View -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Response Model and View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for view resolve -&amp;gt; ViewResolver ViewResolver &amp;ndash; Response the View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Apply Colors to a Drawing -&amp;gt; View DispatcherServlet &amp;ndash; Response -&amp;gt; Client 常用注解 @RequestParam @RequestMapping(&amp;#34;/Path&amp;#34;) public String method(@RequestParam(name = &amp;#34;nameInRequest&amp;#34;) String username) { .</description>
+    </item>
+  </channel>
+</rss>

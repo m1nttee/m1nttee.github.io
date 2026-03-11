@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Problems Encountered When Implementing Transparent Status Bar | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/transparency-state-bar-problem/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Problems Encountered When Implementing Transparent Status Bar</h1>
+    <time>August 13, 2020</time>
+  </header>
+  <div class="post-content">
+    <h1 id="problem-solution-at-the-end-of-the-article">Problem (Solution at the end of the article)</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#998;font-style:italic">&lt;!-- file inner.xml --&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;RelativeLayout</span> <span style="color:#008080">xmlns:android=</span><span style="color:#d14">&#34;http://schemas.android.com/apk/res/android&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:id=</span><span style="color:#d14">&#34;@+id/innerLayout&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:layout_width=</span><span style="color:#d14">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:layout_height=</span><span style="color:#d14">&#34;530dp&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:fitsSystemWindows=</span><span style="color:#d14">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:orientation=</span><span style="color:#d14">&#34;vertical&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>	...
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/RelativeLayout&gt;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#998;font-style:italic">&lt;!-- file outer.xml --&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;ScrollView</span> <span style="color:#008080">xmlns:android=</span><span style="color:#d14">&#34;http://schemas.android.com/apk/res/android&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:id=</span><span style="color:#d14">&#34;@+id/outerLayout&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:layout_width=</span><span style="color:#d14">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:layout_height=</span><span style="color:#d14">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:overScrollMode=</span><span style="color:#d14">&#34;never&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:scrollbars=</span><span style="color:#d14">&#34;none&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:visibility=</span><span style="color:#d14">&#34;invisible&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">android:fitsSystemWindows=</span><span style="color:#d14">&#34;true&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;LinearLayout</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:layout_width=</span><span style="color:#d14">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:layout_height=</span><span style="color:#d14">&#34;wrap_content&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:orientation=</span><span style="color:#d14">&#34;vertical&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:fitsSystemWindows=</span><span style="color:#d14">&#34;true&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;include</span> <span style="color:#008080">layout=</span><span style="color:#d14">&#34;@layout/inner&#34;</span> <span style="color:#000080">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/LinearLayout&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/ScrollView&gt;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// file activity.kt
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Activity</span> : AppCompatActivity() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">override</span> <span style="color:#000;font-weight:bold">fun</span> <span style="color:#900;font-weight:bold">onCreate</span>(savedInstanceState: Bundle?) {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">..</span>.
+</span></span><span style="display:flex;"><span>        nowLayout.setBackgroundResource(ImageId)
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">..</span>.
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#998;font-style:italic">&lt;!-- file AndroidManifest.xml --&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;manifest</span> <span style="color:#008080">xmlns:android=</span><span style="color:#d14">&#34;http://schemas.android.com/apk/res/android&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">package=</span><span style="color:#d14">&#34;xyz.aiinirii.xxx&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;application</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:name=</span><span style="color:#d14">&#34;.xxxApplication&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:allowBackup=</span><span style="color:#d14">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:icon=</span><span style="color:#d14">&#34;@mipmap/ic_launcher&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:label=</span><span style="color:#d14">&#34;@string/app_name&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:roundIcon=</span><span style="color:#d14">&#34;@mipmap/ic_launcher_round&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:supportsRtl=</span><span style="color:#d14">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#008080">android:theme=</span><span style="color:#d14">&#34;@style/AppTheme&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;activity</span> <span style="color:#008080">android:name=</span><span style="color:#d14">&#34;.Activity&#34;</span> <span style="color:#008080">android:theme=</span><span style="color:#d14">&#34;@style/ActivityTheme&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span><span style="display:flex;"><span>		...
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/application&gt;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/manifest&gt;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#998;font-style:italic">&lt;!-- file styles.xml --&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;resources&gt;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>	<span style="color:#000080">&lt;style</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;AppTheme&#34;</span> <span style="color:#008080">parent=</span><span style="color:#d14">&#34;Theme.AppCompat.Light.NoActionBar&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">&lt;!-- Customize your theme here. --&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;item</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;colorPrimary&#34;</span><span style="color:#000080">&gt;</span>@color/colorPrimary<span style="color:#000080">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;item</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;colorPrimaryDark&#34;</span><span style="color:#000080">&gt;</span>@color/colorPrimaryDark<span style="color:#000080">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;item</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;colorAccent&#34;</span><span style="color:#000080">&gt;</span>@color/colorAccent<span style="color:#000080">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/style&gt;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;style</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;ActivityTheme&#34;</span> <span style="color:#008080">parent=</span><span style="color:#d14">&#34;AppTheme&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;item</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;android:statusBarColor&#34;</span><span style="color:#000080">&gt;</span>@android:color/transparent<span style="color:#000080">&lt;/item&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/style&gt;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/resources&gt;</span>
+</span></span></code></pre></div><p>Above are several related files. Theoretically, with the settings above, the status bar should be transparent, but in practice, this is what happens:</p>
+<p><img alt="image-20200813212736743" src="/img/image-20200813212736743.png"></p>
+<p>As you can see, the status bar above is white. I&rsquo;m not sure where the problem is yet. Next, I plan to do some experiments.</p>
+<h1 id="experiments">Experiments</h1>
+<ol>
+<li>Changed background to static XML setting, i.e., adding <code>android:background=&quot;@color/colorPrimary&quot;</code>, found it didn&rsquo;t help.</li>
+<li>Speculated that it was because the view that needs the transparent box attribute has <code>android:layout_height=&quot;530dp&quot;</code> fixed. Changed to <code>match_parent</code> but still no use.</li>
+<li>Speculated that it was caused by the <code>&lt;include&gt;</code> tag, so I added an image above the <code>&lt;include&gt;</code> tag and set <code>android:fitsSystemWindows=&quot;true&quot;</code>, found the problem still exists.</li>
+<li>Speculated that <code>&lt;ScrollView&gt;</code> tag doesn&rsquo;t support transparent mode, but actually it&rsquo;s not&hellip;</li>
+</ol>
+<h1 id="the-problem">The Problem</h1>
+<p>Finally found where the problem is. After checking all theinformation (information), here&rsquo;s the summary:</p>
+<ol>
+<li>
+<p>First, about the <code>android:fitsSystemWindows</code> attribute. I misunderstood it before. For a component, if this value is set to <code>true</code>, it will avoid the system component. The specific avoidance method is adding padding. Below, experiments are conducted by changing the <code>fitsSystemWindows</code> field of the Beijing <code>TextView</code> component.</p>
+<ul>
+<li>
+<p><code>fitsSystemWindows = false</code>:</p>
+<p><img alt="image-20200813231215979" src="/img/image-20200813231215979.png"></p>
+</li>
+<li>
+<p><code>fitsSystemWindows = true</code></p>
+<p><img alt="image-20200813231024882" src="/img/image-20200813231024882.png"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>If you want to solve the above problem, there are two methods:</p>
+<ul>
+<li>
+<p><code>&lt;item name=&quot;android:windowTranslucentNavigation&quot;&gt;true&lt;/item&gt;</code> This is my favorite method. Its effect picture is as follows:</p>
+<p><img alt="image-20200813230852013" src="/img/image-20200813230852013.png"></p>
+</li>
+<li>
+<p><code>&lt;item name=&quot;android:windowTranslucentStatus&quot;&gt;true&lt;/item&gt;</code> This corresponds to the semi-transparent effect:</p>
+<p><img alt="image-20200813231024882" src="/img/image-20200813231024882.png"></p>
+</li>
+</ul>
+</li>
+</ol>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

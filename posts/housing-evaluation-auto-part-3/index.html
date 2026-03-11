@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Housing Auto Pricing (Part 3) - Neural Network | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/housing-evaluation-auto-part-3/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Housing Auto Pricing (Part 3) - Neural Network</h1>
+    <time>April 6, 2020</time>
+  </header>
+  <div class="post-content">
+    <p>Data scraping and preprocessing are done. Now, I&rsquo;ll use a simple BP neural network to fit the data. I&rsquo;m using TensorFlow 2.1.0.</p>
+<hr>
+<h1 id="inputoutput-selection">Input/Output Selection</h1>
+<p>Since we&rsquo;re just testing the BP neural network, let&rsquo;s keep inputs and outputs simple.</p>
+<p><strong>INPUT</strong>: place_id, house_type, house_area, house_towards</p>
+<p><strong>OUTPUT</strong>: house_price</p>
+<p>The four input data are:</p>
+<ol>
+<li>Area ID (I&rsquo;ve numbered each area, e.g., Andingmen: 1)</li>
+<li>House type (also numbered, e.g., Board-style: 0)</li>
+<li>House area (in square meters)</li>
+<li>House direction/towards (also numbered, e.g., South: 0)</li>
+</ol>
+<p>The output is the house transaction price (in 10,000 yuan).</p>
+<hr>
+<h1 id="data-processing">Data Processing</h1>
+<p>After flattening the dataset, the input data X_data becomes a dataset of size (150731, 310), where 310 = 4+8+297+1. I used one-hot encoding for house direction, type, and area, then merged them together. 4 represents 4 house types, 8 represents 8 directions, 297 represents 297 areas. The last element is house area.</p>
+<hr>
+<h1 id="building-the-model">Building the Model</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">tensorflow</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">tf</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">tensorflow</span> <span style="color:#000;font-weight:bold">import</span> keras
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">from</span> <span style="color:#555">tensorflow.keras</span> <span style="color:#000;font-weight:bold">import</span> layers
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model <span style="color:#000;font-weight:bold">=</span> keras<span style="color:#000;font-weight:bold">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">128</span>, activation<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;relu&#39;</span>, input_shape<span style="color:#000;font-weight:bold">=</span>(<span style="color:#099">310</span>,)),
+</span></span><span style="display:flex;"><span>    layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">64</span>, activation<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">32</span>, activation<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model<span style="color:#000;font-weight:bold">.</span>compile(optimizer<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;adam&#39;</span>,
+</span></span><span style="display:flex;"><span>              loss<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;mse&#39;</span>,
+</span></span><span style="display:flex;"><span>              metrics<span style="color:#000;font-weight:bold">=</span>[<span style="color:#d14">&#39;mae&#39;</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model<span style="color:#000;font-weight:bold">.</span>fit(X_train, y_train, epochs<span style="color:#000;font-weight:bold">=</span><span style="color:#099">50</span>, batch_size<span style="color:#000;font-weight:bold">=</span><span style="color:#099">32</span>, validation_split<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.2</span>)
+</span></span></code></pre></div><hr>
+<h1 id="summary">Summary</h1>
+<p>This is a simple neural network for housing price prediction. In production, you&rsquo;d need:</p>
+<ul>
+<li>More features</li>
+<li>Better preprocessing</li>
+<li>Cross-validation</li>
+<li>Model optimization</li>
+</ul>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

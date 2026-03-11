@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring 笔记（一） | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/spring-note/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Spring 笔记（一）</h1>
+    <time>June 7, 2020</time>
+  </header>
+  <div class="post-content">
+    <h1 id="为什么要用-spring">为什么要用 Spring</h1>
+<p>为了解耦！</p>
+<p>那么何为解耦？</p>
+<h2 id="耦合">耦合</h2>
+<p>指程序间的依赖关系：</p>
+<ul>
+<li>
+<p>包括类之间的依赖</p>
+</li>
+<li>
+<p>包括方法之间的依赖</p>
+</li>
+</ul>
+<h2 id="解耦">解耦</h2>
+<ul>
+<li>
+<p>降低程序间的依赖关系</p>
+</li>
+<li>
+<p>做到编译的时候不依赖（报错？），运行时才依赖。</p>
+</li>
+</ul>
+<h2 id="思路">思路</h2>
+<ul>
+<li>用反射来创建对象。</li>
+<li>读取配置文件来读取要创建的对象的全限定类名。</li>
+</ul>
+<hr>
+<h1 id="ioc-容器详解">IOC 容器详解</h1>
+<p><strong>IOC: Inversion of Control</strong></p>
+<p><em>关键词：工厂模式，单例模式，线程安全。</em></p>
+<ul>
+<li><em>单例模式实现思路：新建静态 Map 共享 value 。</em></li>
+</ul>
+<p>原来：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>IUserDao<span style="color:#bbb"> </span>userDao<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>UserDaoImpl();<span style="color:#bbb">
+</span></span></span></code></pre></div><p>IOC 实现：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>IUserDao<span style="color:#bbb"> </span>userDao<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>(IUserDao)<span style="color:#bbb"> </span>BeanFactory.<span style="color:#008080">getBean</span>(<span style="color:#d14">&#34;userDao&#34;</span>);<span style="color:#bbb">
+</span></span></span></code></pre></div><p>作用：控制反转，将控制权转移给 BeanFactory，从而割断与 Dao 层的直接联系，从而达到解耦。</p>
+<p><em>注：以上的例子里，userDao 的新建对象任务已经交给了工厂。这样操作之后，编译时不会有依赖，但是运行时会有依赖。</em></p>
+<p>IOC 的本质：把创建对象的权力交给框架。</p>
+<hr>
+<h1 id="spring-中的-ioc">Spring 中的 IOC</h1>
+<p>ApplicationContext 的三个常用实现类：</p>
+<ul>
+<li>ClassPathXmlApplicationContext：加载类路径下的配置文件，必须要在类路径下，否则免谈。（常用）</li>
+<li>FileSystemXmlApplicationContext：加载磁盘任意路径下的配置文件。</li>
+<li>AnnotationConfigApplicationContext：用于读取注解容器。（常用）</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>ApplicationContext<span style="color:#bbb"> </span>applicationContext<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>ClassPathXmlApplicationContext(<span style="color:#d14">&#34;applicationContext.xml&#34;</span>);<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// 运行这行时已经创建了对象。</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>IAccountService<span style="color:#bbb"> </span>accountService<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>applicationContext.<span style="color:#008080">getBean</span>(<span style="color:#d14">&#34;accountService&#34;</span>,<span style="color:#bbb"> </span>IAccountService.<span style="color:#008080">class</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>IAccountDao<span style="color:#bbb"> </span>accountDao<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>applicationContext.<span style="color:#008080">getBean</span>(<span style="color:#d14">&#34;accountDao&#34;</span>,<span style="color:#bbb"> </span>IAccountDao.<span style="color:#008080">class</span>);<span style="color:#bbb">
+</span></span></span></code></pre></div><p>或者用 BeanFactory 实现：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Resource<span style="color:#bbb"> </span>resource<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>ClassPathResource(<span style="color:#d14">&#34;applicationContext.xml&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>BeanFactory<span style="color:#bbb"> </span>beanFactory<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>DefaultListableBeanFactory();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>BeanDefinitionReader<span style="color:#bbb"> </span>beanDefinitionReader<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>XmlBeanDefinitionReader((BeanDefinitionRegistry)<span style="color:#bbb"> </span>beanFactory);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>beanDefinitionReader.<span style="color:#008080">loadBeanDefinitions</span>(resource);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#998;font-style:italic">// 只有当创建了 Bean 之后才创建对象。</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>IAccountService<span style="color:#bbb"> </span>accountService<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>beanFactory.<span style="color:#008080">getBean</span>(<span style="color:#d14">&#34;accountService&#34;</span>,<span style="color:#bbb"> </span>IAccountService.<span style="color:#008080">class</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>IAccountDao<span style="color:#bbb"> </span>accountDao<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>beanFactory.<span style="color:#008080">getBean</span>(<span style="color:#d14">&#34;accountDao&#34;</span>,<span style="color:#bbb"> </span>IAccountDao.<span style="color:#008080">class</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>System.<span style="color:#008080">out</span>.<span style="color:#008080">println</span>(<span style="color:#d14">&#34;accountDao = &#34;</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">+</span><span style="color:#bbb"> </span>accountDao);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>System.<span style="color:#008080">out</span>.<span style="color:#008080">println</span>(<span style="color:#d14">&#34;accountService = &#34;</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">+</span><span style="color:#bbb"> </span>accountService);<span style="color:#bbb">
+</span></span></span></code></pre></div><ul>
+<li>ApplicationContext 适用于单例对象，BeanFactory 适用于多例对象。</li>
+<li>ApplicationContext 采用立即方式加载，BeanFactory 采用延迟方式加载。</li>
+</ul>
+<hr>
+<h1 id="spring-中-bean-的管理细节">Spring 中 Bean 的管理细节</h1>
+<h3 id="创建-bean-对象的三种方式">创建 Bean 对象的三种方式</h3>
+<ol>
+<li>
+<p>使用默认构造函数来创建Bean对象</p>
+<p><em>如果没有默认构造函数，则无法创建Bean对象</em></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;ClassId&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;ClassName&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>用某个类中的方法创建对象并存入Spring容器</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;FactoryId&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;ClassName&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;ClassId&#34;</span> <span style="color:#008080">factory-bean=</span><span style="color:#d14">&#34;FactoryBeanName&#34;</span> <span style="color:#008080">factory-method=</span><span style="color:#d14">&#34;MethodInFactory&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>使用类中的静态方法创建对象并存入Spring容器</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;ClassId&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;FactoryName&#34;</span> <span style="color:#008080">factory-method=</span><span style="color:#d14">&#34;MethodInFactory&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span></code></pre></div></li>
+</ol>
+<hr>
+<h3 id="bean-对象的作用范围">Bean 对象的作用范围</h3>
+<p>对象默认为单例，如果要调整则更改scope参数。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;ClassId&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;ClassName&#34;</span> <span style="color:#008080">scope=</span><span style="color:#d14">&#34;singleton&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span></code></pre></div><p>参数可以为：</p>
+<ul>
+<li>singleton：单例（缺省值）</li>
+<li>prototype：多例</li>
+<li>request：web请求范围</li>
+<li>session：web会话范围</li>
+<li>global-session：集群环境的会话范围 - 负载均衡状况下产生的global-session</li>
+</ul>
+<hr>
+<h3 id="bean-对象的生命周期">Bean 对象的生命周期</h3>
+<ol>
+<li>单例对象
+<ul>
+<li>容器创建时对象产生</li>
+<li>容器存在时对象存在</li>
+<li>容器销毁时对象关闭</li>
+</ul>
+</li>
+<li>多例对象
+<ul>
+<li>使用容器获得对象时产生</li>
+<li>只要没有关闭对象，对象就会存在</li>
+<li>Java的垃圾回收机制</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="spring-的依赖注入">Spring 的依赖注入</h1>
+<p><em>依赖注入：Dependency Injection</em></p>
+<p>我们将依赖关系的管理都交给 Spring。而我们所需要做的就是在配置文件中说明。</p>
+<hr>
+<h3 id="三种注入数据类型">三种注入数据类型：</h3>
+<ol>
+<li>
+<p>基本类型和 String</p>
+<p>直接填入value</p>
+</li>
+<li>
+<p>其他 Bean 类型</p>
+<p>新建 Bean 并引用</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;ClassId&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;ClassName&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;constructor-arg</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;BeanName&#34;</span> <span style="color:#008080">ref=</span><span style="color:#d14">&#34;BeanId&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/bean&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;BeanId&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;BeanClassName&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>复杂类型/集合类型</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;ClassId&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;ClassName&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;property</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;setName&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;set&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;value&gt;</span>AAA<span style="color:#000080">&lt;/value&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;value&gt;</span>BBB<span style="color:#000080">&lt;/value&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;value&gt;</span>CCC<span style="color:#000080">&lt;/value&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;/set&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/property&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;property</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;listName&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#000080">&lt;list&gt;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#000080">&lt;value&gt;</span>AAA<span style="color:#000080">&lt;/value&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;value&gt;</span>BBB<span style="color:#000080">&lt;/value&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#000080">&lt;value&gt;</span>CCC<span style="color:#000080">&lt;/value&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;/list&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/property&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!-- 除此之外还有 map array props 等等标签，其中 list set array 可以互换 map props 可以互换--&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/bean&gt;</span>
+</span></span></code></pre></div></li>
+</ol>
+<hr>
+<h3 id="三种注入方式">三种注入方式：</h3>
+<ol>
+<li>
+<p>使用构造函数</p>
+<p>使用的标签：constructor-arg</p>
+<p>其中的属性：</p>
+<ul>
+<li>
+<p>type</p>
+<p>指定类型</p>
+</li>
+<li>
+<p>index</p>
+<p>指定参数索引的位置（从0开始）</p>
+</li>
+<li>
+<p>name</p>
+<p>指定给构造函数中指定的参数赋值 （常用）</p>
+</li>
+<li>
+<p>value</p>
+<p>提供基本类型或String类型的数据</p>
+</li>
+<li>
+<p>ref</p>
+<p>其他Bean对象的 ID，在IOC中出现过的对象都可以</p>
+</li>
+</ul>
+</li>
+<li>
+<p>使用set方法（常用）</p>
+<p>使用的标签：property</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;ClassId&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;ClassName&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000080">&lt;property</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;[set]name&#34;</span> <span style="color:#008080">value=</span><span style="color:#d14">&#34;value&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/bean&gt;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>使用注解：<a href="/2020/06/09/spring-note-2/">见笔记（二）</a></p>
+</li>
+</ol>
+<hr>
+<p>课程链接：</p>
+<p><a href="https://www.bilibili.com/video/BV1Sb411s7vP?from=search&seid=11893869544331926521">https://www.bilibili.com/video/BV1Sb411s7vP?from=search&seid=11893869544331926521</a></p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/tags/python/</link>
+    <description>Recent content in Python on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 14 Apr 2020 23:12:54 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ModuleNotFoundError Solutions</title>
+      <link>https://m1nttee.github.io/posts/modulenotfounderror/</link>
+      <pubDate>Tue, 14 Apr 2020 23:12:54 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/modulenotfounderror/</guid>
+      <description>Today I encountered a very strange thing. When I tried to use the mmdetection toolkit&#xA;This is what I entered:&#xA;$ python tools/test.py configs/faster_rcnn_r50_fpn_1x.py checkpoints/faster_rcnn_r50_fpn_1x_20181010-3d1b3351.pth modeltest And this is how it reported the error:&#xA;Traceback (most recent call last): File &amp;#34;tools/test.py&amp;#34;, line 13, in &amp;lt;module&amp;gt; from tools.fuse_conv_bn import fuse_module ModuleNotFoundError Solutions: No module named &amp;#39;tools&amp;#39; I was really depressed. Why would this be an error???&#xA;Clearly PyCharm told me it was working fine!</description>
+    </item>
+  </channel>
+</rss>

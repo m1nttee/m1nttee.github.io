@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Binary Tree Traversal - Pre-order, In-order, and Post-order | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/preorder-inorder-and-postorder/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Binary Tree Traversal - Pre-order, In-order, and Post-order</h1>
+    <time>April 2, 2020</time>
+  </header>
+  <div class="post-content">
+    <hr>
+<h2 id="introduction">Introduction</h2>
+<p>It&rsquo;s been almost a month since I set up this blog.</p>
+<p>But&hellip; why can&rsquo;t I write a single blog post!?</p>
+<p>I really wanted to be a blogger, you know!</p>
+<p><img alt="img" src="/img/02D461D5.png"></p>
+<p>I decided to start writing technical posts. I&rsquo;m currently studying binary trees, so let me share my understanding of Pre-order, In-order, and Post-order traversal!</p>
+<hr>
+<h2 id="binary-tree-structure">Binary Tree Structure</h2>
+<p>To talk about the three traversal methods, we must first understand binary trees. Here&rsquo;s the definition:</p>
+<blockquote>
+<p>In computer science, a binary tree is a tree data structure in which each node has at most two children, referred to as the &ldquo;left subtree&rdquo; and &ldquo;right subtree&rdquo;. Binary trees are commonly used to implement binary search trees and binary heaps.</p>
+</blockquote>
+<p>We can see that binary trees are very useful, and their structure is:</p>
+<ul>
+<li>Each node can have at most two child nodes</li>
+<li>The tree starts from the root node and ends at external nodes (leaf nodes)</li>
+</ul>
+<hr>
+<h2 id="pre-order-in-order-and-post-order">Pre-order, In-order, and Post-order</h2>
+<h3 id="1-pre-order">1. Pre-order</h3>
+<p>Now that we understand the structure, what is Pre-order traversal?</p>
+<p>When searching all elements in a binary tree, we need to follow a pattern. The rules for Pre-order are:</p>
+<ol>
+<li>First, we visit the root node - now we can do something with this node</li>
+<li>Then we do the following in order:
+a) Visit the left child node, treating it as the new root, repeat steps 1-2 until no new nodes can be visited
+b) Visit the right child node, treating it as the new root, repeat steps 1-2 until no new nodes can be visited</li>
+</ol>
+<p>This is clearly a recursive process. Here&rsquo;s the code:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">queryNodePreorder</span>(ITree<span style="color:#bbb"> </span>tree,<span style="color:#bbb"> </span>IPosition<span style="color:#bbb"> </span>nowRoot)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic">/* Do something with nowRoot */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(tree.<span style="color:#008080">isLeaf</span>(nowRoot))<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// Exit recursion if leaf node</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">// Visit left and right children in order</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodePreorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getLeftChild</span>(nowRoot));<span style="color:#bbb"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodePreorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getRightChild</span>(nowRoot));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="2-in-order">2. In-order</h3>
+<p>In-order traversal is very similar to Pre-order. Here are the rules:</p>
+<ol>
+<li>First, find the root node, but unlike Pre-order, we don&rsquo;t visit it yet</li>
+<li>Then we do the following in order:
+a) Find the left child node (don&rsquo;t visit yet), treat it as the new root, repeat until we find the leftmost node
+b) Then start visiting from this node, after that visit its parent node
+c) After the parent, it&rsquo;s the parent&rsquo;s right child node
+d) Repeat steps a-c for the right child node until the entire tree is done</li>
+</ol>
+<p>Here&rsquo;s the code:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">queryNodeInorder</span>(ITree<span style="color:#bbb"> </span>tree,<span style="color:#bbb"> </span>IPosition<span style="color:#bbb"> </span>nowRoot)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(tree.<span style="color:#008080">isLeaf</span>(nowRoot))<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// Exit recursion if leaf node</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">// Visit children in order</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodeInorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getLeftChild</span>(nowRoot));<span style="color:#bbb"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">/* Unlike Pre-order, we visit the node here */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodeInorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getRightChild</span>(nowRoot));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="3-post-order">3. Post-order</h3>
+<p>I&rsquo;m not entirely sure why it&rsquo;s called &ldquo;Post-order&rdquo;, but the principle is clear:</p>
+<ol>
+<li>First, find the root node, but don&rsquo;t visit it yet</li>
+<li>Then do the following in order:
+a) Find the left child node, don&rsquo;t visit
+b) Find the left child of that node, repeat until leaf node is found
+c) Visit that leaf node
+d) Visit the right child of the leaf&rsquo;s parent
+e) Treat that right child as new root, repeat a-d
+f) After visiting the right child, visit the root node</li>
+</ol>
+<p>Here&rsquo;s the code:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">queryNodePostorder</span>(ITree<span style="color:#bbb"> </span>tree,<span style="color:#bbb"> </span>IPosition<span style="color:#bbb"> </span>nowRoot)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(tree.<span style="color:#008080">isLeaf</span>(nowRoot))<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// Exit recursion if leaf node</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">// Visit children in order</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodePostorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getLeftChild</span>(nowRoot));<span style="color:#bbb"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodePostorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getRightChild</span>(nowRoot));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">/* Visit the node here */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h2 id="summary">Summary</h2>
+<p>That&rsquo;s it for this post! Pre-order, In-order, and Post-order - now you won&rsquo;t confuse them anymore!</p>
+<p>In the next post, I&rsquo;ll talk about how to reconstruct a binary tree from Pre-order, In-order, and Post-order combinations. Hope I can keep it up!</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maven 项目目录管理 | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/maven-catalogue/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Maven 项目目录管理</h1>
+    <time>June 5, 2020</time>
+  </header>
+  <div class="post-content">
+    <p>最近在尝试用 Maven 写项目，但奈何功夫不到家，刚开始就被 Maven 项目的目录安排给难住了。</p>
+<p><img alt="img" src="/img/00678B33.jpg"></p>
+<p>先介绍一下情况，我的项目（project）将会分为若干模块（module）。</p>
+<p>大概是下面这样的情况：</p>
+<pre tabindex="0"><code>- project
+  - module 1
+  - module 2
+  - module 3
+</code></pre><p>而我仔细一想，这个问题其实可以分成几个小问题：</p>
+<ul>
+<li>如何命名项目的 groupId 和 artifactId。</li>
+<li>子 Maven 项目和父 Maven 项目之间的关系。</li>
+</ul>
+<p>话不多说，切入正题。</p>
+<hr>
+<h1 id="如何命名项目的-groupid-和-artifactid">如何命名项目的 groupId 和 artifactId</h1>
+<p>首先，我们需要知道的是这里的 groupId 和 artifactId 其实代表的是项目的坐标。</p>
+<p>举个例子，</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;groupId&gt;</span>org.apache.maven.plugins<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;artifactId&gt;</span>maven-compiler-plugin<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span></code></pre></div><p>这两行实际上就可以帮助我们定位这个项目，它将会在 org/apache/maven/plugins/maven-compiler-plugin/ 这个文件夹下。</p>
+<p>那其实我们的问题就迎刃而解了，假如说，在 aiinirii.xyz 这个域名下我想要建一个名为 proj 的项目。</p>
+<p><img alt="image-20200608145503912" src="/img/image-20200608145503912.png"></p>
+<p>这里要注意的，Location 其实和 GroupId 并无关系，其实只是源代码的存储路径，在 Maven 项目 Install 之后其实会直接被载入本地的 Maven 仓库中的 xyz/aiinirii/proj 目录下，只需要保证不会与其他坐标产生冲突就可以。</p>
+<hr>
+<h1 id="子-maven-项目和父-maven-项目之间的关系">子 Maven 项目和父 Maven 项目之间的关系</h1>
+<p>讲清楚了如何命名项目，接下来再介绍一下如果像我一样，多项目之间有父子依赖关系怎么办？</p>
+<p>首先，我们需要建一个父项目，例如设置 groupId 和 artifactId 分别为：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;groupId&gt;</span>xyz.aiinirii<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;artifactId&gt;</span>learn<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span></code></pre></div><p>这个父项目将会有若干个子项目，这里我新建一个名为 spring 的项目当例子：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;parent&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;artifactId&gt;</span>learn<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;groupId&gt;</span>xyz.aiinirii<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;version&gt;</span>1.0-SNAPSHOT<span style="color:#000080">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/parent&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;modelVersion&gt;</span>4.0.0<span style="color:#000080">&lt;/modelVersion&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;groupId&gt;</span>xyz.aiinirii.learn<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;artifactId&gt;</span>spring<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span></code></pre></div><p>建完该子项目之后，需要将父项目的 pom.xml 文件改成：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;groupId&gt;</span>xyz.aiinirii<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;artifactId&gt;</span>learn<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;version&gt;</span>1.0-SNAPSHOT<span style="color:#000080">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;modules&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;module&gt;</span>spring<span style="color:#000080">&lt;/module&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/modules&gt;</span>
+</span></span></code></pre></div><p>可以看到，两者的关联已经产生了。在 Maven 软件部署之后，新建的这个名为 spring 的项目将会根据它的 groupId 成为父项目 learn 目录下的一个子项目。</p>
+<p>两者之间的关系是，父项目中引入的包，子项目中不需要再次调配，我们可以发现，这种方式可以保证同一父项目下的各个子项目的环境的统一，同时还便于管理。</p>
+<hr>
+<h1 id="总结">总结</h1>
+<ol>
+<li>项目打包之后的路径（groupId）使用域名反写的方式。</li>
+<li>artifactId 及项目名称，最终会被安置在 groupId 路径下。</li>
+<li>使用多模块开发的方式，可以统一管理 Maven 项目环境。</li>
+</ol>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

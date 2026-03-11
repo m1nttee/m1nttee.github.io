@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>二叉树的先序遍历、中序遍历以及后序遍历 | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/preorder-inorder-and-postorder/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>二叉树的先序遍历、中序遍历以及后序遍历</h1>
+    <time>April 2, 2020</time>
+  </header>
+  <div class="post-content">
+    <hr>
+<h2 id="开始前的一些碎碎念">开始前的一些碎碎念</h2>
+<p>仔细算算，距离我搭建好这个博客已经有进一个月了。</p>
+<p>但。。。。？</p>
+<p>为什么我还是一篇博文也写不出来！？</p>
+<p>明明我也是有个博主梦的好嘛？</p>
+<p><img alt="img" src="/img/02D461D5.png"></p>
+<p>果然这样下去还是不行的，要不用技术贴来水水博客好了。</p>
+<p><img alt="img" src="/img/02D705CC.jpg"></p>
+<p>说干就干！正好最近在学习二叉树，这次就来聊聊自己对先序遍历 (pre-order) 、中序遍历 (in-order) 和后序遍历 (post-order) 的理解吧！</p>
+<hr>
+<h2 id="二叉树的结构">二叉树的结构</h2>
+<p>若要谈三种遍历方式，必定逃不过二叉树本身。先放上二叉树的解释。</p>
+<blockquote>
+<p>在计算机科学中，二叉树是每个结点最多有两个子树的树结构。通常子树被称作“左子树”（left subtree）和“右子树”（right subtree）。二叉树常被用于实现二叉查找树和二叉堆。</p>
+<p>一棵深度为k，且有2^k-1个结点的二叉树，称为满二叉树。这种树的特点是每一层上的结点数都是最大结点数。而在一棵二叉树中，除最后一层外，若其余层都是满的，并且或者最后一层是满的，或者是在右边缺少连续若干结点，则此二叉树为完全二叉树。具有n个结点的完全二叉树的深度为floor(log2n)+1。深度为k的完全二叉树，至少有2k-1个叶子结点，至多有2k-1个结点。</p>
+<p>来源：<a href="https://baike.baidu.com/item/%E4%BA%8C%E5%8F%89%E6%A0%91">百度百科</a></p>
+</blockquote>
+<p>我们可以看到，二叉树确实非常非常有用(￣▽￣)~*，而二叉树的结构其实也就是：</p>
+<ul>
+<li>每个节点最多只能有两个子节点</li>
+<li>整棵树从根节点（root node）出发，到无元素存储的外部节点（external node）结束。</li>
+</ul>
+<hr>
+<h2 id="先序pre-order中序in-order和后序post-order">先序（pre-order）、中序（in-order）和后序（post-order）</h2>
+<h4 id="一先序pre-order">一、先序（pre-order）</h4>
+<p>那么，介绍完二叉树的结构之后问题就来了，什么是先序遍历呢？</p>
+<p>当我们去搜索一棵二叉树上所有元素的时候，我们难免需要遵守一种规律。而先序遍历的规则是这样的：</p>
+<ol>
+<li>
+<p>首先，我们会去问候根节点，这个时候我们就可以对这个节点干些想干的事情了⁄(⁄⁄•⁄ω⁄•⁄⁄)⁄</p>
+</li>
+<li>
+<p>之后呢，我们会按顺序干以下两件事</p>
+<p>a)  问候这个节点的左子节点，并将该节点当成新的根节点，重复步骤1 - 2直到没有新节点可以被访问</p>
+<p>b)  问候这个节点的右子节点，并将该节点当成新的根节点，重复步骤1 - 2直到没有新节点可以被访问</p>
+</li>
+</ol>
+<p>我们可以很明显地看到，这个其实是一个递归过程，而代码是这样的：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">queryNodePreorder</span>(ITree<span style="color:#bbb"> </span>tree,<span style="color:#bbb"> </span>IPosition<span style="color:#bbb"> </span>nowRoot)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic">/* 这里可以对nowRoot节点干些事情 */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(tree.<span style="color:#008080">isLeaf</span>(nowRoot))<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// 如果nowRoot是叶节点退出递归</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">// 按顺序去访问nowRoot的左右子节点</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodePreorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getLeftChild</span>(nowRoot));<span style="color:#bbb"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodePreorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getRightChild</span>(nowRoot));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h4 id="二中序in-order">二、中序（In-order）</h4>
+<p>其实中序遍历和先序遍历相差无几。下面先给出中序遍历的规则：</p>
+<ol>
+<li>
+<p>首先，还是要找到根节点，但是不同于先序，我们暂时先不访问它</p>
+</li>
+<li>
+<p>之后呢，不同于先序，我们会按顺序干以下四件事</p>
+<p>a)  找到这个节点的左子节点（先不访问），并将该节点当成新的根节点，重复步骤1 - 2直到找到最左的那个子节点</p>
+<p>b)  然后从这个新的节点开始访问，访问完之后访问它的父节点</p>
+<p>c)  父节点之后是父节点的右子节点，同样也是不访问，只是找到它</p>
+<p>d)  再对这个右子节点重复步骤a - c，直到将整棵树操作完</p>
+</li>
+</ol>
+<p>用文字说明有点绕了，还是放上代码吧</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">queryNodeInorder</span>(ITree<span style="color:#bbb"> </span>tree,<span style="color:#bbb"> </span>IPosition<span style="color:#bbb"> </span>nowRoot)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(tree.<span style="color:#008080">isLeaf</span>(nowRoot))<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// 如果nowRoot是叶节点退出递归</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">// 按顺序去访问nowRoot的左右子节点</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodeInorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getLeftChild</span>(nowRoot));<span style="color:#bbb"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">/* 不同于先序，我们会在这里对nowRoot节点干事情 */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodeInorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getRightChild</span>(nowRoot));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h4 id="三后序post-order">三、后序（post-order）</h4>
+<p>说实话，我现在还不太清楚后序为什么叫（post-order）。。但原理还是很清晰的：</p>
+<ol>
+<li>
+<p>首先，还是要找到根节点，但是不同于先序，我们暂时先不访问它</p>
+</li>
+<li>
+<p>然后我们会按顺序干下面几件事：</p>
+<p>a)  找到左子节点，不访问</p>
+<p>b)  找到该节点的左子节点，并重复此步骤，直到找到叶节点</p>
+<p>c)  访问该叶节点</p>
+<p>d)  访问该叶节点的父节点的右子节点</p>
+<p>e)  将该右子节点当成新的根节点重复操作a - d</p>
+<p>f )  访问完右子节点后访问根节点</p>
+</li>
+</ol>
+<p>(；´д｀)ゞ这文字写得我都恶心了。。。</p>
+<p>还是放上代码吧，简单易懂：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">queryNodePostorder</span>(ITree<span style="color:#bbb"> </span>tree,<span style="color:#bbb"> </span>IPosition<span style="color:#bbb"> </span>nowRoot)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(tree.<span style="color:#008080">isLeaf</span>(nowRoot))<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// 如果nowRoot是叶节点退出递归</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">// 按顺序去访问nowRoot的左右子节点</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodePostorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getLeftChild</span>(nowRoot));<span style="color:#bbb"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>queryNodePostorder(tree,<span style="color:#bbb"> </span>tree.<span style="color:#008080">getRightChild</span>(nowRoot));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">/* 在这里对nowRoot节点进行访问 */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h2 id="总结">总结</h2>
+<p>这篇博文大概就是这样啦，先序、中序和后序，再也不会傻傻分不清楚了ヽ(￣▽￣)ﾉ</p>
+<p>下篇博文打算聊聊如何用先序、中序和后序的组合看出原来的二叉树结构，希望自己能坚持下去呀！~</p>
+<p>٩꒰▽ ꒱۶⁼³₌₃ 学习去咯</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

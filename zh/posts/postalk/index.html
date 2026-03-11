@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Postalk | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/postalk/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Postalk</h1>
+    <time>June 17, 2020</time>
+  </header>
+  <div class="post-content">
+    <h1 id="postalk">Postalk</h1>
+<h2 id="0-简介">0. 简介</h2>
+<p>这个项目是一个基于Spring boot, Mybatis, Druid, MySQL技术的web应用，其功能为发帖+聊天。该文章将会记录开发过程以及在过程之中所遇到的问题。</p>
+<h2 id="1-设计部分">1. 设计部分</h2>
+<h3 id="数据库设计">数据库设计</h3>
+<p>为了使开发更为顺利，我首先按照各实体类之间的关系，设计了该ER图。</p>
+<p><img alt="Postalk_ER" src="/img/egZaYQPko9BK851.png"></p>
+<p>User表：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>username</th>
+<th>password</th>
+<th>sex</th>
+<th>age</th>
+<th>phone_number</th>
+<th>email</th>
+<th>registration_date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>序号</td>
+<td>用户名</td>
+<td>密码</td>
+<td>性别（F表示女性，M表示男性）</td>
+<td>年龄</td>
+<td>电话号码</td>
+<td>电子邮箱</td>
+<td>注册时间</td>
+</tr>
+</tbody>
+</table>
+<p>Text表：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>uid</th>
+<th>content</th>
+<th>time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>序号</td>
+<td>用户序号</td>
+<td>文本内容</td>
+<td>发文时间</td>
+</tr>
+</tbody>
+</table>
+<p>Comment表：</p>
+<table>
+<thead>
+<tr>
+<th>tid</th>
+<th>pid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对应文本的序号</td>
+<td>对应评价文本的序号</td>
+</tr>
+</tbody>
+</table>
+<p>Post表：</p>
+<table>
+<thead>
+<tr>
+<th>tid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对应文本的序号</td>
+</tr>
+</tbody>
+</table>
+<p>Like表：</p>
+<table>
+<thead>
+<tr>
+<th>uid</th>
+<th>tid</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对应用户的序号</td>
+<td>对应文本的序号</td>
+</tr>
+</tbody>
+</table>
+<p>Friend表：</p>
+<table>
+<thead>
+<tr>
+<th>uid_1</th>
+<th>uid_2</th>
+<th>since_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户1的序号</td>
+<td>用户2的序号</td>
+<td>从何时开始成为朋友</td>
+</tr>
+</tbody>
+</table>
+<p>Conversation表：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>to_user</th>
+<th>from_user</th>
+<th>conversation_id</th>
+<th>time</th>
+<th>content</th>
+<th>read</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>该段对话的序号</td>
+<td>发送人序号</td>
+<td>接收人序号</td>
+<td>相同两人之间的对话集合的序号</td>
+<td>对话时间</td>
+<td>对话内容</td>
+<td>是否已读</td>
+</tr>
+</tbody>
+</table>
+<h3 id="restful风格架构设计">RESTful风格架构设计</h3>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>请求URI</th>
+<th>请求方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户登录</td>
+<td>/user/login</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>跳转到添加用户界面</td>
+<td>/user/</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>查询用户</td>
+<td>/user/{id}</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>用户注册</td>
+<td>/user/</td>
+<td>POST</td>
+</tr>
+<tr>
+<td>跳转到对应用户的主页</td>
+<td>/user/myPage</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>跳转到添加帖子界面</td>
+<td>/post/</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>添加帖子</td>
+<td>/post/</td>
+<td>POST</td>
+</tr>
+<tr>
+<td>查询所有帖子</td>
+<td>/posts/</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>查询所有该id对应的用户发的帖子</td>
+<td>/post/{id}</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>修改帖子</td>
+<td>/post/</td>
+<td>PUT</td>
+</tr>
+<tr>
+<td>删除帖子</td>
+<td>/post/{id}</td>
+<td>DELETE</td>
+</tr>
+<tr>
+<td>点赞或取消赞</td>
+<td>/like/</td>
+<td>POST</td>
+</tr>
+<tr>
+<td>获得当前登录用户对应的所有朋友名单</td>
+<td>/friends/</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>跳转到朋友搜索界面</td>
+<td>/friend/</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>根据输入条件查找用户</td>
+<td>/friend/search/</td>
+<td>GET</td>
+</tr>
+<tr>
+<td>添加朋友</td>
+<td>/friend/</td>
+<td>POST</td>
+</tr>
+<tr>
+<td>删除朋友</td>
+<td>/friend/{id}</td>
+<td>DELETE</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-搭建mybatisspringboot基础框架">2. 搭建Mybatis+SpringBoot基础框架</h2>
+<h3 id="配置druid数据源">配置Druid数据源</h3>
+<ol>
+<li>
+<p>首先引入Druid的Maven依赖</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;groupId&gt;</span>com.alibaba<span style="color:#000080">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;artifactId&gt;</span>druid-spring-boot-starter<span style="color:#000080">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;version&gt;</span>1.1.22<span style="color:#000080">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/dependency&gt;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>然后在<code>application.yml</code>中配置Datasource</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#000080">spring</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#000080">datasource</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000080">type</span>:<span style="color:#bbb"> </span>com.alibaba.druid.pool.DruidDataSource<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000080">driver-class-name</span>:<span style="color:#bbb"> </span>com.mysql.cj.jdbc.Driver<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000080">url</span>:<span style="color:#bbb"> </span>jdbc:mysql://localhost:3306/postalk?useUnicode=true&amp;characterEncoding=utf-8&amp;relaxAutoCommit=true&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true&amp;serverTimezone=GMT%2B8<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000080">password</span>:<span style="color:#bbb"> </span>root<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000080">username</span>:<span style="color:#bbb"> </span>root<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000080">druid</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">initial-size</span>:<span style="color:#bbb"> </span><span style="color:#099">5</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">min-idle</span>:<span style="color:#bbb"> </span><span style="color:#099">5</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">maxActive</span>:<span style="color:#bbb"> </span><span style="color:#099">20</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">maxWait</span>:<span style="color:#bbb"> </span><span style="color:#099">60000</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">timeBetweenEvictionRunsMillis</span>:<span style="color:#bbb"> </span><span style="color:#099">60000</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">minEvictableIdleTimeMillis</span>:<span style="color:#bbb"> </span><span style="color:#099">300000</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">validationQuery</span>:<span style="color:#bbb"> </span>SELECT 1<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">testWhileIdle</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">testOnBorrow</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">false</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">testOnReturn</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">false</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">poolPreparedStatements</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">maxPoolPreparedStatementPerConnectionSize</span>:<span style="color:#bbb"> </span><span style="color:#099">20</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">filters</span>:<span style="color:#bbb"> </span>stat,wall,slf4j<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">connectionProperties</span>:<span style="color:#bbb"> </span>druid.stat.mergeSql\=true;druid.stat.slowSqlMillis\=5000<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">web-stat-filter</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">enabled</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">url-pattern</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;/*&#34;</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">exclusions</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*&#34;</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">stat-view-servlet</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">url-pattern</span>:<span style="color:#bbb"> </span><span style="color:#d14">&#34;/druid/*&#34;</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">reset-enable</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">false</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">login-username</span>:<span style="color:#bbb"> </span>admin<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">login-password</span>:<span style="color:#bbb"> </span><span style="color:#099">123456</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">enabled</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span><span style="color:#bbb">
+</span></span></span></code></pre></div></li>
+</ol>
+<h3 id="实现各实体类">实现各实体类</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">package</span><span style="color:#bbb"> </span><span style="color:#555">xyz.aiinirii.postalk.bean</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">lombok.Data</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">lombok.EqualsAndHashCode</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">java.util.Date</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Data</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">User</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span>id;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>username;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>password;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>sex;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span>age;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>phoneNumber;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>email;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>Date<span style="color:#bbb"> </span>registrationDate;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Data</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">abstract</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Text</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span>id;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>content;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>Date<span style="color:#bbb"> </span>time;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@EqualsAndHashCode</span>(callSuper<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Data</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Comment</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">extends</span><span style="color:#bbb"> </span>Text{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>Text<span style="color:#bbb"> </span>text;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@EqualsAndHashCode</span>(callSuper<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Data</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Post</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">extends</span><span style="color:#bbb"> </span>Text{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Data</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Like</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>Text<span style="color:#bbb"> </span>text;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Data</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Friend</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user1;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user2;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>Data<span style="color:#bbb"> </span>sinceTime;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Data</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Conversation</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span>id;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>toUser;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>fromUser;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span>conversationId;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>Date<span style="color:#bbb"> </span>time;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>content;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">boolean</span><span style="color:#bbb"> </span>read;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h2 id="3-用户模块">3. 用户模块</h2>
+<h3 id="实现user的curd操作">实现User的CURD操作</h3>
+<h4 id="mapper-实现">Mapper 实现</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">package</span><span style="color:#bbb"> </span><span style="color:#555">xyz.aiinirii.postalk.mapper</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.apache.ibatis.annotations.*</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.springframework.stereotype.Repository</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">xyz.aiinirii.postalk.bean.User</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">java.util.List</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#998;font-style:italic">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"> * @author AIINIRII
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"> */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Mapper</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Repository</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">interface</span> <span style="color:#458;font-weight:bold">UserMapper</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Select</span>(<span style="color:#d14">&#34;select * from user&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>List<span style="color:#000;font-weight:bold">&lt;</span>User<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findAllUser</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Select</span>(<span style="color:#d14">&#34;select * from user where id=#{id}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>User<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findUserById</span>(Integer<span style="color:#bbb"> </span>id);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Select</span>(<span style="color:#d14">&#34;delete from user where id=#{id}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">deleteUserById</span>(Integer<span style="color:#bbb"> </span>id);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Options</span>(useGeneratedKeys<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>keyProperty<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;id&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Insert</span>(<span style="color:#d14">&#34;insert into user(username, password, sex, age, phone_number, email, registration_date) values (#{username}, #{password}, #{sex}, #{age}, #{phoneNumber}, #{email}, #{registrationDate})&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">insertUser</span>(User<span style="color:#bbb"> </span>user);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Insert</span>(<span style="color:#d14">&#34;update user set username=#{username}, password=#{password}, sex=#{sex}, age=#{age}, phone_number=#{phoneNumber}, email=#{email}, registration_date=#{registration_date} where id=#{id}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">updateUser</span>(User<span style="color:#bbb"> </span>user);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="登录注册功能实现">登录注册功能实现</h3>
+<h4 id="controller类代码实现">Controller类代码实现</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">package</span><span style="color:#bbb"> </span><span style="color:#555">xyz.aiinirii.postalk.controller</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.springframework.beans.factory.annotation.Autowired</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.springframework.stereotype.Controller</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.springframework.web.bind.annotation.GetMapping</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.springframework.web.bind.annotation.PathVariable</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.springframework.web.bind.annotation.PostMapping</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.springframework.web.bind.annotation.RequestMapping</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">org.springframework.web.servlet.ModelAndView</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">xyz.aiinirii.postalk.bean.User</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">xyz.aiinirii.postalk.service.UserService</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">java.util.LinkedList</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">java.util.List</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#998;font-style:italic">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"> * @author AIINIRII
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"> */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Controller</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">UserController</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>UserService<span style="color:#bbb"> </span>userService<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>UserService();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Autowired</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">setUserService</span>(UserService<span style="color:#bbb"> </span>userService)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">userService</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>userService;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@PostMapping</span>(<span style="color:#d14">&#34;/user/login&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">checkUser</span>(User<span style="color:#bbb"> </span>user,<span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span>modelAndView){<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span>res<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>userService.<span style="color:#008080">checkUser</span>(user);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>modelAndView.<span style="color:#008080">addObject</span>(<span style="color:#d14">&#34;checkResult&#34;</span>,<span style="color:#bbb"> </span>res);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(res<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>0)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;/post/index&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;/index&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>modelAndView;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@GetMapping</span>(<span style="color:#d14">&#34;/user/{id}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findUserById</span>(<span style="color:#3c5d5d;font-weight:bold">@PathVariable</span>(<span style="color:#d14">&#34;id&#34;</span>)<span style="color:#bbb"> </span>Integer<span style="color:#bbb"> </span>id,<span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span>modelAndView)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>User<span style="color:#bbb"> </span>user<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>userService.<span style="color:#008080">findUserById</span>(id);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;user/list&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>List<span style="color:#000;font-weight:bold">&lt;</span>User<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span>users<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>LinkedList<span style="color:#000;font-weight:bold">&lt;&gt;</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>users.<span style="color:#008080">add</span>(user);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>modelAndView.<span style="color:#008080">addObject</span>(<span style="color:#d14">&#34;users&#34;</span>,<span style="color:#bbb"> </span>users);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>modelAndView;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@GetMapping</span>(<span style="color:#d14">&#34;/user&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">toRegisterPage</span>(){<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;user/update&#34;</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@PostMapping</span>(<span style="color:#d14">&#34;/user&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">registerUser</span>(User<span style="color:#bbb"> </span>user,<span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span>modelAndView)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#458;font-weight:bold">int</span><span style="color:#bbb"> </span>res<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>userService.<span style="color:#008080">registerUser</span>(user);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(res<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>0)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#998;font-style:italic">// success insert, go to login page</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;/index&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(res<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1){<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#998;font-style:italic">// the username is used, go back to the register page</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>modelAndView.<span style="color:#008080">addObject</span>(<span style="color:#d14">&#34;userR&#34;</span>,<span style="color:#bbb"> </span>user);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;/user/update&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>modelAndView;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h4 id="前端代码实现首页">前端代码实现（首页）</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">html</span> <span style="color:#008080">lang</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;en&#34;</span> <span style="color:#008080">xmlns:th</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;http://www.thymeleaf.org&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">meta</span> <span style="color:#008080">http-equiv</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Content-Type&#34;</span> <span style="color:#008080">content</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;text/html; charset=UTF-8&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">meta</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;viewport&#34;</span> <span style="color:#008080">content</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;width=device-width, initial-scale=1, shrink-to-fit=no&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">meta</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;description&#34;</span> <span style="color:#008080">content</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">meta</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;author&#34;</span> <span style="color:#008080">content</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">title</span>&gt;Signin Template for Bootstrap&lt;/<span style="color:#000080">title</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!-- Bootstrap core CSS --&gt;</span>
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">link</span> <span style="color:#008080">href</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;/asserts/css/bootstrap.min.css&#34;</span> <span style="color:#008080">rel</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;stylesheet&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!-- Custom styles for this template --&gt;</span>
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">link</span> <span style="color:#008080">href</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;/asserts/css/signin.css&#34;</span> <span style="color:#008080">rel</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;stylesheet&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">head</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">body</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;text-center&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">form</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-signin&#34;</span> <span style="color:#008080">method</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;post&#34;</span> <span style="color:#008080">th:action</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;@{/user/login}&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">img</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;mb-4&#34;</span> <span style="color:#008080">src</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;/asserts/img/bootstrap-solid.svg&#34;</span> <span style="color:#008080">alt</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span> <span style="color:#008080">width</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;72&#34;</span> <span style="color:#008080">height</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;72&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">h1</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;h3 mb-3 font-weight-normal&#34;</span>&gt;Please sign in&lt;/<span style="color:#000080">h1</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">p</span> <span style="color:#008080">style</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;color: #b21f2d&#34;</span> <span style="color:#008080">th:if</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${checkResult == 1}&#34;</span>&gt;wrong password&lt;/<span style="color:#000080">p</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">p</span> <span style="color:#008080">style</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;color: #b21f2d&#34;</span> <span style="color:#008080">th:if</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${checkResult == 2}&#34;</span>&gt;no such user&lt;/<span style="color:#000080">p</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">label</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;sr-only&#34;</span>&gt;Username&lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">input</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;username&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;text&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-control&#34;</span> <span style="color:#008080">placeholder</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Username&#34;</span> <span style="color:#008080">required</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span> <span style="color:#008080">autofocus</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">label</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;sr-only&#34;</span>&gt;Password&lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">input</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;password&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;password&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-control&#34;</span> <span style="color:#008080">placeholder</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Password&#34;</span> <span style="color:#008080">required</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;checkbox mb-3&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">input</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;checkbox&#34;</span> <span style="color:#008080">value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;remember-me&#34;</span>/&gt; Remember me
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">button</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;btn btn-lg btn-primary btn-block&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;submit&#34;</span>&gt;Sign in&lt;/<span style="color:#000080">button</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">form</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">form</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-signin&#34;</span> <span style="color:#008080">action</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;/user/&#34;</span> <span style="color:#008080">method</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;get&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">button</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;btn btn-lg btn-success btn-block&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;submit&#34;</span>&gt;Register&lt;/<span style="color:#000080">button</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">form</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">p</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;mt-5 mb-3 text-muted&#34;</span>&gt;© 2019-2020&lt;/<span style="color:#000080">p</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">body</span>&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">html</span>&gt;
+</span></span></code></pre></div><h4 id="前端代码实现注册界面">前端代码实现（注册界面）</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">html</span> <span style="color:#008080">lang</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;en&#34;</span> <span style="color:#008080">xmlns:th</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;http://www.thymeleaf.org&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">style</span>&gt;
+</span></span><span style="display:flex;"><span>    #<span style="color:#555">wrapper</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">width</span>: <span style="color:#099">60</span><span style="color:#458;font-weight:bold">%</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">margin</span>: <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">auto</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">border</span>: <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">style</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">meta</span> <span style="color:#008080">http-equiv</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;Content-Type&#34;</span> <span style="color:#008080">content</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;text/html; charset=UTF-8&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">title</span>&gt;Register&lt;/<span style="color:#000080">title</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!-- Bootstrap core CSS --&gt;</span>
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">link</span> <span style="color:#008080">href</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;/asserts/css/bootstrap.min.css&#34;</span> <span style="color:#008080">rel</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;stylesheet&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!-- Custom styles for this template --&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">&lt;!--&lt;link href=&#34;/asserts/css/signin.css&#34; rel=&#34;stylesheet&#34;&gt;--&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">head</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">div</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;wrapper&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">form</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;needs-validation&#34;</span> <span style="color:#008080">novalidate</span> <span style="color:#008080">method</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;post&#34;</span> <span style="color:#008080">action</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;/user&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-group row&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">label</span> <span style="color:#008080">for</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputUsername&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-2 col-form-label&#34;</span>&gt;User name*&lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-10 mb-3&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">input</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;username&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;text&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-control&#34;</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputUsername&#34;</span> <span style="color:#008080">th:value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${userR!=null}?${userR.username}&#34;</span> <span style="color:#008080">required</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;valid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Looks good!
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;invalid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Please enter a valid username.
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-group row&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">label</span> <span style="color:#008080">for</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputPassword&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-2 col-form-label&#34;</span>&gt;Password*&lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-10&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">input</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;password&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;password&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-control&#34;</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputPassword&#34;</span> <span style="color:#008080">required</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;valid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Looks good!
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;invalid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Please enter a valid password.
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">fieldset</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-group&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;row&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">legend</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-form-label col-sm-2 pt-0&#34;</span>&gt;Gender*&lt;/<span style="color:#000080">legend</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-10&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-check&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                        &lt;<span style="color:#000080">input</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-check-input&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;radio&#34;</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;sex&#34;</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;gridRadios1&#34;</span> <span style="color:#008080">value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;M&#34;</span>  <span style="color:#008080">th:checked</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${userR!=null}?${userR.sex==&#39;M&#39;}&#34;</span> <span style="color:#008080">checked</span>&gt;
+</span></span><span style="display:flex;"><span>                        &lt;<span style="color:#000080">label</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-check-label&#34;</span> <span style="color:#008080">for</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;gridRadios1&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                            Male
+</span></span><span style="display:flex;"><span>                        &lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>                    &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>                    &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-check&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                        &lt;<span style="color:#000080">input</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-check-input&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;radio&#34;</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;sex&#34;</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;gridRadios2&#34;</span> <span style="color:#008080">th:checked</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${userR!=null}?${userR.sex==&#39;F&#39;}&#34;</span> <span style="color:#008080">value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;F&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                        &lt;<span style="color:#000080">label</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-check-label&#34;</span> <span style="color:#008080">for</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;gridRadios2&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                            Female
+</span></span><span style="display:flex;"><span>                        &lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>                    &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">fieldset</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-group row&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">label</span> <span style="color:#008080">for</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputAge&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-2 col-form-label&#34;</span>&gt;Age*&lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-10&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">input</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;age&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;number&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-control&#34;</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputAge&#34;</span> <span style="color:#008080">th:value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${userR!=null}?${userR.age}&#34;</span> <span style="color:#008080">required</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;valid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Looks good!
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;invalid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Please enter a valid age.
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-group row&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">label</span> <span style="color:#008080">for</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputPhoneNumber&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-2 col-form-label&#34;</span>&gt;Phone number&lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-10&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">input</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;phoneNumber&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;text&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-control&#34;</span> <span style="color:#008080">th:value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${userR!=null}?${userR.phoneNumber}&#34;</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputPhoneNumber&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;valid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Looks good!
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;invalid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Please enter a valid phone number.
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-group row&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">label</span> <span style="color:#008080">for</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputEmail&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-2 col-form-label&#34;</span>&gt;Email&lt;/<span style="color:#000080">label</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-10&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">input</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;email&#34;</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;email&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-control&#34;</span> <span style="color:#008080">th:value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${userR!=null}?${userR.email}&#34;</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;inputEmail&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;valid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Looks good!
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;invalid-feedback&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    Please enter a valid email.
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;form-group row&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;col-sm-10&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">button</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;submit&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;btn btn-primary&#34;</span>&gt;Sign in&lt;/<span style="color:#000080">button</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#000080">form</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">script</span>&gt;
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// Example starter JavaScript for disabling form submissions if there are invalid fields
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    (<span style="color:#000;font-weight:bold">function</span> () {
+</span></span><span style="display:flex;"><span>        <span style="color:#d14">&#39;use strict&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#0086b3">window</span>.addEventListener(<span style="color:#d14">&#39;load&#39;</span>, <span style="color:#000;font-weight:bold">function</span> () {
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic">// Fetch all the forms we want to apply custom Bootstrap validation styles to
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>            <span style="color:#000;font-weight:bold">var</span> forms <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">document</span>.getElementsByClassName(<span style="color:#d14">&#39;needs-validation&#39;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic">// Loop over them and prevent submission
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>            <span style="color:#000;font-weight:bold">var</span> validation <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">Array</span>.prototype.filter.call(forms, <span style="color:#000;font-weight:bold">function</span> (form) {
+</span></span><span style="display:flex;"><span>                form.addEventListener(<span style="color:#d14">&#39;submit&#39;</span>, <span style="color:#000;font-weight:bold">function</span> (event) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#000;font-weight:bold">if</span> (form.checkValidity() <span style="color:#000;font-weight:bold">===</span> <span style="color:#000;font-weight:bold">false</span>) {
+</span></span><span style="display:flex;"><span>                        event.preventDefault();
+</span></span><span style="display:flex;"><span>                        event.stopPropagation();
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                    form.classList.add(<span style="color:#d14">&#39;was-validated&#39;</span>);
+</span></span><span style="display:flex;"><span>                }, <span style="color:#000;font-weight:bold">false</span>);
+</span></span><span style="display:flex;"><span>            });
+</span></span><span style="display:flex;"><span>        }, <span style="color:#000;font-weight:bold">false</span>);
+</span></span><span style="display:flex;"><span>    })();
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">script</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">html</span>&gt;
+</span></span></code></pre></div><h2 id="4-帖子模块">4. 帖子模块</h2>
+<h3 id="基本的增删改查">基本的增删改查</h3>
+<p>先贴上效果图：</p>
+<ul>
+<li>
+<p>主页面：可以看到平台上所有用户的帖子 -  <img alt="image-20200620132434280" src="/img/image-20200620132434280.png"></p>
+</li>
+<li>
+<p>用户主页面：可以看到自己发的所有帖子，而且能够进行修改和删除 - <img alt="image-20200620133505658" src="/img/image-20200620133505658.png"></p>
+</li>
+<li>
+<p>修改界面：这里用户可以编辑内容并提交 - <img alt="image-20200620133609830" src="/img/image-20200620133609830.png"></p>
+</li>
+<li>
+<p>发帖页面：这里可以发帖 - <img alt="image-20200620133748133" src="/img/image-20200620133748133.png"></p>
+</li>
+</ul>
+<p>因为代码太多，这里就不贴出来了，主要说几个遇到的问题：</p>
+<ol>
+<li>
+<p>基于注解的懒加载</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Select</span>(<span style="color:#d14">&#34;select * from post left join text t on post.tid = t.id where tid = #{id}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Results</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;findPostById&#34;</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>value<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;tid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;id&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;content&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;content&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;time&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;time&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;uid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;user&#34;</span>,<span style="color:#bbb"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                            </span>one<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@One</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.UserMapper.findUserById&#34;</span>,<span style="color:#bbb"> 
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                                       </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>))<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>Post<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findPostById</span>(Integer<span style="color:#bbb"> </span>id);<span style="color:#bbb">
+</span></span></span></code></pre></div><p>其中<code>@Result(column = &quot;uid&quot;, property = &quot;user&quot;, one = @One(select = &quot;xyz.aiinirii.postalk.mapper.UserMapper.findUserById&quot;, fetchType = FetchType.LAZY))</code>所实现的效果是根据<code>findUserById</code>这个类，根据提供的<code>uid</code>查询到<code>user</code>对象，并且只有当<code>user</code>被使用了，即调用了<code>getUser()</code>方法后才会执行查询。</p>
+</li>
+<li>
+<p>如何使用HTML发送put、delete请求</p>
+<p>其中前端代码为：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#000080">form</span> <span style="color:#008080">action</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;/post/&#34;</span> <span style="color:#008080">method</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;post&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;needs-validation&#34;</span> <span style="color:#008080">novalidate</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">input</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;hidden&#34;</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;_method&#34;</span> <span style="color:#008080">value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;put&#34;</span> <span style="color:#008080">th:if</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${post!=null}&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">input</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;hidden&#34;</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;id&#34;</span> <span style="color:#008080">th:value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${post.getId()}&#34;</span> <span style="color:#008080">th:if</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${post!=null}&#34;</span>/&gt;
+</span></span></code></pre></div><p>这里给的是一个发送put请求的例子，其实form表单是不支持发送put请求的，但是我们可以加一个<code>&lt;input type=&quot;hidden&quot; name=&quot;_method&quot; value=&quot;put&quot; th:if=&quot;${post!=null}&quot;/&gt;</code>在form表单中，其中字段名必须为<code>_method</code>而<code>value</code>应该为希望的请求方式。而这种发送请求的方式，则需要服务端进行form表单的解析，而spring则可以做到这一点，但是需要配置，在<code>application.yml</code>文件中：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#000080">spring</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#000080">mvc</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000080">hiddenmethod</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">      </span><span style="color:#000080">filter</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000080">enabled</span>:<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span><span style="color:#bbb">
+</span></span></span></code></pre></div></li>
+</ol>
+<h3 id="点赞功能实现">点赞功能实现</h3>
+<ul>
+<li>
+<p>赞数显示</p>
+<p>思路：每次加载页面时自动查询赞数，并显示在页面上。</p>
+<p>相关LikeMapper代码：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Mapper</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Repository</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">interface</span> <span style="color:#458;font-weight:bold">LikeMapper</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Select</span>(<span style="color:#d14">&#34;select * from `like` where tid = #{tid}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Results</span>(<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;findLikeByTId&#34;</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>value<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;tid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;text&#34;</span>,<span style="color:#bbb"> </span>one<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@One</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.TextMapper.findTextById&#34;</span>,<span style="color:#bbb"> </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>)),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;uid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;user&#34;</span>,<span style="color:#bbb"> </span>one<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@One</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.UserMapper.findUserById&#34;</span>,<span style="color:#bbb"> </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>))<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>List<span style="color:#000;font-weight:bold">&lt;</span>Like<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findLikeByTId</span>(Integer<span style="color:#bbb"> </span>tid);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>除此之外我们还需将<code>Post</code>和<code>PostMapper</code>进行调整，每次查询<code>Post</code>时使用懒加载的方式（因为其实需要用到<code>Like</code>的情况并不多）去加载<code>Post</code>中的<code>likes</code>。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Data</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">abstract</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Text</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">implements</span><span style="color:#bbb"> </span>Serializable<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>Integer<span style="color:#bbb"> </span>id;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>content;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>Date<span style="color:#bbb"> </span>time;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">boolean</span><span style="color:#bbb"> </span>anonymous<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">false</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic">// 新加入likes属性</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>List<span style="color:#000;font-weight:bold">&lt;</span>Like<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span>likes;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>下面是<code>PostMapper</code>类，主要改动是在每个查询方法上的<code>@Result</code>内加入了<code>@Result(id = true, column = &quot;tid&quot;, property = &quot;likes&quot;, many = @Many(select = &quot;xyz.aiinirii.postalk.mapper.LikeMapper.findLikeByTId&quot;, fetchType = FetchType.LAZY))</code>。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Mapper</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Repository</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">interface</span> <span style="color:#458;font-weight:bold">PostMapper</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">  </span><span style="color:#3c5d5d;font-weight:bold">@Select</span>(<span style="color:#d14">&#34;select * from post p left join text t on p.tid = t.id where uid = #{id} ORDER BY t.time DESC&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Results</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;findAllPostByUId&#34;</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>value<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;tid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;id&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;content&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;content&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;time&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;time&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;uid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;user&#34;</span>,<span style="color:#bbb"> </span>one<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@One</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.UserMapper.findUserById&#34;</span>,<span style="color:#bbb"> </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>)),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;tid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;likes&#34;</span>,<span style="color:#bbb"> </span>many<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@Many</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.LikeMapper.findLikeByTId&#34;</span>,<span style="color:#bbb"> </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>))<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>List<span style="color:#000;font-weight:bold">&lt;</span>Post<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findAllPostByUId</span>(Integer<span style="color:#bbb"> </span>id);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Select</span>(<span style="color:#d14">&#34;select * from post left join text t on post.tid = t.id where tid = #{id}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Results</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;findPostById&#34;</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>value<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;tid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;id&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;content&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;content&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;time&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;time&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;uid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;user&#34;</span>,<span style="color:#bbb"> </span>one<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@One</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.UserMapper.findUserById&#34;</span>,<span style="color:#bbb"> </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>)),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;tid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;likes&#34;</span>,<span style="color:#bbb"> </span>many<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@Many</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.LikeMapper.findLikeByTId&#34;</span>,<span style="color:#bbb"> </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>))<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>Post<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findPostById</span>(Integer<span style="color:#bbb"> </span>id);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Select</span>(<span style="color:#d14">&#34;select * from post p left join text t on p.tid = t.id ORDER BY t.time DESC&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Results</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;findAllPost&#34;</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>value<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;tid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;id&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;content&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;content&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;time&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;time&#34;</span>),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;uid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;user&#34;</span>,<span style="color:#bbb"> </span>one<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@One</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.UserMapper.findUserById&#34;</span>,<span style="color:#bbb"> </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>)),<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#3c5d5d;font-weight:bold">@Result</span>(id<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">true</span>,<span style="color:#bbb"> </span>column<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;tid&#34;</span>,<span style="color:#bbb"> </span>property<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;likes&#34;</span>,<span style="color:#bbb"> </span>many<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#3c5d5d;font-weight:bold">@Many</span>(select<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;xyz.aiinirii.postalk.mapper.LikeMapper.findLikeByTId&#34;</span>,<span style="color:#bbb"> </span>fetchType<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>FetchType.<span style="color:#008080">LAZY</span>))<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>List<span style="color:#000;font-weight:bold">&lt;</span>Post<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findAllPost</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>这样一来，每次我们需要查询Post的赞数时，我们只需要调用<code>post.getLikes().size()</code>方法。</p>
+</li>
+<li>
+<p>点击按钮增加赞数</p>
+<p>思路：点击按钮时调用<code>LikeService</code>中的<code>like</code>方法，对传入的<code>uid</code>和<code>tid</code>进行查询，如果发现在<code>like</code>表中没有字段，则执行insert方法。</p>
+</li>
+<li>
+<p>再次点击按钮减少赞数</p>
+<p>思路：同增加赞数的思想，只是如果发现<code>like</code>表中有字段时才会执行delete方法。</p>
+<p>以下是service层方法。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Service</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">LikeService</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>LikeMapper<span style="color:#bbb"> </span>likeMapper;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Autowired</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">setLikeMapper</span>(LikeMapper<span style="color:#bbb"> </span>likeMapper)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">likeMapper</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>likeMapper;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">     * add like if the user haven&#39;t liked,
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">     * delete like if the user already have liked
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">     *
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">     * @param tid text&#39;s id
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">     * @param uid user&#39;s id
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">     * @return true if the operation is success
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">     */</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Transactional</span>(propagation<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>Propagation.<span style="color:#008080">REQUIRED</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">boolean</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">like</span>(Integer<span style="color:#bbb"> </span>tid,<span style="color:#bbb"> </span>Integer<span style="color:#bbb"> </span>uid)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>Like<span style="color:#bbb"> </span>like<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>likeMapper.<span style="color:#008080">findLikeByTIdUId</span>(tid,<span style="color:#bbb"> </span>uid);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(like<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">null</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>likeMapper.<span style="color:#008080">insertLike</span>(tid,<span style="color:#bbb"> </span>uid)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>likeMapper.<span style="color:#008080">deleteLike</span>(tid,<span style="color:#bbb"> </span>uid)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div></li>
+</ul>
+<h3 id="匿名显示">匿名显示</h3>
+<p>只需要稍微对前端代码进行修改就可以了：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#000080">a</span> <span style="color:#008080">href</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;#&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;badge badge-light&#34;</span> <span style="color:#008080">th:text</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${!post.anonymous?post.user.username:&#39;anonymous&#39;}&#34;</span>&gt;&lt;/<span style="color:#000080">a</span>&gt;
+</span></span></code></pre></div><p>这里加入一处判断，倘若post是匿名的，则不会显示用户的名字。</p>
+<h2 id="5-好友模块">5. 好友模块</h2>
+<p>有了之前的基础，这一模块就相对简单了，主要是实现以下几个特性：</p>
+<ul>
+<li>根据ID或用户名查找好友</li>
+<li>添加好友</li>
+<li>删除好友</li>
+</ul>
+<p>好友相关界面一览：</p>
+<p><img alt="image-20200621121414466" src="/img/image-20200621121414466.png"></p>
+<p><img alt="image-20200621115555366" src="/img/image-20200621115555366.png"></p>
+<h3 id="根据id或用户名查找好友">根据ID或用户名查找好友</h3>
+<p>这一部分主要使用的是<code>userService</code>有关的接口去操作，以下是controller层代码：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@GetMapping</span>(<span style="color:#d14">&#34;/friends/&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">toMyFriendPage</span>(ModelAndView<span style="color:#bbb"> </span>modelAndView,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                                   </span><span style="color:#3c5d5d;font-weight:bold">@SessionAttribute</span>(<span style="color:#d14">&#34;loginUser&#34;</span>)<span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>List<span style="color:#000;font-weight:bold">&lt;</span>User<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span>friends<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>friendService.<span style="color:#008080">findAllFriendsByUId</span>(user.<span style="color:#008080">getId</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>modelAndView.<span style="color:#008080">addObject</span>(<span style="color:#d14">&#34;friends&#34;</span>,<span style="color:#bbb"> </span>friends);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;friend/myFriend&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>modelAndView;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@GetMapping</span>(<span style="color:#d14">&#34;/friend/search/&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">findFriend</span>(ModelAndView<span style="color:#bbb"> </span>modelAndView,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                               </span><span style="color:#3c5d5d;font-weight:bold">@Param</span>(<span style="color:#d14">&#34;findWay&#34;</span>)<span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>findWay,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                               </span><span style="color:#3c5d5d;font-weight:bold">@Param</span>(<span style="color:#d14">&#34;inputSearch&#34;</span>)<span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>inputSearch,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                               </span><span style="color:#3c5d5d;font-weight:bold">@SessionAttribute</span>(<span style="color:#d14">&#34;loginUser&#34;</span>)<span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">throws</span><span style="color:#bbb"> </span>Exception<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>List<span style="color:#000;font-weight:bold">&lt;</span>User<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span>friends<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>LinkedList<span style="color:#000;font-weight:bold">&lt;&gt;</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(findWay.<span style="color:#008080">equals</span>(<span style="color:#d14">&#34;id&#34;</span>)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">&amp;&amp;</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">!</span>user.<span style="color:#008080">getId</span>().<span style="color:#008080">equals</span>(Integer.<span style="color:#008080">valueOf</span>(inputSearch)))<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>friends.<span style="color:#008080">add</span>(userService.<span style="color:#008080">findUserById</span>(Integer.<span style="color:#008080">valueOf</span>(inputSearch)));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(findWay.<span style="color:#008080">equals</span>(<span style="color:#d14">&#34;username&#34;</span>)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">&amp;&amp;</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">!</span>user.<span style="color:#008080">getUsername</span>().<span style="color:#008080">equals</span>(inputSearch))<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>friends<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>userService.<span style="color:#008080">findUserByUsername</span>(inputSearch);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">throw</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>Exception(<span style="color:#d14">&#34;Wrong with the findWay&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;/friend/result&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>modelAndView.<span style="color:#008080">addObject</span>(<span style="color:#d14">&#34;friends&#34;</span>,<span style="color:#bbb"> </span>friends);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>modelAndView;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="添加好友">添加好友</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@PostMapping</span>(<span style="color:#d14">&#34;/friend/&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">addFriend</span>(ModelAndView<span style="color:#bbb"> </span>modelAndView,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                               </span>Integer<span style="color:#bbb"> </span>id,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                               </span><span style="color:#3c5d5d;font-weight:bold">@SessionAttribute</span>(<span style="color:#d14">&#34;loginUser&#34;</span>)<span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>friendService.<span style="color:#008080">addFriend</span>(user.<span style="color:#008080">getId</span>(),<span style="color:#bbb"> </span>id);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>List<span style="color:#000;font-weight:bold">&lt;</span>User<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span>friends<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>friendService.<span style="color:#008080">findAllFriendsByUId</span>(user.<span style="color:#008080">getId</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>modelAndView.<span style="color:#008080">addObject</span>(<span style="color:#d14">&#34;friends&#34;</span>,<span style="color:#bbb"> </span>friends);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;friend/myFriend&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>modelAndView;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>可以看到，这里主要是调用了service层的addFriend方法。具体操作便是向friend表单中插入字段。</p>
+<h3 id="删除好友">删除好友</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@DeleteMapping</span>(<span style="color:#d14">&#34;/friend/{id}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>ModelAndView<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">deleteFriend</span>(ModelAndView<span style="color:#bbb"> </span>modelAndView,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                                 </span><span style="color:#3c5d5d;font-weight:bold">@PathVariable</span>(<span style="color:#d14">&#34;id&#34;</span>)<span style="color:#bbb"> </span>Integer<span style="color:#bbb"> </span>id,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                                 </span><span style="color:#3c5d5d;font-weight:bold">@SessionAttribute</span>(<span style="color:#d14">&#34;loginUser&#34;</span>)<span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">throws</span><span style="color:#bbb"> </span>Exception<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(<span style="color:#000;font-weight:bold">!</span>friendService.<span style="color:#008080">deleteFriendById</span>(user.<span style="color:#008080">getId</span>(),<span style="color:#bbb"> </span>id))<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">throw</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>Exception(<span style="color:#d14">&#34;the delete operation failed&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>List<span style="color:#000;font-weight:bold">&lt;</span>User<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span>friends<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>friendService.<span style="color:#008080">findAllFriendsByUId</span>(user.<span style="color:#008080">getId</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>modelAndView.<span style="color:#008080">addObject</span>(<span style="color:#d14">&#34;friends&#34;</span>,<span style="color:#bbb"> </span>friends);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>modelAndView.<span style="color:#008080">setViewName</span>(<span style="color:#d14">&#34;friend/myFriend&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>modelAndView;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>这里用了delete方法，倘若搜索不到该用户，该方法会发出异常。</p>
+<h2 id="6-评论模块">6. 评论模块</h2>
+<p>评论模块需要实现以下几个功能：</p>
+<ul>
+<li>评论的创建删除修改匿名和显示</li>
+<li>贴主可以管理评论，可以对评论进行删除操作</li>
+</ul>
+<p>效果图：</p>
+<p><img alt="image-20200621225300015" src="/img/image-20200621225300015.png"></p>
+<h3 id="评论的创建删除修改和匿名">评论的创建删除修改和匿名</h3>
+<h4 id="service层">Service层</h4>
+<p>这里的要点是两个service层的方法：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Transactional</span>(propagation<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>Propagation.<span style="color:#008080">REQUIRED</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">createComment</span>(Integer<span style="color:#bbb"> </span>pid,<span style="color:#bbb"> </span>Comment<span style="color:#bbb"> </span>comment,<span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>comment.<span style="color:#008080">setUser</span>(user);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>comment.<span style="color:#008080">setTime</span>(<span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>Date(System.<span style="color:#008080">currentTimeMillis</span>()));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>textMapper.<span style="color:#008080">insertText</span>(comment);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>commentMapper.<span style="color:#008080">insertComment</span>(pid);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Transactional</span>(propagation<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>Propagation.<span style="color:#008080">REQUIRED</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">boolean</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">deleteCommentById</span>(Integer<span style="color:#bbb"> </span>id,<span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">throws</span><span style="color:#bbb"> </span>Exception<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(commentMapper.<span style="color:#008080">findCommentById</span>(id).<span style="color:#008080">getUser</span>().<span style="color:#008080">getId</span>().<span style="color:#008080">equals</span>(user.<span style="color:#008080">getId</span>()))<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>commentMapper.<span style="color:#008080">deleteCommentById</span>(id)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">&amp;&amp;</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span>textMapper.<span style="color:#008080">deleteTextById</span>(id)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#000;font-weight:bold">throw</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>Exception(<span style="color:#d14">&#34;the user do not have right to delete the comment&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p><code>createComment</code>在这里扮演的角色是执行comment的创建，这一点和post的创建过程是一样的；</p>
+<p>而<code>deleteCommentById</code>方法则是和post的删除流程一样。</p>
+<h4 id="仅可删除自己的comment功能实现">’仅可删除自己的comment‘功能实现</h4>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#000080">div</span> <span style="color:#008080">id</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;commentModule&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;card&#34;</span> <span style="color:#008080">style</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;width: auto&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#000080">ul</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;list-group list-group-flush&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#000080">li</span> <span style="color:#008080">th:each</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;comment: ${post.comments}&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;list-group-item&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;<span style="color:#000080">div</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;row&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">a</span> <span style="color:#008080">href</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;#&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;badge badge-light card-text&#34;</span>
+</span></span><span style="display:flex;"><span>                   <span style="color:#008080">th:text</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${!comment.anonymous?comment.user.username:&#39;anonymous&#39;}&#34;</span>&gt;Light&lt;/<span style="color:#000080">a</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">p</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;card-text col-sm-8&#34;</span> <span style="color:#008080">th:text</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${comment.content}&#34;</span>&gt;content&lt;/<span style="color:#000080">p</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;<span style="color:#000080">form</span> <span style="color:#008080">th:action</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;@{&#39;/comment/&#39; + ${comment.id}}&#34;</span> <span style="color:#008080">method</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;post&#34;</span> <span style="color:#008080">th:if</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${session.loginUser.id == comment.user.id}&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>                    &lt;<span style="color:#000080">input</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;hidden&#34;</span> <span style="color:#008080">name</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;_method&#34;</span> <span style="color:#008080">value</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;delete&#34;</span>/&gt;
+</span></span><span style="display:flex;"><span>                    &lt;<span style="color:#000080">button</span> <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;submit&#34;</span> <span style="color:#008080">class</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;btn btn-danger&#34;</span>&gt;Delete&lt;/<span style="color:#000080">button</span>&gt;
+</span></span><span style="display:flex;"><span>                &lt;/<span style="color:#000080">form</span>&gt;
+</span></span><span style="display:flex;"><span>            &lt;/<span style="color:#000080">div</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;/<span style="color:#000080">li</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#000080">ul</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#000080">div</span>&gt;
+</span></span></code></pre></div><p>注意到这里其实做了一个判断，如果登录的用户和该comment所属的用户不同的话，将不会出现表单。</p>
+<p>同时为了防止恶意提交，在后台Service层也有相应的检查。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Transactional</span>(propagation<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>Propagation.<span style="color:#008080">REQUIRED</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">boolean</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">deleteCommentById</span>(Integer<span style="color:#bbb"> </span>id,<span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">throws</span><span style="color:#bbb"> </span>Exception<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(commentMapper.<span style="color:#008080">findCommentById</span>(id).<span style="color:#008080">getUser</span>().<span style="color:#008080">getId</span>().<span style="color:#008080">equals</span>(user.<span style="color:#008080">getId</span>()))<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// 检查该用户是否有权删除</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>commentMapper.<span style="color:#008080">deleteCommentById</span>(id)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">&amp;&amp;</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span>textMapper.<span style="color:#008080">deleteTextById</span>(id)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#000;font-weight:bold">throw</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>Exception(<span style="color:#d14">&#34;the user do not have right to delete the comment&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="贴主可以管理评论可以对评论进行删除操作">贴主可以管理评论，可以对评论进行删除操作</h3>
+<p>效果图</p>
+<p><img alt="image-20200622111802772" src="/img/image-20200622111802772.png"></p>
+<p>同之前的评论删除相似，这里仅仅是调整了各个评论的删除权限：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#998;font-style:italic">&lt;!-- 前端代码调整，调整了按钮出现的逻辑 --&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#000080">form</span> <span style="color:#008080">th:action</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;@{&#39;/comment/&#39; + ${comment.id}}&#34;</span> <span style="color:#008080">method</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;post&#34;</span> <span style="color:#008080">th:if</span><span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;${session.loginUser.id} == ${comment.user.id} or ${session.loginUser.id} == ${comment.text.user.id}&#34;</span>&gt;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// 后端service 层删除代码调整</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Transactional</span>(propagation<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>Propagation.<span style="color:#008080">REQUIRED</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">boolean</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">deleteCommentById</span>(Integer<span style="color:#bbb"> </span>id,<span style="color:#bbb"> </span>User<span style="color:#bbb"> </span>user)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">throws</span><span style="color:#bbb"> </span>Exception<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(commentMapper.<span style="color:#008080">findCommentById</span>(id).<span style="color:#008080">getUser</span>().<span style="color:#008080">getId</span>().<span style="color:#008080">equals</span>(user.<span style="color:#008080">getId</span>())<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">||</span><span style="color:#bbb"> </span>commentMapper.<span style="color:#008080">findCommentById</span>(id).<span style="color:#008080">getText</span>().<span style="color:#008080">getUser</span>().<span style="color:#008080">getId</span>().<span style="color:#008080">equals</span>(user.<span style="color:#008080">getId</span>()))<span style="color:#bbb"> </span>{<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">// 加入了判断该评论的父贴子的用户是否为登录用户的逻辑</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>commentMapper.<span style="color:#008080">deleteCommentById</span>(id)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">&amp;&amp;</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>textMapper.<span style="color:#008080">deleteTextById</span>(id)<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">==</span><span style="color:#bbb"> </span>1;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">throw</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>Exception(<span style="color:#d14">&#34;the user do not have right to delete the comment&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<p>那么到此为止，一个基础的贴吧就做好了，但其实还和计划时差了一点（没有聊天模块）。随着项目的进行，我也才发现，如果要完成聊天模块的话自己欠缺的知识其实还有许多，那就先欠着吧:-D，等以后闲下来再去学，然后再把这个瘸腿项目给完善了。</p>
+<p>另注：该项目已开源，下面是github项目传送门，来一起进步啊~</p>
+<p><a href="https://github.com/AIINIRII/postalk">https://github.com/AIINIRII/postalk</a></p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

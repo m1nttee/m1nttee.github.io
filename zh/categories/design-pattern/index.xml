@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Design Pattern on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/categories/design-pattern/</link>
+    <description>Recent content in Design Pattern on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 11 Mar 2026 11:50:00 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/categories/design-pattern/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>设计模式 - 工厂模式</title>
+      <link>https://m1nttee.github.io/zh/posts/design-pattern-factory-pattern/</link>
+      <pubDate>Wed, 11 Mar 2026 11:50:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/design-pattern-factory-pattern/</guid>
+      <description>01 工厂模式 背景 在写代码时，我们常常会碰到这样的情景：&#xA;需要根据用户输入的不同类型，创建不同的对象。比如根据配置文件中的数据库类型，创建 MySQL、PostgreSQL 或 MongoDB 的连接对象。 对象的创建逻辑复杂，如果散落在代码各处，会导致维护困难。 希望对对象的创建进行统一管理，方便添加新的产品类型。 因此，工厂模式（Factory Pattern）就应运而生了。&#xA;分析 工厂模式的核心思想是：将对象的创建与使用分离。&#xA;下面是它的 UML 图：&#xA;classDiagram class Product { &lt;&gt; +operation() } class ConcreteProductA { +operation() } class ConcreteProductB { +operation() } class Creator { +factoryMethod() Product } class ConcreteCreatorA { +factoryMethod() Product } class ConcreteCreatorB { +factoryMethod() Product } Product &lt;|.. ConcreteProductA Product &lt;|.. ConcreteProductB Creator &lt;|.. ConcreteCreatorA Creator &lt;|.. ConcreteCreatorB Creator ..&gt; Product 例子 在 C++ 中，工厂模式非常常用。下面是一个简单的例子：</description>
+    </item>
+  </channel>
+</rss>

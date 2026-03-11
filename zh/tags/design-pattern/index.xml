@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Design Pattern on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/design-pattern/</link>
+    <description>Recent content in Design Pattern on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 11 Mar 2026 11:50:00 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/design-pattern/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>设计模式 - 工厂模式</title>
+      <link>https://m1nttee.github.io/zh/posts/design-pattern-factory-pattern/</link>
+      <pubDate>Wed, 11 Mar 2026 11:50:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/design-pattern-factory-pattern/</guid>
+      <description>01 工厂模式 背景 在写代码时，我们常常会碰到这样的情景：&#xA;需要根据用户输入的不同类型，创建不同的对象。比如根据配置文件中的数据库类型，创建 MySQL、PostgreSQL 或 MongoDB 的连接对象。 对象的创建逻辑复杂，如果散落在代码各处，会导致维护困难。 希望对对象的创建进行统一管理，方便添加新的产品类型。 因此，工厂模式（Factory Pattern）就应运而生了。&#xA;分析 工厂模式的核心思想是：将对象的创建与使用分离。&#xA;下面是它的 UML 图：&#xA;classDiagram class Product { &lt;&gt; +operation() } class ConcreteProductA { +operation() } class ConcreteProductB { +operation() } class Creator { +factoryMethod() Product } class ConcreteCreatorA { +factoryMethod() Product } class ConcreteCreatorB { +factoryMethod() Product } Product &lt;|.. ConcreteProductA Product &lt;|.. ConcreteProductB Creator &lt;|.. ConcreteCreatorA Creator &lt;|.. ConcreteCreatorB Creator ..&gt; Product 例子 在 C++ 中，工厂模式非常常用。下面是一个简单的例子：</description>
+    </item>
+    <item>
+      <title>设计模式-单例模式</title>
+      <link>https://m1nttee.github.io/zh/posts/design-pattern-prototype-pattern/</link>
+      <pubDate>Mon, 25 Oct 2021 16:00:51 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/design-pattern-prototype-pattern/</guid>
+      <description>01 Prototype Pattern 背景 在写代码时，我们也许会碰到这些情景：&#xA;在进行一次数据库查询后，我们成功地创建出了一个实体，而此时，我们需要从同一个数据源以同样方法取得另一个实体，如果已知其他人并未对数据源进行任何写入操作，那么此时最好的办法就是不经过数据源，我们直接复制已经查询到的数据。这样一来就能避免再次占用昂贵的数据库链接资源，并避免高耗时的数据库查询请求。 或者，在千辛万苦经过了多次递归反射后，我们成功分析了一个类，并得到了它的解析结果对应的对象。这时如果我们需要去使用这个解析对应的对象，最好的办法就是将这个对象作为一个原型，直接复制其中的各个属性，从而跳过极其耗时的 Java 反射过程，快速生成解析结果对象。 又或者，作为一个程序员，我们在对 Excel 表的其中一个格子进行了各种 style 的装饰，虽然我们很享受这个美化的过程，但是在美化结束后，如果需要我们去对第二个格子，或是另一个 Excel 文件中的另一个相同 style 的格子重新赋值一次，我们会感到相当痛苦。这个时候最好的方法就是去通过之前已经美化完成的格子复制一次，之后只需稍微改一下格子中的文字就好啦。 因此，Prototype Pattern 就应运而生了，作为创建模式之一，它可以省去创建过程中的一些昂贵的消耗，并以简单无脑的复制（clone）代替。&#xA;分析 下面是它的 UML 图：&#xA;它本质上是进行了一次克隆的操作，借用已经有的实体，进行一次克隆，从而创建出一个一模一样的实体。UML 图非常简单，但是平常我们一般不会将其单独使用，而往往作为一种辅助工具，实现快速无误地创建一个新对象的作用。&#xA;例子 在 Spring Boot 中，我们有一个类叫做 BeanDefinition，这个类所对应的对象，都和 Bean 的创建有关，可以说是一个非常核心的类了。例如：&#xA;在 Spring 的核心方法 org.springframework.beans.factory.support.AbstractBeanFactory#doGetBean 中，当我们需要去新创建一个 Bean 对象供程序使用的时候，我们首先需要解析 class，生成对应的 BeanDefinition 对象 mbd (RootBeanDefinition) 。&#xA;对于那些不了解 mdb 的小伙伴们：mdb 是一个 BeanDefinition 对象，其中包含了许多在配置时期所需要指定的该 Bean 的属性 - 例如 isPrototype, isSingleton, resolvedTargetType 等等等等。&#xA;而 mdb 将会参加下面这个重要的流水线：&#xA;我们通过 xml 文件或者 Java annotation 去设置这个 Bean 的一些特性，比如它对应的 class，它是否是单例。之后我们会创建一个 MutablePropertyValues 对象，将之前的配置变成一个 key-value 的 map。而这个 map 中，key 是 Bean Definition 中的属性的 Java 字段名称，value 是我们所指定的值。再成功生成 MutablePropertyValues 之后，我们通过 new RootBeanDefinition(className, null, mutablePropertyValues) 的方式生成 beanDefinition，并将它注入到ApplicationContext 里。这样一来，下次需要 Bean 的时候，我们就只需要去执行 applicationContext.</description>
+    </item>
+  </channel>
+</rss>

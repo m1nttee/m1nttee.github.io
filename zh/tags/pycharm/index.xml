@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pycharm on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/pycharm/</link>
+    <description>Recent content in Pycharm on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Mon, 13 Apr 2020 17:28:22 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/pycharm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jupyter&#43;Pycharm&#43;anaconda 环境搭建时的报错</title>
+      <link>https://m1nttee.github.io/zh/posts/jupyter-pycharm-anaconda-bug/</link>
+      <pubDate>Mon, 13 Apr 2020 17:28:22 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/jupyter-pycharm-anaconda-bug/</guid>
+      <description>今天突然发现，Pycharm里原来也可以集成Jupyter！&#xA;然后，本人便兴冲冲地去实现了Jupyter+Pycharm+anaconda的环境部署。。。&#xA;然而。。。事情并没有想象的那么简单。。&#xA;在成功地安装完了环境之后，本人十分愉（zi）快（xin）地点击了运行cell，以下是报错：&#xA;Traceback (most recent call last): File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\web.py&amp;#34;, line 1703, in _execute result = await result File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 742, in run yielded = self.gen.throw(*exc_info) # type: ignore File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\notebook\services\sessions\handlers.py&amp;#34;, line 72, in post type=mtype)) File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 735, in run value = future.result() File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 742, in run yielded = self.gen.throw(*exc_info) # type: ignore File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\notebook\services\sessions\sessionmanager.py&amp;#34;, line 88, in create_session kernel_id = yield self.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Visual Studio on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/visual-studio/</link>
+    <description>Recent content in Visual Studio on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Tue, 14 Apr 2020 18:14:42 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/visual-studio/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>「解决」anaconda下cl.exe缺失的报错</title>
+      <link>https://m1nttee.github.io/zh/posts/lack-of-cl-exe/</link>
+      <pubDate>Tue, 14 Apr 2020 18:14:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/lack-of-cl-exe/</guid>
+      <description>今天很崩溃，为了配置mmdetection所需的环境，我真可谓是煞费苦心。这里记录一个让我止步不前的报错。&#xA;cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\lib\site-packages\numpy\core\include&amp;#34; &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&amp;#34; &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&amp;#34; /EHsc /Tp./mmcv/video/optflow_warp/flow_warp.cpp /Fobuild\temp.win-amd64-3.7\Release\./mmcv/video/optflow_warp/flow_warp.obj error: command &amp;#39;cl.exe&amp;#39; failed: No such file or directory 奇怪了啊，为什么会报错找不到cl.exe呢？我是装了vstool的啊？？？&#xA;在网上找了一圈之后，也没有任何解答。&#xA;后来突然，当我不小心没activate就进行安装指令的时候。。。我发现。。他他他可以了？？&#xA;原来是anaconda的锅。&#xA;于是去网上就这个问题找了一会儿，发现原理其实很简单，就是anaconda环境里没有Cpython。于是：&#xA;pip install cpython 就解决了。</description>
+    </item>
+  </channel>
+</rss>

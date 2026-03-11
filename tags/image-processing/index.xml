@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Image Processing on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/tags/image-processing/</link>
+    <description>Recent content in Image Processing on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 24 Jun 2020 23:41:42 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/tags/image-processing/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Notes for: IterDet: Iterative Scheme for Object Detection in Crowded Environments</title>
+      <link>https://m1nttee.github.io/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</guid>
+      <description>Abstract In this work, we develop an alternative iterative scheme where a new subset of objects is detected at each iteration. Detected boxes from previous iterations are passed to the network in subsequent iterations to ensure that the same object is not detected twice. This iterative scheme can be applied to both one-stage and two-stage object detectors with minor modifications to the training and inference processes.&#xA;Problem Description Modern algorithms like NMS cannot handle crowded environments, treating two crowded objects as one object.</description>
+    </item>
+    <item>
+      <title>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection</title>
+      <link>https://m1nttee.github.io/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</guid>
+      <description>Overview STAC:&#xA;Semi-Supervised Learning (SSL) Deploys highly confident localized object pseudo-labels from unlabeled images Updates the model by enforcing consistency through data augmentation Introduction to SSL Provides methods to use unlabeled data to improve model performance when large-scale annotated data is not available First provides artificial labels for unlabeled data. Then uses semantic-preserving methods to predict and update these labels with other labels. Data Augmentation Improves robustness of neural networks Very powerful for SSL image classification!</description>
+    </item>
+    <item>
+      <title>Deep Learning Journal - Convolutional Neural Network Implementation</title>
+      <link>https://m1nttee.github.io/posts/deeplearning-journal/</link>
+      <pubDate>Wed, 08 Apr 2020 21:23:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/deeplearning-journal/</guid>
+      <description>Outline of the Assignment Convolution functions, including: Zero Padding Convolve window Convolution forward Pooling functions, including: Pooling forward Create mask Distribute value Convolution function Zero Padding Firstly, we need to implement a function called Zero Padding, the code is as below.&#xA;def zero_pad(X, pad): X_pad = np.pad(X, ((0,0), (pad, pad), (pad, pad), (0,0)), mode=&amp;#39;constant&amp;#39;, constant_values = (0,0)) return X_pad We can see that with using numpy, it is very easy to be implement.</description>
+    </item>
+  </channel>
+</rss>

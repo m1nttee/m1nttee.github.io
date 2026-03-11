@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/categories/</link>
+    <description>Recent content in Categories on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 11 Mar 2026 11:50:00 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43;</title>
+      <link>https://m1nttee.github.io/categories/c&#43;&#43;/</link>
+      <pubDate>Wed, 11 Mar 2026 11:50:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Design Pattern</title>
+      <link>https://m1nttee.github.io/categories/design-pattern/</link>
+      <pubDate>Wed, 11 Mar 2026 11:50:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/design-pattern/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>https://m1nttee.github.io/categories/java/</link>
+      <pubDate>Mon, 25 Oct 2021 16:00:51 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MySQL</title>
+      <link>https://m1nttee.github.io/categories/mysql/</link>
+      <pubDate>Mon, 10 May 2021 16:58:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/mysql/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Android</title>
+      <link>https://m1nttee.github.io/categories/android/</link>
+      <pubDate>Mon, 31 Aug 2020 21:24:03 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/android/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DL</title>
+      <link>https://m1nttee.github.io/categories/dl/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/dl/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Object Detection</title>
+      <link>https://m1nttee.github.io/categories/object-detection/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/object-detection/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Python</title>
+      <link>https://m1nttee.github.io/categories/python/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/python/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Spring</title>
+      <link>https://m1nttee.github.io/categories/spring/</link>
+      <pubDate>Wed, 17 Jun 2020 11:05:52 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/spring/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Spring Boot</title>
+      <link>https://m1nttee.github.io/categories/spring-boot/</link>
+      <pubDate>Wed, 17 Jun 2020 11:05:52 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/spring-boot/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Spring MVC</title>
+      <link>https://m1nttee.github.io/categories/spring-mvc/</link>
+      <pubDate>Fri, 12 Jun 2020 11:47:13 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/spring-mvc/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Maven</title>
+      <link>https://m1nttee.github.io/categories/maven/</link>
+      <pubDate>Fri, 05 Jun 2020 13:46:15 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/maven/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mybatis</title>
+      <link>https://m1nttee.github.io/categories/mybatis/</link>
+      <pubDate>Sat, 30 May 2020 17:34:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/mybatis/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Bug</title>
+      <link>https://m1nttee.github.io/categories/bug/</link>
+      <pubDate>Tue, 14 Apr 2020 23:12:54 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/bug/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>ML</title>
+      <link>https://m1nttee.github.io/categories/ml/</link>
+      <pubDate>Mon, 06 Apr 2020 21:21:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/ml/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DSA</title>
+      <link>https://m1nttee.github.io/categories/dsa/</link>
+      <pubDate>Thu, 02 Apr 2020 12:52:44 +0000</pubDate>
+      <guid>https://m1nttee.github.io/categories/dsa/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

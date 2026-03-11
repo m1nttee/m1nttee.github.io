@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design Pattern - Factory Pattern | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/design-pattern-factory-pattern/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Design Pattern - Factory Pattern</h1>
+    <time>March 11, 2026</time>
+  </header>
+  <div class="post-content">
+    <h1 id="01-factory-pattern">01 Factory Pattern</h1>
+<h2 id="background">Background</h2>
+<p>When writing code, we often encounter such scenarios:</p>
+<ol>
+<li>Need to create different objects based on different types of user input. For example, based on the database type in the configuration file, create connection objects for MySQL, PostgreSQL, or MongoDB.</li>
+<li>The object&rsquo;s creation logic is complex. If scattered throughout the code, it will cause maintenance difficulties.</li>
+<li>Want to unify the management of object creation to facilitate adding new product types.</li>
+</ol>
+<p>Therefore, Factory Pattern came into being.</p>
+<h2 id="analysis">Analysis</h2>
+<p>The core idea of the factory pattern is: <strong>separate object creation from usage</strong>.</p>
+<p>Here is its UML diagram:</p>
+<pre class="mermaid">
+classDiagram
+    class Product {
+        <<interface>>
+        +operation()
+    }
+    class ConcreteProductA {
+        +operation()
+    }
+    class ConcreteProductB {
+        +operation()
+    }
+    class Creator {
+        +factoryMethod() Product
+    }
+    class ConcreteCreatorA {
+        +factoryMethod() Product
+    }
+    class ConcreteCreatorB {
+        +factoryMethod() Product
+    }
+    
+    Product <|.. ConcreteProductA
+    Product <|.. ConcreteProductB
+    Creator <|.. ConcreteCreatorA
+    Creator <|.. ConcreteCreatorB
+    Creator ..> Product
+</pre>
+<h2 id="example">Example</h2>
+<p>In C++, factory patterns are very commonly used. Here is a simple example:</p>
+<h3 id="1-define-product-interface">1. Define Product Interface</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Database</span> {
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">virtual</span> <span style="color:#000;font-weight:bold">~</span>Database() <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">default</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">virtual</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">connect</span>() <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">virtual</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">query</span>(<span style="color:#000;font-weight:bold">const</span> std<span style="color:#000;font-weight:bold">::</span>string<span style="color:#000;font-weight:bold">&amp;</span> sql) <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="2-implement-concrete-products">2. Implement Concrete Products</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">MySQL</span> <span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">public</span> Database {
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">void</span> connect() <span style="color:#000;font-weight:bold">override</span> {
+</span></span><span style="display:flex;"><span>        std<span style="color:#000;font-weight:bold">::</span>cout <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;Connecting to MySQL...&#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">query</span>(<span style="color:#000;font-weight:bold">const</span> std<span style="color:#000;font-weight:bold">::</span>string<span style="color:#000;font-weight:bold">&amp;</span> sql) <span style="color:#000;font-weight:bold">override</span> {
+</span></span><span style="display:flex;"><span>        std<span style="color:#000;font-weight:bold">::</span>cout <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;MySQL executing: &#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> sql <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">PostgreSQL</span> <span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">public</span> Database {
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">void</span> connect() <span style="color:#000;font-weight:bold">override</span> {
+</span></span><span style="display:flex;"><span>        std<span style="color:#000;font-weight:bold">::</span>cout <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;Connecting to PostgreSQL...&#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">query</span>(<span style="color:#000;font-weight:bold">const</span> std<span style="color:#000;font-weight:bold">::</span>string<span style="color:#000;font-weight:bold">&amp;</span> sql) <span style="color:#000;font-weight:bold">override</span> {
+</span></span><span style="display:flex;"><span>        std<span style="color:#000;font-weight:bold">::</span>cout <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;PostgreSQL executing: &#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> sql <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="3-define-factory">3. Define Factory</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">DatabaseFactory</span> {
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">enum</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Type</span> {
+</span></span><span style="display:flex;"><span>        MySQL,
+</span></span><span style="display:flex;"><span>        PostgreSQL
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">static</span> std<span style="color:#000;font-weight:bold">::</span>unique_ptr<span style="color:#000;font-weight:bold">&lt;</span>Database<span style="color:#000;font-weight:bold">&gt;</span> create(Type type) {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">switch</span> (type) {
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">case</span> Type<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">MySQL</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> std<span style="color:#000;font-weight:bold">::</span>make_unique<span style="color:#000;font-weight:bold">&lt;</span>MySQL<span style="color:#000;font-weight:bold">&gt;</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">case</span> Type<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">PostgreSQL</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> std<span style="color:#000;font-weight:bold">::</span>make_unique<span style="color:#000;font-weight:bold">&lt;</span>PostgreSQL<span style="color:#000;font-weight:bold">&gt;</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">default</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">nullptr</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="4-usage">4. Usage</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">auto</span> db <span style="color:#000;font-weight:bold">=</span> DatabaseFactory<span style="color:#000;font-weight:bold">::</span>create(DatabaseFactory<span style="color:#000;font-weight:bold">::</span>Type<span style="color:#000;font-weight:bold">::</span>MySQL);
+</span></span><span style="display:flex;"><span>    db<span style="color:#000;font-weight:bold">-&gt;</span>connect();
+</span></span><span style="display:flex;"><span>    db<span style="color:#000;font-weight:bold">-&gt;</span>query(<span style="color:#d14">&#34;SELECT * FROM users&#34;</span>);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="advantages">Advantages</h2>
+<ol>
+<li><strong>Decoupling</strong>: Client code doesn&rsquo;t need to care about the specific object creation process</li>
+<li><strong>Easy to extend</strong>: Adding new products only requires modifying the factory class, without affecting the client</li>
+<li><strong>Unified management</strong>: All object creation is in one place, making maintenance easier</li>
+</ol>
+<h2 id="variants">Variants</h2>
+<ol>
+<li><strong>Simple Factory</strong>: Factory class directly creates objects based on parameters (the example above is actually a simple factory)</li>
+<li><strong>Factory Method</strong>: Defines an interface for creating objects, letting subclasses decide which class to instantiate</li>
+<li><strong>Abstract Factory</strong>: Provides an interface for creating a series of related objects without specifying concrete classes</li>
+</ol>
+<h2 id="summary">Summary</h2>
+<p>Factory pattern is one of the most commonly used creational patterns, especially suitable in C++ for:</p>
+<ul>
+<li>Need to create different objects based on configuration</li>
+<li>Complex object creation logic</li>
+<li>Need unified management of object creation</li>
+</ul>
+<p>Mastering the factory pattern can make your code more flexible and maintainable.</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

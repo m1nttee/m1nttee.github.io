@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring MVC | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/springmvc-note-1/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Spring MVC</h1>
+    <time>June 12, 2020</time>
+  </header>
+  <div class="post-content">
+    <h1 id="three-tier-architecture-review">Three-Tier Architecture REVIEW</h1>
+<ul>
+<li>Presentation Layer
+<ul>
+<li>Spring MVC</li>
+</ul>
+</li>
+<li>Business Layer
+<ul>
+<li>Spring</li>
+</ul>
+</li>
+<li>Persistence Layer
+<ul>
+<li>Mybatis</li>
+</ul>
+</li>
+</ul>
+<p>What the presentation layer needs to do:</p>
+<ol>
+<li>Receive requests</li>
+<li>Return responses</li>
+</ol>
+<hr>
+<h1 id="mvc-review">MVC REVIEW</h1>
+<ul>
+<li>Model
+<ul>
+<li>java bean</li>
+</ul>
+</li>
+<li>View
+<ul>
+<li>jsp || HTML</li>
+</ul>
+</li>
+<li>Controller
+<ul>
+<li>servlet</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="advantages-of-spring-mvc">Advantages of Spring MVC</h1>
+<h2 id="clear-role-separation">Clear role separation</h2>
+<ul>
+<li>Front Controller (DispatcherServlet)</li>
+<li>Mapping from requests to handlers (HandlerMapping)</li>
+<li>Handler adapter (HandlerAdapter)</li>
+<li>View resolver (ViewResolver)</li>
+<li>Handler or page controller (Controller)</li>
+<li>Validator</li>
+<li>Command object (the object that request parameters are bound to is called a command object)</li>
+<li>Form object (the object provided for form display and submission is called a form object)</li>
+</ul>
+<hr>
+<h1 id="execution-flow">Execution Flow</h1>
+<ol>
+<li>Client &ndash; Request -&gt; DispatcherServlet</li>
+<li>DispatcherServlet &ndash; Request for Handler -&gt; HandlerMapping</li>
+<li>HandllerMapping find the Method position</li>
+<li>HandlerMapping &ndash; Response an executable chain -&gt; DispatcherServlet</li>
+<li>DispatcherServlet &ndash; Request for execute -&gt; HandlerAdapter</li>
+<li>HandlerAdapter &ndash; Execute -&gt; Handler/Controller</li>
+<li>Handler/Controller &ndash; Response Model and View -&gt; HandlerAdapter</li>
+<li>HandlerAdapter &ndash; Response Model and View -&gt; DispatcherServlet</li>
+<li>DispatcherServlet &ndash; Request for view resolve -&gt; ViewResolver</li>
+<li>ViewResolver &ndash; Response the View -&gt; DispatcherServlet</li>
+<li>DispatcherServlet &ndash; Apply Colors to a Drawing -&gt; View</li>
+<li>DispatcherServlet &ndash; Response -&gt; Client</li>
+</ol>
+<hr>
+<h1 id="common-annotations">Common Annotations</h1>
+<h3 id="requestparam">@RequestParam</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/Path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">method</span>(<span style="color:#3c5d5d;font-weight:bold">@RequestParam</span>(name<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;nameInRequest&#34;</span>)<span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>username)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="requestbody">@RequestBody</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// get 不适用；异步时传json有用</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#998;font-style:italic">// 获得类似(&#34;username=name&amp;age=20&#34;)</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/Path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">method</span>(<span style="color:#3c5d5d;font-weight:bold">@RequestBody</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>body)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="pathvariable">@PathVariable</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// REST 风格</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/Path/{id}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">method</span>(<span style="color:#3c5d5d;font-weight:bold">@PathVariable</span>(name<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;id&#34;</span>)<span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>id)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="requestheader">@RequestHeader</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// 获得请求头的值</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/Path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">method</span>(<span style="color:#3c5d5d;font-weight:bold">@RequestHeader</span>(value<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;HeaderName&#34;</span>)<span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>header)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="cookievalue">@CookieValue</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// 获得cookie</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/Path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">method</span>(<span style="color:#3c5d5d;font-weight:bold">@CookieValue</span>(value<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;CookieName&#34;</span>)<span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>cookie)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="modelattribute">@ModelAttribute</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// 放在方法上，该方法会先执行</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@ModelAttribute</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">attributeMethod</span>(String<span style="color:#bbb"> </span>id)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>attribute;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#998;font-style:italic">// 获得attribute</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/Path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">method</span>(Attribute<span style="color:#bbb"> </span>attribute)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// 第二种写法，利用Map</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@ModelAttribute</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">attributeMethod</span>(String<span style="color:#bbb"> </span>id,<span style="color:#bbb"> </span>Map<span style="color:#000;font-weight:bold">&lt;</span>String,<span style="color:#bbb"> </span>Attribute<span style="color:#000;font-weight:bold">&gt;</span><span style="color:#bbb"> </span>map)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>map.<span style="color:#008080">put</span>(id,<span style="color:#bbb"> </span>attribute);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/Path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">method</span>(<span style="color:#3c5d5d;font-weight:bold">@ModelAttribute</span>(value<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>id)<span style="color:#bbb"> </span>Attribute<span style="color:#bbb"> </span>attribute)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="sessionattribute">@SessionAttribute</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#998;font-style:italic">// add attribute to session</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/Path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">setSessionAttribute</span>(Model<span style="color:#bbb"> </span>model)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>model.<span style="color:#008080">addAttribute</span>(<span style="color:#d14">&#34;key&#34;</span>,<span style="color:#bbb"> </span>value);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#998;font-style:italic">// get attribute from session</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">getSessionAttribute</span>(ModelMap<span style="color:#bbb"> </span>modelMap)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>result<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>(String)<span style="color:#bbb"> </span>modelMap.<span style="color:#008080">get</span>(<span style="color:#d14">&#34;key&#34;</span>);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#998;font-style:italic">// delete attribute from session</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@RequestMapping</span>(<span style="color:#d14">&#34;/path&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>String<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">deleteSessionAttribute</span>(SessionStatus<span style="color:#bbb"> </span>status)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>status.<span style="color:#008080">setComplete</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h1 id="supplement">Supplement</h1>
+<h3 id="rest-style">REST style:</h3>
+<p><em>restfule</em>: for multiple methods, the request address is the same, and different functions are implemented based on different request methods.</p>
+<hr>
+<h1 id="difference-between-interceptors-and-filters">Difference Between Interceptors and Filters</h1>
+<p>Interceptors are specific to SpringMVC, while filters are part of Servlet.</p>
+<ul>
+<li>Filters:
+<ul>
+<li>After configuring /* in url-pattern, they can intercept all resources to be accessed.</li>
+</ul>
+</li>
+<li>Interceptors:
+<ul>
+<li>They only intercept accessed controller methods. If it is jsp, html, and so on, they will not intercept.</li>
+</ul>
+</li>
+</ul>
+<p>Understanding: an interceptor is a weakened version of an interceptor.</p>
+<h3 id="order-of-interception-methods-in-an-interceptor">Order of interception methods in an interceptor:</h3>
+<p>preHandle - &gt; method - &gt; postHandle - &gt; jsp - &gt; afterCompletion</p>
+<h3 id="if-there-are-two-interceptors-1---2---controller">If there are two interceptors (1 -&gt; 2 -&gt; Controller):</h3>
+<p>preHandle1 - &gt; preHandle2 - &gt; method - &gt; postHandle2 - &gt; postHandle1 - &gt; jsp - &gt; afterCompletion2 - &gt; afterCompletion1</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

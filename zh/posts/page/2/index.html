@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Posts | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<div class="page-content">
+  
+  <h1 class="page-title">Posts</h1>
+  
+  <ul class="post-list">
+    
+    <li class="post-item">
+      <time class="post-date">Jun 10, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-note-4/">Spring 笔记（四）</a></h2>
+      
+      
+      <p class="post-summary">收藏 有关事务传播行为：https://segmentfault.com/a/1190000013341344
+有关事务隔离行为：
+isolation：用于指定事务的隔离级别。默认是DEFALUT，表示使用数据库的默认隔离级别。 propagation：用于指定事物的传播行为，默认值是REQUIRED，这是增删改的选择。查询可用SUPPORTS。 read-only：用于指定事务是否只读，查询 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 10, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-note-3/">Spring 笔记（三）</a></h2>
+      
+      
+      <p class="post-summary">AOP: Aspect Oriented Programing 面向切面编程
+使用动态代理实现AOP
+传统方法：
+基于接口的动态代理：Proxy.newProxyInstance 基于子类的动态代理：Enhancer.create 术语：
+JoinPoint（连接点）：所代理类的所有方法。 Pointcut（切入点）：被增强的方法是切入点。 Advice（通知/增强）：拦截到JoinPoint之后 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 9, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-note-2/">Spring 笔记（二）</a></h2>
+      
+      
+      <p class="post-summary">基于注解的IOC配置 xml配置 需要首先扫描包。
+&lt;!-- 添加命名空间 --&gt; &lt;beans xmlns=&#34;http://www.springframework.org/schema/beans&#34; xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34; …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 7, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-note/">Spring 笔记（一）</a></h2>
+      
+      
+      <p class="post-summary">为什么要用 Spring 为了解耦！
+那么何为解耦？
+耦合 指程序间的依赖关系：
+包括类之间的依赖
+包括方法之间的依赖
+解耦 降低程序间的依赖关系
+做到编译的时候不依赖（报错？），运行时才依赖。
+思路 用反射来创建对象。 读取配置文件来读取要创建的对象的全限定类名。 IOC 容器详解 IOC: Inversion of Control
+关键词：工厂模式，单例模式，线程安全。
+单例模式实现思路：新建 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 5, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/maven-catalogue/">Maven 项目目录管理</a></h2>
+      
+      
+      <p class="post-summary">最近在尝试用 Maven 写项目，但奈何功夫不到家，刚开始就被 Maven 项目的目录安排给难住了。
+先介绍一下情况，我的项目（project）将会分为若干模块（module）。
+大概是下面这样的情况：
+- project - module 1 - module 2 - module 3 而我仔细一想，这个问题其实可以分成几个小问题：
+如何命名项目的 groupId 和 artifactId。 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 2, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/name-the-project/">项目命名宝典</a></h2>
+      
+      
+      <p class="post-summary">如何给项目命名？想必各位 coder 都常为此苦恼不已。这里我稍微整理了一下几个比较规范的命名规则，主要还是自己看啦！
+欢迎大家补充哦 :-)
+一、项目名 全部小写，比如 cms、workdesk、jobserver 等
+二、java相关命名 类命名：每音节单词前的第一个字母大写，比如 FieldInfo、Expression 等
+普通变量(包括spring里的变量引用命名)：第一个单词前小写，以 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">May 30, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/mybatis-notes/">Mybatis 笔记</a></h2>
+      
+      
+      <p class="post-summary">终于，本:herb::baby_chick:结束了长达一个多月的DDL战争，重拾旧爱。
+接下来几天要开始按照 Mybatis -&gt; Spring -&gt; Spring MVC 的流程爬一遍！
+一、 XML 配置 与基础 CURD 的 XML 实现 Maven XML dependencies 配置 &lt;dependencies&gt; &lt;dependency&gt; …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Apr 14, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/modulenotfounderror/">ModuleNotFoundError</a></h2>
+      
+      
+      <p class="post-summary">今天碰到一件十分奇怪的的事情。当我尝试着使用mmdetection的工具包时
+我是这样输入的：
+$ python tools/test.py configs/faster_rcnn_r50_fpn_1x.py checkpoints/faster_rcnn_r50_fpn_1x_20181010-3d1b3351.pth modeltest 而他是这样报错的：
+Traceback (most …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Apr 14, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/lack-of-cl-exe/">「解决」anaconda下cl.exe缺失的报错</a></h2>
+      
+      
+      <p class="post-summary">今天很崩溃，为了配置mmdetection所需的环境，我真可谓是煞费苦心。这里记录一个让我止步不前的报错。
+cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD &#34;-ID:\Program Files\anaconda\envs\open_mmlab\lib\site-packages\numpy\core\include&#34; …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Apr 13, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/jupyter-pycharm-anaconda-bug/">Jupyter&#43;Pycharm&#43;anaconda 环境搭建时的报错</a></h2>
+      
+      
+      <p class="post-summary">今天突然发现，Pycharm里原来也可以集成Jupyter！
+然后，本人便兴冲冲地去实现了Jupyter+Pycharm+anaconda的环境部署。。。
+然而。。。事情并没有想象的那么简单。。
+在成功地安装完了环境之后，本人十分愉（zi）快（xin）地点击了运行cell，以下是报错：
+Traceback (most recent call last): File &#34;D:\Program …</p>
+      
+    </li>
+    
+  </ul>
+  
+
+<nav class="pagination" aria-label="Pagination">
+  
+    <a href="/zh/posts/" class="page-link page-prev" aria-label="Previous page">&larr; Prev</a>
+  
+
+  <span class="page-numbers">
+    
+      
+        <a href="/zh/posts/" class="page-link">1</a>
+      
+    
+      
+        <span class="page-link current">2</span>
+      
+    
+      
+        <a href="/zh/posts/page/3/" class="page-link">3</a>
+      
+    
+  </span>
+
+  
+    <a href="/zh/posts/page/3/" class="page-link page-next" aria-label="Next page">Next &rarr;</a>
+  
+</nav>
+
+
+</div>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

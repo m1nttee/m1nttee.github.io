@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mybatis on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/tags/mybatis/</link>
+    <description>Recent content in Mybatis on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 17 Jun 2020 11:05:52 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/tags/mybatis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Postalk - Android Note App</title>
+      <link>https://m1nttee.github.io/posts/postalk/</link>
+      <pubDate>Wed, 17 Jun 2020 11:05:52 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/postalk/</guid>
+      <description>Postalk - Android Note App 0. Introduction This project is a web application based on Spring Boot, Mybatis, Druid, and MySQL. Its function is posting + chat. This article will record the development process and problems encountered.&#xA;1. Design Database Design To make development smoother, I first designed an ER diagram based on the relationships between entities.&#xA;User Table:&#xA;id username password sex age phone_number email registration_date Technology Stack Backend: Spring Boot, Spring MVC ORM: Mybatis Connection Pool: Druid Database: MySQL Frontend: Android (for the app) Project Structure src/ ├── main/ │ ├── java/ │ │ └── xyz.</description>
+    </item>
+    <item>
+      <title>Mybatis Notes</title>
+      <link>https://m1nttee.github.io/posts/mybatis-notes/</link>
+      <pubDate>Sat, 30 May 2020 17:34:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/mybatis-notes/</guid>
+      <description>Finally, I finished the month-long DDL battle and picked up my old love again.&#xA;In the next few days, I&amp;rsquo;ll go through the process: Mybatis -&amp;gt; Spring -&amp;gt; Spring MVC!&#xA;1. XML Configuration and Basic CRUD with XML Maven XML Dependencies &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;4.13&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;log4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;log4j&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.12&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;8.0.19&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.mybatis&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mybatis&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.5.5&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; Mybatis Config XML &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34; ?</description>
+    </item>
+  </channel>
+</rss>

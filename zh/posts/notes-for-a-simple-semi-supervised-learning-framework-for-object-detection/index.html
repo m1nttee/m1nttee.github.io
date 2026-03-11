@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection</h1>
+    <time>June 24, 2020</time>
+  </header>
+  <div class="post-content">
+    <h2 id="概述">概述</h2>
+<p>STAC：</p>
+<ul>
+<li>
+<p>半监督学习（SSL）</p>
+</li>
+<li>
+<p>从未标记的图像中部署高度自信的本地化对象伪标签</p>
+</li>
+<li>
+<p>通过增强数据来增强一致性，从而更新模型</p>
+</li>
+</ul>
+<h2 id="ssl简介">SSL简介</h2>
+<ul>
+<li>
+<p>提供了在没有大规模注释数据时使用未标记数据来提高模型性能的方法</p>
+<ul>
+<li>首先为未标记的数据提供人工标签。</li>
+<li>然后使用语义保留的方法用其他的标签来对这个标签进行预测和更新。</li>
+</ul>
+</li>
+<li>
+<p>数据增强</p>
+<ul>
+<li>提高神经网络的鲁棒性</li>
+<li>对SSL的图像分类功能非常强大！</li>
+</ul>
+</li>
+<li>
+<p>在对象检测问题中也需要这种方法，因为标记成本比较昂贵</p>
+</li>
+</ul>
+<h2 id="方法流程">方法流程</h2>
+<ol>
+<li>
+<p>对数据集进行阶段性培训</p>
+<ul>
+<li>使用所有可用的标记数据训练教师模型</li>
+<li>使用标记和未标记的数据训练STAC</li>
+<li>使用高阈值来控制伪标签的质量</li>
+</ul>
+<blockquote>
+<ol>
+<li>
+<p>Train a teacher model on available labeled images.</p>
+</li>
+<li>
+<p>Generate pseudo labels of unlabeled images (i.e., bounding boxes and their class labels) using the trained teacher model.</p>
+</li>
+<li>
+<p>Apply strong data augmentations to unlabeled images, and augment pseudo labels (i.e. bounding boxes) correspondingly when global geometric transformations are applied.</p>
+</li>
+<li>
+<p>Compute unsupervised loss and supervised loss to train a detector.</p>
+</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p>训练教师模型</p>
+<ul>
+<li>
+<p>基于FASTER RCNN</p>
+</li>
+<li>
+<p>supervised loss function:</p>
+<p><img alt="image-20200624231335427" src="/img/image-20200624231335427.png"></p>
+</li>
+<li>
+<p>unsupervised loss function:</p>
+<p><img alt="image-20200624231531750" src="/img/image-20200624231531750.png"></p>
+</li>
+<li>
+<p>after join two function*:</p>
+<p><img alt="image-20200624231555036" src="/img/image-20200624231555036.png"></p>
+</li>
+<li>
+<p>其中A是应用与未标记图像的强数据增强。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>数据增强</p>
+<ul>
+<li>
+<p>有以下三种增强方式：</p>
+<ol>
+<li>全局色彩变换（C）：使用[7]中的色彩变换操作和每个操作的建议幅度范围。</li>
+<li>全局几何变换（G）：使用[7]中的几何变换操作，即x-y平移，旋转和x-y剪切。</li>
+<li>盒级变换[69]（B）：使用了来自全局几何变换的三个变换操作，但是幅度范围较小。</li>
+</ol>
+</li>
+<li>
+<p>增强方法：</p>
+<p>C -&gt; G/B -&gt; Random Cutout</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><img alt="image-20200624232304092" src="/img/image-20200624232304092.png"></p>
+<h2 id="details">Details</h2>
+<ul>
+<li>基于Faster RCNN和FPN</li>
+<li>使用了ResNet-50</li>
+<li>λu 和 τ 的使用：
+<ul>
+<li>λu：无监督损失的正则化系数</li>
+<li>τ：置信度阈值</li>
+<li>当λu= 2且τ= 0.9时，STAC的性能最佳</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>虽然STAC使用伪标记可大大提高mAP的使用率，但我们的结果表明，伪标记质量的逐步提高可能不会带来显着的额外收益</p>
+</blockquote>
+<h2 id="不足">不足</h2>
+<ul>
+<li>
+<p>投入不足，需要更高级别的标签进行有效培训。</p>
+</li>
+<li>
+<p>嘈杂的伪标签会过度使用！！</p>
+<blockquote>
+<p>While STAC demonstrates an impressive performance gain already without taking confirmation bias [66,1] issue into ac- count, it could be problematic when using a detection framework with a stronger form of hard negative mining [47,29] because noisy pseudo labels can be overly- used. Further investigation in learning with noisy labels, confidence calibration, and uncertainty estimation in the context of object detection are few important topics to further enhance the performance of SSL object detection.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<p>[1] K. Sohn, Z. Zhang, C.-L. Li, H. Zhang, C.-Y. Lee, and T. Pfister, “A Simple Semi-Supervised Learning Framework for Object Detection,” 2020, [Online]. Available: <a href="http://arxiv.org/abs/2005.04757">http://arxiv.org/abs/2005.04757</a>.</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

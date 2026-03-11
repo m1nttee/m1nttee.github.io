@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Posts | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<div class="page-content">
+  
+  <h1 class="page-title">Posts</h1>
+  
+  <ul class="post-list">
+    
+    <li class="post-item">
+      <time class="post-date">Mar 11, 2026</time>
+      <h2 class="post-title"><a href="/zh/posts/design-pattern-factory-pattern/">设计模式 - 工厂模式</a></h2>
+      
+      
+      <p class="post-summary">01 工厂模式 背景 在写代码时，我们常常会碰到这样的情景：
+需要根据用户输入的不同类型，创建不同的对象。比如根据配置文件中的数据库类型，创建 MySQL、PostgreSQL 或 MongoDB 的连接对象。 对象的创建逻辑复杂，如果散落在代码各处，会导致维护困难。 希望对对象的创建进行统一管理，方便添加新的产品类型。 因此，工厂模式（Factory Pattern）就应运而生了。
+分析 工厂模 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Oct 25, 2021</time>
+      <h2 class="post-title"><a href="/zh/posts/design-pattern-prototype-pattern/">设计模式-单例模式</a></h2>
+      
+      
+      <p class="post-summary">01 Prototype Pattern 背景 在写代码时，我们也许会碰到这些情景：
+在进行一次数据库查询后，我们成功地创建出了一个实体，而此时，我们需要从同一个数据源以同样方法取得另一个实体，如果已知其他人并未对数据源进行任何写入操作，那么此时最好的办法就是不经过数据源，我们直接复制已经查询到的数据。这样一来就能避免再次占用昂贵的数据库链接资源，并避免高耗时的数据库查询请求。 或者，在千辛万苦经 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">May 10, 2021</time>
+      <h2 class="post-title"><a href="/zh/posts/mysql-deadly-problem/">MySQL 致命错误</a></h2>
+      
+      
+      <p class="post-summary">今天遇到了一个MySQL有关的错误，记录一下。
+root@iZ2ze2hwhau036810z3eyrZ:/opt/web# systemctl start mysql Job for mysql.service failed because the control process exited with error code. See &#34;systemctl status …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Aug 31, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/google-android-todolist-mvvm-%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/">Google Android TodoList MVVM 架构分析</a></h2>
+      
+      
+      <p class="post-summary">这几天打算写个android程序，但建好项目之后油然而生的无从下手感，让我意识到，作为一名追求程序极致美学的搬砖人民，还是先摸清楚目前主流的android程序结构再下手吧。
+逛了一圈CSDN之后，作为一个小白我了解到，目前市场上比较成熟的两种架构思想分别是MVP和MVVM。斟酌之后，我选择了MVVM架构作为我的第一个android程序的架构。
+于是我顺藤摸瓜，终于发现了，原来android官方早 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Aug 13, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/transparency-state-bar-problem/">透明状态栏实现过程中遇到的问题</a></h2>
+      
+      
+      <p class="post-summary">问题（解决办法在文章末尾） &lt;!-- file inner.xml --&gt; &lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt; &lt;RelativeLayout xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34; …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 24, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/">Notes for: IterDet: Iterative Scheme for Object Detection in Crowded Environments</a></h2>
+      
+      
+      <p class="post-summary">摘要 在这项工作中，我们开发了一种替代的迭代方案，其中在每次迭代中都检测到一个新的对象子集。来自先前迭代的检测到的框在接下来的迭代中传递到网络，以确保不会两次检测到同一对象。只需对训练和推理过程进行较小的修改，就可以将这种迭代方案应用于一级和二级对象检测器。
+问题描述 现代的NMS之类的算法无法处理拥挤的环境，会把拥挤的两个对象看成一个对象。
+所做工作 对象检测器可以分为两类： 两级检测 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 24, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/">Notes for: A Simple Semi-Supervised Learning Framework for Object Detection</a></h2>
+      
+      
+      <p class="post-summary">概述 STAC：
+半监督学习（SSL）
+从未标记的图像中部署高度自信的本地化对象伪标签
+通过增强数据来增强一致性，从而更新模型
+SSL简介 提供了在没有大规模注释数据时使用未标记数据来提高模型性能的方法
+首先为未标记的数据提供人工标签。 然后使用语义保留的方法用其他的标签来对这个标签进行预测和更新。 数据增强
+提高神经网络的鲁棒性 对SSL的图像分类功能非常强大！ 在对象检测问题中也需要这种方法， …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 17, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/postalk/">Postalk</a></h2>
+      
+      
+      <p class="post-summary">Postalk 0. 简介 这个项目是一个基于Spring boot, Mybatis, Druid, MySQL技术的web应用，其功能为发帖+聊天。该文章将会记录开发过程以及在过程之中所遇到的问题。
+1. 设计部分 数据库设计 为了使开发更为顺利，我首先按照各实体类之间的关系，设计了该ER图。
+User表：
+id username password sex age phone_number …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 13, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-boot-note/">spring-boot-note</a></h2>
+      
+      
+      <p class="post-summary">注入 @Value&amp;ConfigurationProperties @ConfigurationProperties @Value 功能 批量注入配置文件中的属性 一个个指定（较麻烦） SpEL 不支持 支持 松散绑定（松散语法） 支持 不支持 JSR303数据校验（@Email） 支持 不支持（加了之后无效） 复杂类型封装 支持 不支持 @PropertySource: 加载指定的配置文 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 12, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/springmvc-note-1/">Spring MVC</a></h2>
+      
+      
+      <p class="post-summary">三层架构 REVIEW 表现层 Spring MVC 业务层 Spring 持久层 Mybatis 表现层需要做：
+接收请求 响应结果 MVC REVIEW Model （模型） java bean View （视图） jsp || HTML Controller （控制器） servlet Spring MVC 优势 角色划分清晰 前端控制器（DispatcherServlet） 请求到处理器映 …</p>
+      
+    </li>
+    
+  </ul>
+  
+
+<nav class="pagination" aria-label="Pagination">
+  
+    <span class="page-link page-prev disabled">&larr; Prev</span>
+  
+
+  <span class="page-numbers">
+    
+      
+        <span class="page-link current">1</span>
+      
+    
+      
+        <a href="/zh/posts/page/2/" class="page-link">2</a>
+      
+    
+      
+        <a href="/zh/posts/page/3/" class="page-link">3</a>
+      
+    
+  </span>
+
+  
+    <a href="/zh/posts/page/2/" class="page-link page-next" aria-label="Next page">Next &rarr;</a>
+  
+</nav>
+
+
+</div>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

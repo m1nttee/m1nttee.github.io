@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DL on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/dl/</link>
+    <description>Recent content in DL on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 24 Jun 2020 23:41:42 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/dl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Notes for: IterDet: Iterative Scheme for Object Detection in Crowded Environments</title>
+      <link>https://m1nttee.github.io/zh/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</guid>
+      <description>摘要 在这项工作中，我们开发了一种替代的迭代方案，其中在每次迭代中都检测到一个新的对象子集。来自先前迭代的检测到的框在接下来的迭代中传递到网络，以确保不会两次检测到同一对象。只需对训练和推理过程进行较小的修改，就可以将这种迭代方案应用于一级和二级对象检测器。&#xA;问题描述 现代的NMS之类的算法无法处理拥挤的环境，会把拥挤的两个对象看成一个对象。&#xA;所做工作 对象检测器可以分为两类： 两级检测器（R-CNN系列） 一级检测器 （YOCO） 更高的速度，接近两级检测器的精度 最近Anchor-free的算法出现了 原先的NMS算法的缺陷： 选择得分较高的检测的特性，导致了NMS在拥挤环境会出问题 做出的努力： NMS的聚类问题 NMS重新定制为积分任务 Soft-NMS的应用 Fitness-NMS和Soft-NMS的结合 自适应NMS R2NMS同时预测对象的完整框和可见框 加循环LSTM层，用于通过Hungarian loss function训练序列生成 将Jaccard指数估计为检测质量得分的层，以及一个新颖的EM合并单元 该算法： 迭代进行检测：&#xA;第一次先搜索一些比较简单的对象 之后几次慢慢增加抑制参数并提高精度 检验算法可行度 使用AdaptIS Toy V1 and Toy V2数据集 基于MMDetection框架 SGD optimizer with momentum 0.9, weight decay parameter 0.0001, and initial learning rate 0.02 Adam lr = 0.0001 Reference [1] D. Rukhovich, K. Sofiiuk, D. Galeev, O. Barinova, and A. Konushin, “IterDet: Iterative Scheme for ObjectDetection in Crowded Environments,” 2020, [Online].</description>
+    </item>
+    <item>
+      <title>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection</title>
+      <link>https://m1nttee.github.io/zh/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</guid>
+      <description>概述 STAC：&#xA;半监督学习（SSL）&#xA;从未标记的图像中部署高度自信的本地化对象伪标签&#xA;通过增强数据来增强一致性，从而更新模型&#xA;SSL简介 提供了在没有大规模注释数据时使用未标记数据来提高模型性能的方法&#xA;首先为未标记的数据提供人工标签。 然后使用语义保留的方法用其他的标签来对这个标签进行预测和更新。 数据增强&#xA;提高神经网络的鲁棒性 对SSL的图像分类功能非常强大！ 在对象检测问题中也需要这种方法，因为标记成本比较昂贵&#xA;方法流程 对数据集进行阶段性培训&#xA;使用所有可用的标记数据训练教师模型 使用标记和未标记的数据训练STAC 使用高阈值来控制伪标签的质量 Train a teacher model on available labeled images.&#xA;Generate pseudo labels of unlabeled images (i.e., bounding boxes and their class labels) using the trained teacher model.&#xA;Apply strong data augmentations to unlabeled images, and augment pseudo labels (i.e. bounding boxes) correspondingly when global geometric transformations are applied.&#xA;Compute unsupervised loss and supervised loss to train a detector.</description>
+    </item>
+    <item>
+      <title>深度学习日记-卷积神经网络实现</title>
+      <link>https://m1nttee.github.io/zh/posts/deeplearning-journal/</link>
+      <pubDate>Wed, 08 Apr 2020 21:23:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/deeplearning-journal/</guid>
+      <description>Outline of the Assignment Convolution functions, including: Zero Padding Convolve window Convolution forward Pooling functions, including: Pooling forward Create mask Distribute value Convolution function Zero Padding Firstly, we need to implement a function called Zero Padding, the code is as below.&#xA;def zero_pad(X, pad): X_pad = np.pad(X, ((0,0), (pad, pad), (pad, pad), (0,0)), mode=&amp;#39;constant&amp;#39;, constant_values = (0,0)) return X_pad We can see that with using numpy, it is very easy to be implement.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring Notes (1) | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/spring-note/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Spring Notes (1)</h1>
+    <time>June 7, 2020</time>
+  </header>
+  <div class="post-content">
+    <h1 id="why-use-spring">Why Use Spring?</h1>
+<p>For decoupling!</p>
+<p>What is decoupling?</p>
+<h2 id="coupling">Coupling</h2>
+<p>Refers to dependencies between programs:</p>
+<ul>
+<li>Dependencies between classes</li>
+<li>Dependencies between methods</li>
+</ul>
+<h2 id="decoupling">Decoupling</h2>
+<ul>
+<li>Reduce dependencies between programs</li>
+<li>Don&rsquo;t depend on compile-time (error?), depend at runtime instead.</li>
+</ul>
+<h2 id="approach">Approach</h2>
+<ul>
+<li>Use reflection to create objects.</li>
+<li>Read configuration files to get the fully qualified class names to create.</li>
+</ul>
+<hr>
+<h1 id="ioc-container-details">IOC Container Details</h1>
+<p><strong>IOC: Inversion of Control</strong></p>
+<p><em>Keywords: Factory Pattern, Singleton Pattern, Thread Safety.</em></p>
+<ul>
+<li><em>Singleton Pattern: Use static Map to share values.</em></li>
+</ul>
+<p>Before:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>UserService<span style="color:#bbb"> </span>userService<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>UserService();<span style="color:#bbb">
+</span></span></span></code></pre></div><p>After (using Spring):</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>UserService<span style="color:#bbb"> </span>userService<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>(UserService)<span style="color:#bbb"> </span>applicationContext.<span style="color:#008080">getBean</span>(<span style="color:#d14">&#34;userService&#34;</span>);<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h1 id="bean-management-details">Bean Management Details</h1>
+<h2 id="bean-scopes">Bean Scopes</h2>
+<ul>
+<li><strong>singleton</strong>: One instance per Spring container (default)</li>
+<li><strong>prototype</strong>: New instance each time requested</li>
+<li><strong>request</strong>: One instance per HTTP request</li>
+<li><strong>session</strong>: One instance per HTTP session</li>
+</ul>
+<h2 id="bean-lifecycle">Bean Lifecycle</h2>
+<ol>
+<li>Instantiation</li>
+<li>Population of properties</li>
+<li>Initialization</li>
+<li>Destruction</li>
+</ol>
+<h2 id="dependency-injection">Dependency Injection</h2>
+<h3 id="constructor-injection">Constructor Injection</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">UserService</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>UserDao<span style="color:#bbb"> </span>userDao;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">UserService</span>(UserDao<span style="color:#bbb"> </span>userDao)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">userDao</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>userDao;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="setter-injection">Setter Injection</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">UserService</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>UserDao<span style="color:#bbb"> </span>userDao;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">setUserDao</span>(UserDao<span style="color:#bbb"> </span>userDao)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">userDao</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>userDao;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h1 id="summary">Summary</h1>
+<p>Spring provides:</p>
+<ol>
+<li>Decoupling through IOC</li>
+<li>Flexible Bean management</li>
+<li>Multiple dependency injection methods</li>
+<li>AOP (Aspect-Oriented Programming) support</li>
+</ol>
+<p>These features make Spring the most popular Java framework.</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

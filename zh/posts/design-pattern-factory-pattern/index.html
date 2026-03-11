@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>设计模式 - 工厂模式 | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/design-pattern-factory-pattern/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>设计模式 - 工厂模式</h1>
+    <time>March 11, 2026</time>
+  </header>
+  <div class="post-content">
+    <h1 id="01-工厂模式">01 工厂模式</h1>
+<h2 id="背景">背景</h2>
+<p>在写代码时，我们常常会碰到这样的情景：</p>
+<ol>
+<li>需要根据用户输入的不同类型，创建不同的对象。比如根据配置文件中的数据库类型，创建 MySQL、PostgreSQL 或 MongoDB 的连接对象。</li>
+<li>对象的创建逻辑复杂，如果散落在代码各处，会导致维护困难。</li>
+<li>希望对对象的创建进行统一管理，方便添加新的产品类型。</li>
+</ol>
+<p>因此，工厂模式（Factory Pattern）就应运而生了。</p>
+<h2 id="分析">分析</h2>
+<p>工厂模式的核心思想是：<strong>将对象的创建与使用分离</strong>。</p>
+<p>下面是它的 UML 图：</p>
+<pre class="mermaid">
+classDiagram
+    class Product {
+        <<interface>>
+        +operation()
+    }
+    class ConcreteProductA {
+        +operation()
+    }
+    class ConcreteProductB {
+        +operation()
+    }
+    class Creator {
+        +factoryMethod() Product
+    }
+    class ConcreteCreatorA {
+        +factoryMethod() Product
+    }
+    class ConcreteCreatorB {
+        +factoryMethod() Product
+    }
+    
+    Product <|.. ConcreteProductA
+    Product <|.. ConcreteProductB
+    Creator <|.. ConcreteCreatorA
+    Creator <|.. ConcreteCreatorB
+    Creator ..> Product
+</pre>
+<h2 id="例子">例子</h2>
+<p>在 C++ 中，工厂模式非常常用。下面是一个简单的例子：</p>
+<h3 id="1-定义产品接口">1. 定义产品接口</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Database</span> {
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">virtual</span> <span style="color:#000;font-weight:bold">~</span>Database() <span style="color:#000;font-weight:bold">=</span> <span style="color:#000;font-weight:bold">default</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">virtual</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">connect</span>() <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">virtual</span> <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">query</span>(<span style="color:#000;font-weight:bold">const</span> std<span style="color:#000;font-weight:bold">::</span>string<span style="color:#000;font-weight:bold">&amp;</span> sql) <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="2-实现具体产品">2. 实现具体产品</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">MySQL</span> <span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">public</span> Database {
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">void</span> connect() <span style="color:#000;font-weight:bold">override</span> {
+</span></span><span style="display:flex;"><span>        std<span style="color:#000;font-weight:bold">::</span>cout <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;Connecting to MySQL...&#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">query</span>(<span style="color:#000;font-weight:bold">const</span> std<span style="color:#000;font-weight:bold">::</span>string<span style="color:#000;font-weight:bold">&amp;</span> sql) <span style="color:#000;font-weight:bold">override</span> {
+</span></span><span style="display:flex;"><span>        std<span style="color:#000;font-weight:bold">::</span>cout <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;MySQL executing: &#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> sql <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">PostgreSQL</span> <span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">public</span> Database {
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">void</span> connect() <span style="color:#000;font-weight:bold">override</span> {
+</span></span><span style="display:flex;"><span>        std<span style="color:#000;font-weight:bold">::</span>cout <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;Connecting to PostgreSQL...&#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#458;font-weight:bold">void</span> <span style="color:#900;font-weight:bold">query</span>(<span style="color:#000;font-weight:bold">const</span> std<span style="color:#000;font-weight:bold">::</span>string<span style="color:#000;font-weight:bold">&amp;</span> sql) <span style="color:#000;font-weight:bold">override</span> {
+</span></span><span style="display:flex;"><span>        std<span style="color:#000;font-weight:bold">::</span>cout <span style="color:#000;font-weight:bold">&lt;&lt;</span> <span style="color:#d14">&#34;PostgreSQL executing: &#34;</span> <span style="color:#000;font-weight:bold">&lt;&lt;</span> sql <span style="color:#000;font-weight:bold">&lt;&lt;</span> std<span style="color:#000;font-weight:bold">::</span>endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="3-定义工厂">3. 定义工厂</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">DatabaseFactory</span> {
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">enum</span> <span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Type</span> {
+</span></span><span style="display:flex;"><span>        MySQL,
+</span></span><span style="display:flex;"><span>        PostgreSQL
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">static</span> std<span style="color:#000;font-weight:bold">::</span>unique_ptr<span style="color:#000;font-weight:bold">&lt;</span>Database<span style="color:#000;font-weight:bold">&gt;</span> create(Type type) {
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">switch</span> (type) {
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">case</span> Type<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">MySQL</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> std<span style="color:#000;font-weight:bold">::</span>make_unique<span style="color:#000;font-weight:bold">&lt;</span>MySQL<span style="color:#000;font-weight:bold">&gt;</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">case</span> Type<span style="color:#000;font-weight:bold">::</span><span style="color:#900;font-weight:bold">PostgreSQL</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> std<span style="color:#000;font-weight:bold">::</span>make_unique<span style="color:#000;font-weight:bold">&lt;</span>PostgreSQL<span style="color:#000;font-weight:bold">&gt;</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">default</span><span style="color:#000;font-weight:bold">:</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">nullptr</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="4-使用">4. 使用</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#458;font-weight:bold">int</span> <span style="color:#900;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">auto</span> db <span style="color:#000;font-weight:bold">=</span> DatabaseFactory<span style="color:#000;font-weight:bold">::</span>create(DatabaseFactory<span style="color:#000;font-weight:bold">::</span>Type<span style="color:#000;font-weight:bold">::</span>MySQL);
+</span></span><span style="display:flex;"><span>    db<span style="color:#000;font-weight:bold">-&gt;</span>connect();
+</span></span><span style="display:flex;"><span>    db<span style="color:#000;font-weight:bold">-&gt;</span>query(<span style="color:#d14">&#34;SELECT * FROM users&#34;</span>);
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#099">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="优点">优点</h2>
+<ol>
+<li><strong>解耦</strong>：客户端代码不需要关心对象的具体创建过程</li>
+<li><strong>易于扩展</strong>：添加新产品只需修改工厂类，不影响客户端</li>
+<li><strong>统一管理</strong>：所有对象的创建都在一个地方，便于维护</li>
+</ol>
+<h2 id="变体">变体</h2>
+<ol>
+<li><strong>简单工厂</strong>：工厂类根据参数直接创建对象（上面的例子其实就是简单工厂）</li>
+<li><strong>工厂方法</strong>：定义一个创建对象的接口，让子类决定实例化哪个类</li>
+<li><strong>抽象工厂</strong>：提供一个创建一系列相关对象的接口，无需指定具体类</li>
+</ol>
+<h2 id="总结">总结</h2>
+<p>工厂模式是创建型模式中最常用的模式之一，在 C++ 中尤其适用于：</p>
+<ul>
+<li>需要根据配置创建不同对象</li>
+<li>对象创建逻辑复杂</li>
+<li>需要统一管理对象创建</li>
+</ul>
+<p>掌握工厂模式，能让你的代码更加灵活和可维护。</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

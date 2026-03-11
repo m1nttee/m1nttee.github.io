@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pycharm on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/tags/pycharm/</link>
+    <description>Recent content in Pycharm on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 13 Apr 2020 17:28:22 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/tags/pycharm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Jupyter &#43; PyCharm &#43; Anaconda Setup Issues</title>
+      <link>https://m1nttee.github.io/posts/jupyter-pycharm-anaconda-bug/</link>
+      <pubDate>Mon, 13 Apr 2020 17:28:22 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/jupyter-pycharm-anaconda-bug/</guid>
+      <description>Today I suddenly discovered that Jupyter can actually be integrated into PyCharm!&#xA;Then, I excitedly went to implement the Jupyter + PyCharm + Anaconda environment deployment&amp;hellip;&#xA;However&amp;hellip; things weren&amp;rsquo;t as simple as I imagined..&#xA;After successfully installing the environment, I happily (and confidently) clicked Run Cell. Here&amp;rsquo;s the error:&#xA;Traceback (most recent call last): File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\web.py&amp;#34;, line 1703, in _execute result = await result File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 742, in run yielded = self.</description>
+    </item>
+  </channel>
+</rss>

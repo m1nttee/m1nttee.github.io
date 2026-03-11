@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MySQL Fatal Error | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/mysql-deadly-problem/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>MySQL Fatal Error</h1>
+    <time>May 10, 2021</time>
+  </header>
+  <div class="post-content">
+    <p>Today I encountered a MySQL-related error, so I&rsquo;m recording it.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@iZ2ze2hwhau036810z3eyrZ:/opt/web# systemctl start mysql
+</span></span><span style="display:flex;"><span>Job <span style="color:#000;font-weight:bold">for</span> mysql.service failed because the control process exited with error code.
+</span></span><span style="display:flex;"><span>See <span style="color:#d14">&#34;systemctl status mysql.service&#34;</span> and <span style="color:#d14">&#34;journalctl -xe&#34;</span> <span style="color:#000;font-weight:bold">for</span> details.
+</span></span><span style="display:flex;"><span>● mysql.service - MySQL Community Server
+</span></span><span style="display:flex;"><span>   Loaded: loaded <span style="color:#000;font-weight:bold">(</span>/lib/systemd/system/mysql.service; enabled; vendor preset: enabled<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>   Active: failed <span style="color:#000;font-weight:bold">(</span>Result: exit-code<span style="color:#000;font-weight:bold">)</span> since Mon 2021-05-10 15:58:54 CST; 3min 28s ago
+</span></span><span style="display:flex;"><span>  Process: <span style="color:#099">3330</span> <span style="color:#008080">ExecStartPre</span><span style="color:#000;font-weight:bold">=</span>/usr/share/mysql/mysql-systemd-start pre <span style="color:#000;font-weight:bold">(</span><span style="color:#008080">code</span><span style="color:#000;font-weight:bold">=</span>exited, <span style="color:#008080">status</span><span style="color:#000;font-weight:bold">=</span>0/SUCCESS<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>  Process: <span style="color:#099">3368</span> <span style="color:#008080">ExecStart</span><span style="color:#000;font-weight:bold">=</span>/usr/sbin/mysqld --daemonize --pid-file<span style="color:#000;font-weight:bold">=</span>/var/run/mysqld/mysqld.pid <span style="color:#000;font-weight:bold">(</span><span style="color:#008080">code</span><span style="color:#000;font-weight:bold">=</span>exited, <span style="color:#008080">status</span><span style="color:#000;font-weight:bold">=</span>1/F
+</span></span></code></pre></div><p>Later, no matter how many times I restarted, I couldn&rsquo;t run the MySQL service.</p>
+<p>In the end, I searched through forums but couldn&rsquo;t find where my problem was.</p>
+<p>Result:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@iZ2ze2hwhau036810z3eyrZ:~# df
+</span></span><span style="display:flex;"><span>Filesystem     1K-blocks     Used Available Use% Mounted on
+</span></span><span style="display:flex;"><span>udev              <span style="color:#099">953472</span>        <span style="color:#099">0</span>    <span style="color:#099">953472</span>   0% /dev
+</span></span><span style="display:flex;"><span>tmpfs             <span style="color:#099">193720</span>      <span style="color:#099">484</span>    <span style="color:#099">193236</span>   1% /run
+</span></span><span style="display:flex;"><span>/dev/vda1       <span style="color:#099">41152812</span> <span style="color:#099">41115388</span>         <span style="color:#099">0</span> 100% /
+</span></span><span style="display:flex;"><span>tmpfs             <span style="color:#099">968596</span>        <span style="color:#099">0</span>    <span style="color:#099">968596</span>   0% /dev/shm
+</span></span><span style="display:flex;"><span>tmpfs               <span style="color:#099">5120</span>        <span style="color:#099">0</span>      <span style="color:#099">5120</span>   0% /run/lock
+</span></span><span style="display:flex;"><span>tmpfs             <span style="color:#099">968596</span>        <span style="color:#099">0</span>    <span style="color:#099">968596</span>   0% /sys/fs/cgroup
+</span></span><span style="display:flex;"><span>tmpfs             <span style="color:#099">193716</span>        <span style="color:#099">0</span>    <span style="color:#099">193716</span>   0% /run/user/0
+</span></span></code></pre></div><p>Okay, it turned out to be a disk space issue&hellip;</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

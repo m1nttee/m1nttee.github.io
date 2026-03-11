@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Maven on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/tags/maven/</link>
+    <description>Recent content in Maven on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 05 Jun 2020 13:46:15 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/tags/maven/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Maven Project Directory Management</title>
+      <link>https://m1nttee.github.io/posts/maven-catalogue/</link>
+      <pubDate>Fri, 05 Jun 2020 13:46:15 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/maven-catalogue/</guid>
+      <description>Recently I&amp;rsquo;ve been trying to write projects with Maven, but unfortunately my skills aren&amp;rsquo;t good enough. I got stuck at the beginning by the Maven project directory arrangement.&#xA;Let me first introduce the situation. My project will be divided into several modules.&#xA;It&amp;rsquo;s roughly like this:&#xA;- project - module 1 - module 2 - module 3 And after thinking about it carefully, this problem can actually be divided into several small problems:</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring 笔记（四） | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/spring-note-4/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Spring 笔记（四）</h1>
+    <time>June 10, 2020</time>
+  </header>
+  <div class="post-content">
+    <h1 id="收藏">收藏</h1>
+<p>有关事务传播行为：https://segmentfault.com/a/1190000013341344</p>
+<p>有关事务隔离行为：</p>
+<ul>
+<li>isolation：用于指定事务的隔离级别。默认是DEFALUT，表示使用数据库的默认隔离级别。</li>
+<li>propagation：用于指定事物的传播行为，默认值是REQUIRED，这是增删改的选择。查询可用SUPPORTS。</li>
+<li>read-only：用于指定事务是否只读，查询为true，默认为false。</li>
+<li>timeout：用于指定事务的超时时间，默认为-1永不超时。以秒为单位。</li>
+<li>rollback-for：用于指定一个异常，当产生这个异常时，事务回滚，产生其他异常时，事务不回滚。没有默认值，表示任何异常都会滚。</li>
+<li>no-rollback-for：用于指定一个异常，当产生这个异常时，事务不回滚，产生其他异常时，事务回滚。没有默认值，表示任何异常都会滚。</li>
+</ul>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

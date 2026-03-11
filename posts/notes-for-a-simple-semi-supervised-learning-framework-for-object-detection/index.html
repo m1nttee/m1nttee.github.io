@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection</h1>
+    <time>June 24, 2020</time>
+  </header>
+  <div class="post-content">
+    <h2 id="overview">Overview</h2>
+<p>STAC:</p>
+<ul>
+<li>Semi-Supervised Learning (SSL)</li>
+<li>Deploys highly confident localized object pseudo-labels from unlabeled images</li>
+<li>Updates the model by enforcing consistency through data augmentation</li>
+</ul>
+<h2 id="introduction-to-ssl">Introduction to SSL</h2>
+<ul>
+<li>Provides methods to use unlabeled data to improve model performance when large-scale annotated data is not available
+<ul>
+<li>First provides artificial labels for unlabeled data.</li>
+<li>Then uses semantic-preserving methods to predict and update these labels with other labels.</li>
+</ul>
+</li>
+<li>Data Augmentation
+<ul>
+<li>Improves robustness of neural networks</li>
+<li>Very powerful for SSL image classification!</li>
+</ul>
+</li>
+<li>This method is also needed in object detection problems because labeling costs are relatively expensive</li>
+</ul>
+<h2 id="method-pipeline">Method Pipeline</h2>
+<ol>
+<li>
+<p>Phased training on dataset</p>
+<ul>
+<li>Train teacher model on all available labeled data</li>
+<li>Train STAC with labeled and unlabeled data</li>
+<li>Use high thresholds to control pseudo-label quality</li>
+</ul>
+<blockquote>
+<ol>
+<li>
+<p>Train a teacher model on available labeled images.</p>
+</li>
+<li>
+<p>Generate pseudo labels of unlabeled images (i.e., bounding boxes and their class labels) using the trained teacher model.</p>
+</li>
+<li>
+<p>Apply strong data augmentations to unlabeled images, and augment pseudo labels (i.e. bounding boxes) correspondingly when global geometric transformations are applied.</p>
+</li>
+<li>
+<p>Compute unsupervised loss and supervised loss to train a detector.</p>
+</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p>Train teacher model</p>
+<ul>
+<li>
+<p>Based on FASTER RCNN</p>
+</li>
+<li>
+<p>supervised loss function:</p>
+<p><img alt="image-20200624231335427" src="/img/image-20200624231335427.png"></p>
+</li>
+<li>
+<p>unsupervised loss function:</p>
+<p><img alt="image-20200624231531750" src="/img/image-20200624231531750.png"></p>
+</li>
+<li>
+<p>after join two function*:</p>
+<p><img alt="image-20200624231555036" src="/img/image-20200624231555036.png"></p>
+</li>
+<li>
+<p>where A is the strong data augmentation applied to unlabeled images.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Data Augmentation</p>
+<ul>
+<li>
+<p>There are three types of augmentation:</p>
+<ol>
+<li>Global Color Transformation (C): Uses color transformation operations from [7] with the proposed magnitude range for each operation.</li>
+<li>Global Geometric Transformation (G): Uses geometric transformation operations from [7], i.e., x-y translation, rotation, and x-y shear.</li>
+<li>Box-level Transformation [69] (B): Uses the three transformation operations from global geometric transformation, but with smaller magnitude ranges.</li>
+</ol>
+</li>
+<li>
+<p>Augmentation method:</p>
+<p>C -&gt; G/B -&gt; Random Cutout</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><img alt="image-20200624232304092" src="/img/image-20200624232304092.png"></p>
+<h2 id="details">Details</h2>
+<ul>
+<li>Based on Faster RCNN and FPN</li>
+<li>Uses ResNet-50</li>
+<li>Usage of λu and τ:
+<ul>
+<li>λu: Regularization coefficient for unsupervised loss</li>
+<li>τ: Confidence threshold</li>
+<li>STAC performs best when λu=2 and τ=0.9</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Although STAC can greatly improve mAP usage through pseudo-labeling, our results show that gradual improvement in pseudo-label quality may not bring significant additional benefits</p>
+</blockquote>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>
+<p>Insufficient input, requires higher-level labels for effective training.</p>
+</li>
+<li>
+<p>Noisy pseudo labels can be overly used!!!</p>
+<blockquote>
+<p>While STAC demonstrates an impressive performance gain already without taking confirmation bias [66,1] issue into ac- count, it could be problematic when using a detection framework with a stronger form of hard negative mining [47,29] because noisy pseudo labels can be overly- used. Further investigation in learning with noisy labels, confidence calibration, and uncertainty estimation in the context of object detection are few important topics to further enhance the performance of SSL object detection.</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<p>[1] K. Sohn, Z. Zhang, C.-L. Li, H. Zhang, C.-Y. Lee, and T. Pfister, &ldquo;A Simple Semi-Supervised Learning Framework for Object Detection,&rdquo; 2020, [Online]. Available: <a href="http://arxiv.org/abs/2005.04757">http://arxiv.org/abs/2005.04757</a>.</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

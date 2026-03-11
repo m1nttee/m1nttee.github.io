@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Housing Auto Pricing (Part 2) - Data Preprocessing | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/housing-evaluation-auto-part-2/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Housing Auto Pricing (Part 2) - Data Preprocessing</h1>
+    <time>April 5, 2020</time>
+  </header>
+  <div class="post-content">
+    <hr>
+<h1 id="data-preprocessing">Data Preprocessing</h1>
+<p>Yesterday, I successfully scraped the dataset. But to make the machine learning algorithm run smoothly later, I think it&rsquo;s necessary to do data preprocessing.</p>
+<p>Before preprocessing, let me show you my database structure.</p>
+<p>Although it&rsquo;s a quick glance, we can find that many data formats are not consistent, and some show &ldquo;No Data&rdquo;.</p>
+<p>Let&rsquo;s standardize each column!</p>
+<hr>
+<h2 id="house_title">house_title</h2>
+<p>This column clearly has duplicate data with &ldquo;** square meters&rdquo; at the end and the house_area column. We need to remove the &quot; square meters&quot; text.</p>
+<p>Since it involves string slicing, we&rsquo;ll do this in Python (not MySQL).</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">house_title_format</span>(<span style="color:#999">self</span>):
+</span></span><span style="display:flex;"><span>    cursor_r <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>db<span style="color:#000;font-weight:bold">.</span>cursor()
+</span></span><span style="display:flex;"><span>    cursor_w <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>db<span style="color:#000;font-weight:bold">.</span>cursor()
+</span></span><span style="display:flex;"><span>    sqlR <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;SELECT house_id, house_title FROM house_info;&#34;</span>
+</span></span><span style="display:flex;"><span>    sqlW <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;UPDATE house_info SET house_title = </span><span style="color:#d14">%s</span><span style="color:#d14">, rooms_type = </span><span style="color:#d14">%s</span><span style="color:#d14"> WHERE house_id = </span><span style="color:#d14">%s</span><span style="color:#d14">;&#34;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    cursor_r<span style="color:#000;font-weight:bold">.</span>execute(sqlR)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> house_id, house_title <span style="color:#000;font-weight:bold">in</span> cursor_r<span style="color:#000;font-weight:bold">.</span>fetchall():
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> <span style="color:#d14">&#34;平米&#34;</span> <span style="color:#000;font-weight:bold">in</span> house_title:
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># Extract room type</span>
+</span></span><span style="display:flex;"><span>            rooms_type <span style="color:#000;font-weight:bold">=</span> house_title<span style="color:#000;font-weight:bold">.</span>split(<span style="color:#d14">&#34;室&#34;</span>)[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">+</span> <span style="color:#d14">&#34;室&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># Clean title</span>
+</span></span><span style="display:flex;"><span>            house_title <span style="color:#000;font-weight:bold">=</span> house_title<span style="color:#000;font-weight:bold">.</span>replace(<span style="color:#d14">&#34;平米&#34;</span>, <span style="color:#d14">&#34;&#34;</span>)<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>            cursor_w<span style="color:#000;font-weight:bold">.</span>execute(sqlW, (house_title, rooms_type, house_id))
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>db<span style="color:#000;font-weight:bold">.</span>commit()
+</span></span></code></pre></div><hr>
+<h2 id="house_area">house_area</h2>
+<p>The &ldquo;square meters&rdquo; suffix needs to be removed and convert to numeric.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">house_area_format</span>(<span style="color:#999">self</span>):
+</span></span><span style="display:flex;"><span>    cursor <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>db<span style="color:#000;font-weight:bold">.</span>cursor()
+</span></span><span style="display:flex;"><span>    sql <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;SELECT house_id, house_area FROM house_info;&#34;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    cursor<span style="color:#000;font-weight:bold">.</span>execute(sql)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> house_id, house_area <span style="color:#000;font-weight:bold">in</span> cursor<span style="color:#000;font-weight:bold">.</span>fetchall():
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> house_area <span style="color:#000;font-weight:bold">and</span> <span style="color:#d14">&#34;平米&#34;</span> <span style="color:#000;font-weight:bold">in</span> house_area:
+</span></span><span style="display:flex;"><span>            house_area <span style="color:#000;font-weight:bold">=</span> house_area<span style="color:#000;font-weight:bold">.</span>replace(<span style="color:#d14">&#34;平米&#34;</span>, <span style="color:#d14">&#34;&#34;</span>)<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>            cursor<span style="color:#000;font-weight:bold">.</span>execute(<span style="color:#d14">&#34;UPDATE house_info SET house_area = </span><span style="color:#d14">%s</span><span style="color:#d14"> WHERE house_id = </span><span style="color:#d14">%s</span><span style="color:#d14">&#34;</span>, 
+</span></span><span style="display:flex;"><span>                         (house_area, house_id))
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>db<span style="color:#000;font-weight:bold">.</span>commit()
+</span></span></code></pre></div><hr>
+<h2 id="summary">Summary</h2>
+<p>Data preprocessing is crucial for machine learning:</p>
+<ol>
+<li>Remove duplicate information</li>
+<li>Convert to numeric types</li>
+<li>Handle missing values</li>
+<li>Standardize formats</li>
+</ol>
+<p>Next, we&rsquo;ll build the machine learning model!</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TensorFlow on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/tags/tensorflow/</link>
+    <description>Recent content in TensorFlow on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 06 Apr 2020 21:21:31 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/tags/tensorflow/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Housing Auto Pricing (Part 3) - Neural Network</title>
+      <link>https://m1nttee.github.io/posts/housing-evaluation-auto-part-3/</link>
+      <pubDate>Mon, 06 Apr 2020 21:21:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/housing-evaluation-auto-part-3/</guid>
+      <description>Data scraping and preprocessing are done. Now, I&amp;rsquo;ll use a simple BP neural network to fit the data. I&amp;rsquo;m using TensorFlow 2.1.0.&#xA;Input/Output Selection Since we&amp;rsquo;re just testing the BP neural network, let&amp;rsquo;s keep inputs and outputs simple.&#xA;INPUT: place_id, house_type, house_area, house_towards&#xA;OUTPUT: house_price&#xA;The four input data are:&#xA;Area ID (I&amp;rsquo;ve numbered each area, e.g., Andingmen: 1) House type (also numbered, e.g., Board-style: 0) House area (in square meters) House direction/towards (also numbered, e.</description>
+    </item>
+  </channel>
+</rss>

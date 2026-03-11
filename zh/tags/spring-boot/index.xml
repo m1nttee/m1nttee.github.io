@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring Boot on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/spring-boot/</link>
+    <description>Recent content in Spring Boot on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 17 Jun 2020 11:05:52 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Postalk</title>
+      <link>https://m1nttee.github.io/zh/posts/postalk/</link>
+      <pubDate>Wed, 17 Jun 2020 11:05:52 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/postalk/</guid>
+      <description>Postalk 0. 简介 这个项目是一个基于Spring boot, Mybatis, Druid, MySQL技术的web应用，其功能为发帖+聊天。该文章将会记录开发过程以及在过程之中所遇到的问题。&#xA;1. 设计部分 数据库设计 为了使开发更为顺利，我首先按照各实体类之间的关系，设计了该ER图。&#xA;User表：&#xA;id username password sex age phone_number email registration_date 序号 用户名 密码 性别（F表示女性，M表示男性） 年龄 电话号码 电子邮箱 注册时间 Text表：&#xA;id uid content time 序号 用户序号 文本内容 发文时间 Comment表：&#xA;tid pid 对应文本的序号 对应评价文本的序号 Post表：&#xA;tid 对应文本的序号 Like表：&#xA;uid tid 对应用户的序号 对应文本的序号 Friend表：&#xA;uid_1 uid_2 since_time 用户1的序号 用户2的序号 从何时开始成为朋友 Conversation表：&#xA;id to_user from_user conversation_id time content read 该段对话的序号 发送人序号 接收人序号 相同两人之间的对话集合的序号 对话时间 对话内容 是否已读 RESTful风格架构设计 功能 请求URI 请求方式 用户登录 /user/login GET 跳转到添加用户界面 /user/ GET 查询用户 /user/{id} GET 用户注册 /user/ POST 跳转到对应用户的主页 /user/myPage GET 跳转到添加帖子界面 /post/ GET 添加帖子 /post/ POST 查询所有帖子 /posts/ GET 查询所有该id对应的用户发的帖子 /post/{id} GET 修改帖子 /post/ PUT 删除帖子 /post/{id} DELETE 点赞或取消赞 /like/ POST 获得当前登录用户对应的所有朋友名单 /friends/ GET 跳转到朋友搜索界面 /friend/ GET 根据输入条件查找用户 /friend/search/ GET 添加朋友 /friend/ POST 删除朋友 /friend/{id} DELETE 2.</description>
+    </item>
+    <item>
+      <title>spring-boot-note</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-boot-note/</link>
+      <pubDate>Sat, 13 Jun 2020 15:38:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-boot-note/</guid>
+      <description>注入 @Value&amp;amp;ConfigurationProperties @ConfigurationProperties @Value 功能 批量注入配置文件中的属性 一个个指定（较麻烦） SpEL 不支持 支持 松散绑定（松散语法） 支持 不支持 JSR303数据校验（@Email） 支持 不支持（加了之后无效） 复杂类型封装 支持 不支持 @PropertySource: 加载指定的配置文件 @ImportResource: 加载Spring配置文件&#xA;@ImportResource(location = {&amp;#34;xmlFilePath&amp;#34;}) 推荐使用全注解的方式：&#xA;// Bean id is the name of the method // the return value is the object in IOC container. @Configuration public class ConfigurationClass{ @Bean public BeanMethod beanMethod(){ ... return new Bean; } ... } Profile创建多个环境 默认application.properties&#xA;格式application-{name}.properties&#xA;配置方式：&#xA;yaml&#xA;用文档块来分环境&#xA;server: port: 8080 spring: profiles: active: {env} --- server: port: 8081 spring: profiles: dev --- server: port: 8082 spring: profiles: prod properties</description>
+    </item>
+  </channel>
+</rss>

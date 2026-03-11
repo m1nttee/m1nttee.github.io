@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>房地产自动定价（一） | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/housing-evaluation-auto-part-1/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>房地产自动定价（一）</h1>
+    <time>April 4, 2020</time>
+  </header>
+  <div class="post-content">
+    <hr>
+<h1 id="一切的开始">一切的开始</h1>
+<p>这房地产自动定价呢，其实是个项目。而这个项目的故事则说来话长了。记得大概是去年5月接了这个项目，后来浑浑噩噩地做了一段时间，最后似乎是因为技术上不过关就放弃了治疗（十分不提倡这种学术精神！）。</p>
+<p>但这件事情可没有这么简单。。。</p>
+<p>很快，大概六月份我们就要结题了。</p>
+<p><img alt="img" src="/img/0D1B609F.jpg"></p>
+<p>相比于混过最后这段日子，我觉得，还是冲一冲吧！</p>
+<p>这个系列博文将会记录我冲击路上所将经历的坎坷。</p>
+<hr>
+<h1 id="爬虫部分">爬虫部分</h1>
+<p>在数据挖掘之前肯定需要做一个数据集，不同于以往，这次我打算用scrapy框架来爬取房地产网站的有关数据。</p>
+<p>首先，我们来用scrapy来自动生成一个基础框架：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>(HousingEvaluation) E:\code\python_code\HousingEvaluation&gt;scrapy startproject HousingDataScrawler
+</span></span><span style="display:flex;"><span>Fatal error <span style="color:#000;font-weight:bold">in</span> launcher<span style="color:#a61717;background-color:#e3d2d2">:</span> Unable to create <span style="color:#000;font-weight:bold">process</span> using <span style="color:#d14">&#39;&#34;d:\bld\scrapy_1584555977003\_h_env\python.exe&#34;  &#34;D:\Program Files\anaconda\envs\HousingEvaluation\Scripts
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">\scrapy.exe&#34; startproject HousingDataScrawler&#39;</span><span style="color:#a61717;background-color:#e3d2d2">:</span> ???????????
+</span></span></code></pre></div><p>哎呀！报错了！在网上查了一圈之后发现原来使需要用以下命令来执行，感觉错的好冤枉！o(╥﹏╥)o：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-powershell" data-lang="powershell"><span style="display:flex;"><span>python -m scrapy startproject xxx
+</span></span></code></pre></div><p><img alt="image-20200404130926056" src="/img/image-20200404130926056.png"></p>
+<p>这里可以看一下生成之后的程序结构。</p>
+<p>然后我们选好我们希望爬取房源信息的网站。这里选的是<a href="https://bj.lianjia.com/">链家</a>。</p>
+<table>
+<thead>
+<tr>
+<th>房屋户型</th>
+<th>所在楼层</th>
+<th>建筑面积</th>
+<th>户型结构</th>
+<th>套内面积</th>
+<th>建筑类型</th>
+<th>房屋朝向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2室1厅1厨1卫</td>
+<td>中楼层(共4层)</td>
+<td>54.14㎡</td>
+<td>平层</td>
+<td>37.7㎡</td>
+<td>板楼</td>
+<td>南 北</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>建成年代</th>
+<th>装修情况</th>
+<th>建筑结构</th>
+<th>供暖方式</th>
+<th>梯户比例</th>
+<th>产权年限</th>
+<th>配备电梯</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1990</td>
+<td>精装</td>
+<td>混合结构</td>
+<td>集中供暖</td>
+<td>一梯两户</td>
+<td>70年</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<p>之后我们点开网站，发现每个房源都会有这么一系列的信息，而这些信息中大部分都是有用的。这里我们选取**房屋户型(house_type)、所在楼层(house_floor)、套内面积(house_area)、建筑类型(house_type)、房屋朝向(house_towards)、建成年代(completion_time)、装修情况(house_finish)、梯户比例(elevator_ratio)、配备电梯(have_elevator)<strong>以及页面上的</strong>房屋标题(house_title)、房屋价格(house_price)、交易时间(trading_date)**进行爬取。</p>
+<p>以下是HouseDataItem的构成。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">HouseDataItem</span>(scrapy<span style="color:#000;font-weight:bold">.</span>Item):
+</span></span><span style="display:flex;"><span>    house_title <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    house_floor <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    house_price <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    house_type <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    house_finish <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    house_area <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    house_towards <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    have_elevator <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    elevator_ratio <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    completion_time <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span><span style="display:flex;"><span>    trading_date <span style="color:#000;font-weight:bold">=</span> scrapy<span style="color:#000;font-weight:bold">.</span>Field()
+</span></span></code></pre></div><p>接下来就是痛苦的解析环节了，因为要解析的东西实在太多，就不做解释了，直接上代码。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">parse</span>(<span style="color:#999">self</span>, response):
+</span></span><span style="display:flex;"><span>    houseDataItem <span style="color:#000;font-weight:bold">=</span> HouseDataItem()
+</span></span><span style="display:flex;"><span>    houseDataItem[<span style="color:#d14">&#39;house_title&#39;</span>] <span style="color:#000;font-weight:bold">=</span> response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;/html/body/div[4]/div/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>    houseDataItem[<span style="color:#d14">&#39;house_price&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>    response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;/html/body/section[1]/div[2]/div[2]/div[1]/span/i/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">+</span> \
+</span></span><span style="display:flex;"><span>    response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;/html/body/section[1]/div[2]/div[2]/div[1]/span/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>    date_in_text <span style="color:#000;font-weight:bold">=</span> response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;/html/body/div[4]/div/span/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> date_in_text<span style="color:#000;font-weight:bold">.</span>split(<span style="color:#d14">&#34; &#34;</span>)[<span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;成交&#34;</span>:
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;trading_date&#39;</span>] <span style="color:#000;font-weight:bold">=</span> date_in_text<span style="color:#000;font-weight:bold">.</span>split(<span style="color:#d14">&#34; &#34;</span>)[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;house_floor&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>        response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;//*[@id=&#34;introduction&#34;]/div[1]/div[1]/div[2]/ul/li[2]/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;house_type&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>        response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;//*[@id=&#34;introduction&#34;]/div[1]/div[1]/div[2]/ul/li[6]/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;house_finish&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>        response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;//*[@id=&#34;introduction&#34;]/div[1]/div[1]/div[2]/ul/li[8]/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;house_area&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>        response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;//*[@id=&#34;introduction&#34;]/div[1]/div[1]/div[2]/ul/li[3]/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;house_towards&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>        response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;//*[@id=&#34;introduction&#34;]/div[1]/div[1]/div[2]/ul/li[7]/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;have_elevator&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>        response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;//*[@id=&#34;introduction&#34;]/div[1]/div[1]/div[2]/ul/li[14]/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;elevator_ratio&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>        response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;//*[@id=&#34;introduction&#34;]/div[1]/div[1]/div[2]/ul/li[12]/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        houseDataItem[<span style="color:#d14">&#39;completion_time&#39;</span>] <span style="color:#000;font-weight:bold">=</span> \
+</span></span><span style="display:flex;"><span>        response<span style="color:#000;font-weight:bold">.</span>xpath(<span style="color:#d14">&#39;//*[@id=&#34;introduction&#34;]/div[1]/div[1]/div[2]/ul/li[8]/text()&#39;</span>)<span style="color:#000;font-weight:bold">.</span>extract()[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">.</span>strip()
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">yield</span> houseDataItem
+</span></span></code></pre></div><p>啊哈，总算搞定啦！这样之前准备好的160000条链接就可以被逐个爬取啦！！！</p>
+<p><img alt="image-20200404232022048" src="/img/image-20200404232022048.png"></p>
+<p>速度还是很快的，估计十二点左右就可以全整到数据库里啦！是异常开心了O(∩_∩)O哈哈~</p>
+<p>那么，今天就这样啦，明天准备把这爬到的原始数据格式化了~~ 希望能坚持下去啊！</p>
+<hr>
+<p>git仓库链接：https://github.com/AIINIRII/HousingEvaluation/</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

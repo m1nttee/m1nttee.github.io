@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/tags/linux/</link>
+    <description>Recent content in Linux on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 10 May 2021 16:58:42 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MySQL Fatal Error</title>
+      <link>https://m1nttee.github.io/posts/mysql-deadly-problem/</link>
+      <pubDate>Mon, 10 May 2021 16:58:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/mysql-deadly-problem/</guid>
+      <description>Today I encountered a MySQL-related error, so I&amp;rsquo;m recording it.&#xA;root@iZ2ze2hwhau036810z3eyrZ:/opt/web# systemctl start mysql Job for mysql.service failed because the control process exited with error code. See &amp;#34;systemctl status mysql.service&amp;#34; and &amp;#34;journalctl -xe&amp;#34; for details. ● mysql.service - MySQL Community Server Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled) Active: failed (Result: exit-code) since Mon 2021-05-10 15:58:54 CST; 3min 28s ago Process: 3330 ExecStartPre=/usr/share/mysql/mysql-systemd-start pre (code=exited, status=0/SUCCESS) Process: 3368 ExecStart=/usr/sbin/mysqld --daemonize --pid-file=/var/run/mysqld/mysqld.</description>
+    </item>
+  </channel>
+</rss>

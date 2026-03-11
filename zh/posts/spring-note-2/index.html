@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring 笔记（二） | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/spring-note-2/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Spring 笔记（二）</h1>
+    <time>June 9, 2020</time>
+  </header>
+  <div class="post-content">
+    <h1 id="基于注解的ioc配置">基于注解的IOC配置</h1>
+<h3 id="xml配置">xml配置</h3>
+<p>需要首先扫描包。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#998;font-style:italic">&lt;!-- 添加命名空间 --&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;beans</span> <span style="color:#008080">xmlns=</span><span style="color:#d14">&#34;http://www.springframework.org/schema/beans&#34;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#008080">xmlns:xsi=</span><span style="color:#d14">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#008080">xmlns:context=</span><span style="color:#d14">&#34;http://www.springframework.org/schema/context&#34;</span>
+</span></span><span style="display:flex;"><span>       <span style="color:#008080">xsi:schemaLocation=</span><span style="color:#d14">&#34;http://www.springframework.org/schema/beans
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        https://www.springframework.org/schema/beans/spring-beans.xsd
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        http://www.springframework.org/schema/context
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        https://www.springframework.org/schema/context/spring-context.xsd&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">&lt;!-- 扫描包 --&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;context:component-scan</span> <span style="color:#008080">base-package=</span><span style="color:#d14">&#34;xyz.aiinirii&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span></code></pre></div><hr>
+<h3 id="注解格式">注解格式</h3>
+<ul>
+<li>@Component（是以下三种注解的父类）：
+<ul>
+<li>作用：把当前类对象存入IOC中</li>
+<li>属性：
+<ul>
+<li>value：用于指定bean的ID，默认值是当前类名首字母小写。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>@Controller：表现层</li>
+<li>@Service：业务层</li>
+<li>@Repository：持久层</li>
+</ul>
+<p><em>以上四种注释方式仅仅名字不同，这样区分可以让我们的三层对象更加清晰。</em></p>
+<hr>
+<h3 id="注解注入">注解注入</h3>
+<h4 id="bean-类型">Bean 类型</h4>
+<ul>
+<li>
+<p>@Autowired：</p>
+<ul>
+<li>根据类型注入，只要容器中有唯一一个bean对象的类型和要注入的变量类型匹配，就注入成功。</li>
+<li>如果有两个匹配类型，那么就按照变量名称来筛选bean id（选那个和bean id一样的）。</li>
+</ul>
+</li>
+<li>
+<p>@Qualifier：</p>
+<ul>
+<li>
+<p>不能独立使用</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Autowired</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Qualifier</span>(<span style="color:#d14">&#34;BeanId&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>BeanClass<span style="color:#bbb"> </span>beanName<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">null</span>;<span style="color:#bbb">
+</span></span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>@Source:</p>
+<ul>
+<li>
+<p>独立使用</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Resource</span>(<span style="color:#d14">&#34;BeanId&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>BeanClass<span style="color:#bbb"> </span>beanName<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">null</span>;<span style="color:#bbb">
+</span></span></span></code></pre></div></li>
+</ul>
+</li>
+</ul>
+<h4 id="基本类型和string类型">基本类型和String类型</h4>
+<ul>
+<li>@Value：
+<ul>
+<li>属性：
+<ul>
+<li>value：用SpEL（spring的EL表达式）方式写 - ${param}</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="集合类型">集合类型</h4>
+<p>只能用xml实现</p>
+<hr>
+<h3 id="其他注解">其他注解</h3>
+<ul>
+<li>作用范围 - @Scope - 同上次笔记中的scope</li>
+<li>初始化 - @PostConstruct - 初始化对象</li>
+<li>销毁 - @PreDestory - 销毁对象</li>
+</ul>
+<hr>
+<h2 id="配置文件configuration">配置文件（@Configuration）</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Configuration</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@ComponentScan</span>(<span style="color:#d14">&#34;PackageName&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Configuration</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Bean</span>(name<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;BeanId&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>BeanClass<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">createBeanMethod</span>(ParamClass<span style="color:#bbb"> </span>param){<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>beanObject;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Bean</span>(name<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;param&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>publi<span style="color:#bbb"> </span>ParamClass<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">createParamMethod</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>paramObject;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>此时构造ApplicationContext时需要选择：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>ApplicationContext<span style="color:#bbb"> </span>ac<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>AnnotationConfigApplicationContext(ConfigurationClass);<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h2 id="导入其他配置类import">导入其他配置类（@Import）</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Configuration</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@ComponentScan</span>(<span style="color:#d14">&#34;PackageName&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@Import</span>(AnotherConfigurationClass)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Configuration</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Bean</span>(name<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;BeanId&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>BeanClass<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">createBeanMethod</span>(ParamClass<span style="color:#bbb"> </span>param){<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>beanObject;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Bean</span>(name<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;param&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>publi<span style="color:#bbb"> </span>ParamClass<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">createParamMethod</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>paramObject;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h2 id="导入propertysourcepropertysource">导入PropertySource（@PropertySource）</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Configuration</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@ComponentScan</span>(<span style="color:#d14">&#34;PackageName&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#3c5d5d;font-weight:bold">@PropertySource</span>(<span style="color:#d14">&#34;classpath:PropertyFilePath&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">Configuration</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Value</span>(<span style="color:#d14">&#34;${PropertyId}&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>ParamType<span style="color:#bbb"> </span>param;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Bean</span>(name<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;BeanId&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span>BeanClass<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">createBeanMethod</span>(ParamClass<span style="color:#bbb"> </span>param){<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>beanObject;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#3c5d5d;font-weight:bold">@Bean</span>(name<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#d14">&#34;param&#34;</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>publi<span style="color:#bbb"> </span>ParamClass<span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">createParamMethod</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#000;font-weight:bold">return</span><span style="color:#bbb"> </span>paramObject;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h2 id="spring整合junit的配置">Spring整合Junit的配置</h2>
+<ol>
+<li>
+<p>导入spring整合的Junit坐标</p>
+</li>
+<li>
+<p>使用Junit提供的一个注解把原有main方法替换成spring提供的方法。</p>
+<p>@RunWith</p>
+</li>
+<li>
+<p>告知spring的运行器，spring和IOC是基于xml或注解？</p>
+<p>@ContextConfiguration</p>
+<ul>
+<li>
+<p>locations：指定xml文件的位置，加上classpath关键字，表明在类路径下。</p>
+</li>
+<li>
+<p>classes：指定注解类所在的位置。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>课程链接：</p>
+<p><a href="https://www.bilibili.com/video/BV1Sb411s7vP?from=search&seid=11893869544331926521">https://www.bilibili.com/video/BV1Sb411s7vP?from=search&seid=11893869544331926521</a></p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

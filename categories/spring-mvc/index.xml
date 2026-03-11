@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring MVC on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/categories/spring-mvc/</link>
+    <description>Recent content in Spring MVC on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 12 Jun 2020 11:47:13 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/categories/spring-mvc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring MVC</title>
+      <link>https://m1nttee.github.io/posts/springmvc-note-1/</link>
+      <pubDate>Fri, 12 Jun 2020 11:47:13 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/springmvc-note-1/</guid>
+      <description>Three-Tier Architecture REVIEW Presentation Layer Spring MVC Business Layer Spring Persistence Layer Mybatis What the presentation layer needs to do:&#xA;Receive requests Return responses MVC REVIEW Model java bean View jsp || HTML Controller servlet Advantages of Spring MVC Clear role separation Front Controller (DispatcherServlet) Mapping from requests to handlers (HandlerMapping) Handler adapter (HandlerAdapter) View resolver (ViewResolver) Handler or page controller (Controller) Validator Command object (the object that request parameters are bound to is called a command object) Form object (the object provided for form display and submission is called a form object) Execution Flow Client &amp;ndash; Request -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for Handler -&amp;gt; HandlerMapping HandllerMapping find the Method position HandlerMapping &amp;ndash; Response an executable chain -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for execute -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Execute -&amp;gt; Handler/Controller Handler/Controller &amp;ndash; Response Model and View -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Response Model and View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for view resolve -&amp;gt; ViewResolver ViewResolver &amp;ndash; Response the View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Apply Colors to a Drawing -&amp;gt; View DispatcherServlet &amp;ndash; Response -&amp;gt; Client Common Annotations @RequestParam @RequestMapping(&amp;#34;/Path&amp;#34;) public String method(@RequestParam(name = &amp;#34;nameInRequest&amp;#34;) String username) { .</description>
+    </item>
+  </channel>
+</rss>

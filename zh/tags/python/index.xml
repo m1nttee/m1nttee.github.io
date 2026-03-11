@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/python/</link>
+    <description>Recent content in Python on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Tue, 14 Apr 2020 23:12:54 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ModuleNotFoundError</title>
+      <link>https://m1nttee.github.io/zh/posts/modulenotfounderror/</link>
+      <pubDate>Tue, 14 Apr 2020 23:12:54 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/modulenotfounderror/</guid>
+      <description>今天碰到一件十分奇怪的的事情。当我尝试着使用mmdetection的工具包时&#xA;我是这样输入的：&#xA;$ python tools/test.py configs/faster_rcnn_r50_fpn_1x.py checkpoints/faster_rcnn_r50_fpn_1x_20181010-3d1b3351.pth modeltest 而他是这样报错的：&#xA;Traceback (most recent call last): File &amp;#34;tools/test.py&amp;#34;, line 13, in &amp;lt;module&amp;gt; from tools.fuse_conv_bn import fuse_module ModuleNotFoundError: No module named &amp;#39;tools&amp;#39; 我真的太郁闷了，为什么这会有错？？&#xA;明明pycharm告诉我它好得很啊！？？？&#xA;我拓麻真的是馹嘞勾勒&#xA;你们来品品哈，这是import行&#xA;from tools.fuse_conv_bn import fuse_module 我我我经过了一晚上的冥思苦想之后终于恍然大悟，原来是因为tools没有加到运行环境里。。好吧(╯▽╰)我是莎笔&#xA;于是。我加了一句&#xA;import sys sys.path.append(&amp;#34;E:\\code\\python_code\\mmdetection&amp;#34;) 神奇地搞定了哈哈哈！！&#xA;果然遇到bug不要慌，先冷静冷静喝杯茶。</description>
+    </item>
+  </channel>
+</rss>

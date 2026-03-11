@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TensorFlow on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/tensorflow/</link>
+    <description>Recent content in TensorFlow on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Mon, 06 Apr 2020 21:21:31 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/tensorflow/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>房地产自动定价（三）</title>
+      <link>https://m1nttee.github.io/zh/posts/housing-evaluation-auto-part-3/</link>
+      <pubDate>Mon, 06 Apr 2020 21:21:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/housing-evaluation-auto-part-3/</guid>
+      <description>数据的爬取和预处理都结束了。接下来，我打算利用简单的BP网络模型去对这些数据进行一个简单的拟合。这里，我用到了TensorFlow的2.1.0版本。&#xA;输入输出选择 因为打算先跑跑BP神经网络看看效果，所以输入输出先不选的过于复杂。&#xA;INPUT: place_id, house_type, house_area, house_towards&#xA;OUTPUT: house_price&#xA;这四个输入数据分别是&#xA;地区的id（我已经自行为每个地区进行了编号，例如安定门：1） 房屋的类型（我也已编了号，例如板楼：0） 房屋的面积（单位为平方米） 房屋的朝向（我也编了号，例如南：0) 而输出数据为房屋的成交价格（单位万元）&#xA;数据处理 将数据集整理并扁平化之后，输入数据X_data变成了一个大小为（150731，310）的数据集，其中310=4+8+297+1；我采用了one_hot的编码方式将房屋的朝向、类型以及面积均变成了一个个列向量，在这之后我把他们合并到一起，其中4代表的是4种房屋类型，8代表的是8种朝向，297代表的是297种地区，这个列向量的最后一个元素是房屋的面积。&#xA;开始模型搭建 def model_build(n): # shape of X_train: (120584, 310), shape of X_test: (30147, 310) model = tf.keras.models.Sequential([ tf.keras.layers.Dense(64, input_shape=(n,)), tf.keras.layers.Activation(&amp;#39;relu&amp;#39;), tf.keras.layers.Dense(64), tf.keras.layers.Activation(&amp;#39;relu&amp;#39;), tf.keras.layers.Dense(1) ]) model.compile(optimizer=Adam(learning_rate=0.1), loss=&amp;#39;mse&amp;#39;, metrics=[&amp;#39;mae&amp;#39;]) return model 这里采用了两层RELU去进行拟合。&#xA;模型的初尝试 def scheduler(epoch): # 每隔100个epoch，学习率减小为原来的1/3 if epoch % 100 == 0 and epoch != 0: lr = tf.keras.backend.get_value(model.optimizer.lr) tf.keras.backend.set_value(model.optimizer.lr, lr * 0.3) print(&amp;#34;lr changed to {}&amp;#34;.</description>
+    </item>
+  </channel>
+</rss>

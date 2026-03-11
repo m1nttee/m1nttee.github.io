@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/tags/spring/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<div class="page-content">
+  
+  <h1 class="page-title">Spring</h1>
+  
+  <ul class="post-list">
+    
+    <li class="post-item">
+      <time class="post-date">Jun 10, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-note-4/">Spring 笔记（四）</a></h2>
+      
+      
+      <p class="post-summary">收藏 有关事务传播行为：https://segmentfault.com/a/1190000013341344
+有关事务隔离行为：
+isolation：用于指定事务的隔离级别。默认是DEFALUT，表示使用数据库的默认隔离级别。 propagation：用于指定事物的传播行为，默认值是REQUIRED，这是增删改的选择。查询可用SUPPORTS。 read-only：用于指定事务是否只读，查询 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 10, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-note-3/">Spring 笔记（三）</a></h2>
+      
+      
+      <p class="post-summary">AOP: Aspect Oriented Programing 面向切面编程
+使用动态代理实现AOP
+传统方法：
+基于接口的动态代理：Proxy.newProxyInstance 基于子类的动态代理：Enhancer.create 术语：
+JoinPoint（连接点）：所代理类的所有方法。 Pointcut（切入点）：被增强的方法是切入点。 Advice（通知/增强）：拦截到JoinPoint之后 …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 9, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-note-2/">Spring 笔记（二）</a></h2>
+      
+      
+      <p class="post-summary">基于注解的IOC配置 xml配置 需要首先扫描包。
+&lt;!-- 添加命名空间 --&gt; &lt;beans xmlns=&#34;http://www.springframework.org/schema/beans&#34; xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34; …</p>
+      
+    </li>
+    
+    <li class="post-item">
+      <time class="post-date">Jun 7, 2020</time>
+      <h2 class="post-title"><a href="/zh/posts/spring-note/">Spring 笔记（一）</a></h2>
+      
+      
+      <p class="post-summary">为什么要用 Spring 为了解耦！
+那么何为解耦？
+耦合 指程序间的依赖关系：
+包括类之间的依赖
+包括方法之间的依赖
+解耦 降低程序间的依赖关系
+做到编译的时候不依赖（报错？），运行时才依赖。
+思路 用反射来创建对象。 读取配置文件来读取要创建的对象的全限定类名。 IOC 容器详解 IOC: Inversion of Control
+关键词：工厂模式，单例模式，线程安全。
+单例模式实现思路：新建 …</p>
+      
+    </li>
+    
+  </ul>
+  
+
+
+</div>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

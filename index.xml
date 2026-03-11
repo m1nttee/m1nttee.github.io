@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mingtian Chen</title>
+    <link>https://m1nttee.github.io/</link>
+    <description>Recent content on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 11 Mar 2026 11:50:00 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Design Pattern - Factory Pattern</title>
+      <link>https://m1nttee.github.io/posts/design-pattern-factory-pattern/</link>
+      <pubDate>Wed, 11 Mar 2026 11:50:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/design-pattern-factory-pattern/</guid>
+      <description>01 Factory Pattern Background When writing code, we often encounter such scenarios:&#xA;Need to create different objects based on different types of user input. For example, based on the database type in the configuration file, create connection objects for MySQL, PostgreSQL, or MongoDB. The object&amp;rsquo;s creation logic is complex. If scattered throughout the code, it will cause maintenance difficulties. Want to unify the management of object creation to facilitate adding new product types.</description>
+    </item>
+    <item>
+      <title>Design Pattern - Prototype Pattern</title>
+      <link>https://m1nttee.github.io/posts/design-pattern-prototype-pattern/</link>
+      <pubDate>Mon, 25 Oct 2021 16:00:51 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/design-pattern-prototype-pattern/</guid>
+      <description>01 Prototype Pattern Background When writing code, we might encounter these scenarios:&#xA;After performing a database query, we successfully create an entity, and at this point, we need to obtain another entity from the same data source using the same method. If we know that others haven&amp;rsquo;t performed any write operations on the data source, the best approach is to directly copy the already queried data without going through the data source.</description>
+    </item>
+    <item>
+      <title>MySQL Fatal Error</title>
+      <link>https://m1nttee.github.io/posts/mysql-deadly-problem/</link>
+      <pubDate>Mon, 10 May 2021 16:58:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/mysql-deadly-problem/</guid>
+      <description>Today I encountered a MySQL-related error, so I&amp;rsquo;m recording it.&#xA;root@iZ2ze2hwhau036810z3eyrZ:/opt/web# systemctl start mysql Job for mysql.service failed because the control process exited with error code. See &amp;#34;systemctl status mysql.service&amp;#34; and &amp;#34;journalctl -xe&amp;#34; for details. ● mysql.service - MySQL Community Server Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled) Active: failed (Result: exit-code) since Mon 2021-05-10 15:58:54 CST; 3min 28s ago Process: 3330 ExecStartPre=/usr/share/mysql/mysql-systemd-start pre (code=exited, status=0/SUCCESS) Process: 3368 ExecStart=/usr/sbin/mysqld --daemonize --pid-file=/var/run/mysqld/mysqld.</description>
+    </item>
+    <item>
+      <title>Google Android TodoList MVVM Architecture Analysis</title>
+      <link>https://m1nttee.github.io/posts/google-android-todolist-mvvm-%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/</link>
+      <pubDate>Mon, 31 Aug 2020 21:24:03 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/google-android-todolist-mvvm-%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/</guid>
+      <description>These few days I planned to write an Android program, but after setting up the project, I felt overwhelmed and realized that as someone who pursues ultimate code aesthetics, I should first figure out the current mainstream Android program structure before diving in.&#xA;After browsing CSDN, as a beginner I learned that there are two relatively mature architectural patterns in the market: MVP and MVVM. After careful consideration, I chose MVVM architecture as the structure for my first Android program.</description>
+    </item>
+    <item>
+      <title>Problems Encountered When Implementing Transparent Status Bar</title>
+      <link>https://m1nttee.github.io/posts/transparency-state-bar-problem/</link>
+      <pubDate>Thu, 13 Aug 2020 21:06:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/transparency-state-bar-problem/</guid>
+      <description>Problem (Solution at the end of the article) &amp;lt;!-- file inner.xml --&amp;gt; &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; android:id=&amp;#34;@+id/innerLayout&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;530dp&amp;#34; android:fitsSystemWindows=&amp;#34;true&amp;#34; android:orientation=&amp;#34;vertical&amp;#34;&amp;gt; ... &amp;lt;/RelativeLayout&amp;gt; &amp;lt;!-- file outer.xml --&amp;gt; &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;ScrollView xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; android:id=&amp;#34;@+id/outerLayout&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; android:overScrollMode=&amp;#34;never&amp;#34; android:scrollbars=&amp;#34;none&amp;#34; android:visibility=&amp;#34;invisible&amp;#34; android:fitsSystemWindows=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;LinearLayout android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:orientation=&amp;#34;vertical&amp;#34; android:fitsSystemWindows=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;include layout=&amp;#34;@layout/inner&amp;#34; /&amp;gt; &amp;lt;/LinearLayout&amp;gt; &amp;lt;/ScrollView&amp;gt; // file activity.kt class Activity : AppCompatActivity() { override fun onCreate(savedInstanceState: Bundle?) { ... nowLayout.setBackgroundResource(ImageId) ... } } &amp;lt;!-- file AndroidManifest.</description>
+    </item>
+    <item>
+      <title>Notes for: IterDet: Iterative Scheme for Object Detection in Crowded Environments</title>
+      <link>https://m1nttee.github.io/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</guid>
+      <description>Abstract In this work, we develop an alternative iterative scheme where a new subset of objects is detected at each iteration. Detected boxes from previous iterations are passed to the network in subsequent iterations to ensure that the same object is not detected twice. This iterative scheme can be applied to both one-stage and two-stage object detectors with minor modifications to the training and inference processes.&#xA;Problem Description Modern algorithms like NMS cannot handle crowded environments, treating two crowded objects as one object.</description>
+    </item>
+    <item>
+      <title>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection</title>
+      <link>https://m1nttee.github.io/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</guid>
+      <description>Overview STAC:&#xA;Semi-Supervised Learning (SSL) Deploys highly confident localized object pseudo-labels from unlabeled images Updates the model by enforcing consistency through data augmentation Introduction to SSL Provides methods to use unlabeled data to improve model performance when large-scale annotated data is not available First provides artificial labels for unlabeled data. Then uses semantic-preserving methods to predict and update these labels with other labels. Data Augmentation Improves robustness of neural networks Very powerful for SSL image classification!</description>
+    </item>
+    <item>
+      <title>Postalk - Android Note App</title>
+      <link>https://m1nttee.github.io/posts/postalk/</link>
+      <pubDate>Wed, 17 Jun 2020 11:05:52 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/postalk/</guid>
+      <description>Postalk - Android Note App 0. Introduction This project is a web application based on Spring Boot, Mybatis, Druid, and MySQL. Its function is posting + chat. This article will record the development process and problems encountered.&#xA;1. Design Database Design To make development smoother, I first designed an ER diagram based on the relationships between entities.&#xA;User Table:&#xA;id username password sex age phone_number email registration_date Technology Stack Backend: Spring Boot, Spring MVC ORM: Mybatis Connection Pool: Druid Database: MySQL Frontend: Android (for the app) Project Structure src/ ├── main/ │ ├── java/ │ │ └── xyz.</description>
+    </item>
+    <item>
+      <title>Spring Boot Notes</title>
+      <link>https://m1nttee.github.io/posts/spring-boot-note/</link>
+      <pubDate>Sat, 13 Jun 2020 15:38:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-boot-note/</guid>
+      <description>Injection @Value&amp;amp;ConfigurationProperties @ConfigurationProperties @Value Function Batch inject properties from config file Specify one by one (more cumbersome) SpEL Not supported Supported Loose binding (loose syntax) Supported Not supported JSR303 data validation (@Email) Supported Not supported (ineffective if added) Complex type encapsulation Supported Not supported @PropertySource: Load specified configuration file @ImportResource: Load Spring configuration file&#xA;@ImportResource(location = {&amp;#34;xmlFilePath&amp;#34;}) Recommended to use full annotation method:&#xA;// Bean id is the name of the method // the return value is the object in IOC container.</description>
+    </item>
+    <item>
+      <title>Spring MVC</title>
+      <link>https://m1nttee.github.io/posts/springmvc-note-1/</link>
+      <pubDate>Fri, 12 Jun 2020 11:47:13 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/springmvc-note-1/</guid>
+      <description>Three-Tier Architecture REVIEW Presentation Layer Spring MVC Business Layer Spring Persistence Layer Mybatis What the presentation layer needs to do:&#xA;Receive requests Return responses MVC REVIEW Model java bean View jsp || HTML Controller servlet Advantages of Spring MVC Clear role separation Front Controller (DispatcherServlet) Mapping from requests to handlers (HandlerMapping) Handler adapter (HandlerAdapter) View resolver (ViewResolver) Handler or page controller (Controller) Validator Command object (the object that request parameters are bound to is called a command object) Form object (the object provided for form display and submission is called a form object) Execution Flow Client &amp;ndash; Request -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for Handler -&amp;gt; HandlerMapping HandllerMapping find the Method position HandlerMapping &amp;ndash; Response an executable chain -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for execute -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Execute -&amp;gt; Handler/Controller Handler/Controller &amp;ndash; Response Model and View -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Response Model and View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for view resolve -&amp;gt; ViewResolver ViewResolver &amp;ndash; Response the View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Apply Colors to a Drawing -&amp;gt; View DispatcherServlet &amp;ndash; Response -&amp;gt; Client Common Annotations @RequestParam @RequestMapping(&amp;#34;/Path&amp;#34;) public String method(@RequestParam(name = &amp;#34;nameInRequest&amp;#34;) String username) { .</description>
+    </item>
+    <item>
+      <title>Spring Notes (4) - Transaction Management</title>
+      <link>https://m1nttee.github.io/posts/spring-note-4/</link>
+      <pubDate>Wed, 10 Jun 2020 16:31:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-note-4/</guid>
+      <description>Transaction Reference propagation behaviors Transaction: https://segmentfault.com/a/1190000013341344&#xA;Transaction Isolation Levels isolation: Specifies transaction isolation level. Default is DEFAULT (use database&amp;rsquo;s default). Transaction Propagation propagation: Specifies transaction propagation behavior. Default is REQUIRED (for insert/update/delete). Use SUPPORTS for queries. Transaction Properties read-only: Specifies if transaction is read-only. Use true for queries, default is false. timeout: Transaction timeout in seconds. Default is -1 (no timeout). rollback-for: Specifies an exception that triggers rollback. Any other exceptions won&amp;rsquo;t trigger rollback.</description>
+    </item>
+    <item>
+      <title>Spring Notes (3) - AOP</title>
+      <link>https://m1nttee.github.io/posts/spring-note-3/</link>
+      <pubDate>Wed, 10 Jun 2020 09:00:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-note-3/</guid>
+      <description>AOP: Aspect Oriented Programming&#xA;Implemented using dynamic proxy.&#xA;Traditional Methods Interface-based dynamic proxy: Proxy.newProxyInstance Subclass-based dynamic proxy: Enhancer.create Terminology JoinPoint: All methods in the proxied class. Pointcut: The methods that are enhanced/advised. Advice/Enhancement: What to do after intercepting JoinPoint. Before Advice: Before transaction After Advice: After transaction AOP Implementation in Spring &amp;lt;aop:config&amp;gt; &amp;lt;aop:aspect id=&amp;#34;logAspect&amp;#34; ref=&amp;#34;loggingAspect&amp;#34;&amp;gt; &amp;lt;aop:before method=&amp;#34;beforeLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii..*.*(..))&amp;#34;/&amp;gt; &amp;lt;/aop:aspect&amp;gt; &amp;lt;/aop:config&amp;gt; Using Annotations @Aspect @Component public class LoggingAspect { @Before(&amp;#34;execution(* xyz.</description>
+    </item>
+    <item>
+      <title>Spring Notes (2) - Annotation-based IOC Configuration</title>
+      <link>https://m1nttee.github.io/posts/spring-note-2/</link>
+      <pubDate>Tue, 09 Jun 2020 10:18:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-note-2/</guid>
+      <description>Annotation-based IOC Configuration XML Configuration First, you need to scan the packages.&#xA;&amp;lt;!-- Add namespace --&amp;gt; &amp;lt;beans xmlns=&amp;#34;http://www.springframework.org/schema/beans&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xmlns:context=&amp;#34;http://www.springframework.org/schema/context&amp;#34; xsi:schemaLocation=&amp;#34;http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd&amp;#34;&amp;gt; &amp;lt;!-- Scan package --&amp;gt; &amp;lt;context:component-scan base-package=&amp;#34;xyz.aiinirii&amp;#34;/&amp;gt; Common Annotations @Component @Component(&amp;#34;userService&amp;#34;) public class UserService { // ... } @Service @Service public class UserService { // ... } @Repository @Repository public class UserDao { // ... } @Controller @Controller public class UserController { // ... } @Autowired @Service public class UserService { @Autowired private UserDao userDao; } @Qualifier @Service public class UserService { @Autowired @Qualifier(&amp;#34;userDaoImpl&amp;#34;) private UserDao userDao; } @Value @Component public class ValueDemo { @Value(&amp;#34;test&amp;#34;) private String str; @Value(&amp;#34;${jdbc.</description>
+    </item>
+    <item>
+      <title>Spring Notes (1)</title>
+      <link>https://m1nttee.github.io/posts/spring-note/</link>
+      <pubDate>Sun, 07 Jun 2020 15:37:11 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-note/</guid>
+      <description>Why Use Spring? For decoupling!&#xA;What is decoupling?&#xA;Coupling Refers to dependencies between programs:&#xA;Dependencies between classes Dependencies between methods Decoupling Reduce dependencies between programs Don&amp;rsquo;t depend on compile-time (error?), depend at runtime instead. Approach Use reflection to create objects. Read configuration files to get the fully qualified class names to create. IOC Container Details IOC: Inversion of Control&#xA;Keywords: Factory Pattern, Singleton Pattern, Thread Safety.&#xA;Singleton Pattern: Use static Map to share values.</description>
+    </item>
+    <item>
+      <title>Maven Project Directory Management</title>
+      <link>https://m1nttee.github.io/posts/maven-catalogue/</link>
+      <pubDate>Fri, 05 Jun 2020 13:46:15 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/maven-catalogue/</guid>
+      <description>Recently I&amp;rsquo;ve been trying to write projects with Maven, but unfortunately my skills aren&amp;rsquo;t good enough. I got stuck at the beginning by the Maven project directory arrangement.&#xA;Let me first introduce the situation. My project will be divided into several modules.&#xA;It&amp;rsquo;s roughly like this:&#xA;- project - module 1 - module 2 - module 3 And after thinking about it carefully, this problem can actually be divided into several small problems:</description>
+    </item>
+    <item>
+      <title>Project Naming Guide</title>
+      <link>https://m1nttee.github.io/posts/name-the-project/</link>
+      <pubDate>Tue, 02 Jun 2020 13:13:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/name-the-project/</guid>
+      <description>How to name a project? I&amp;rsquo;m sure all you coders often feel troubled by this. Here I&amp;rsquo;ve slightly organized some relatively standard naming rules, mainly for my own reference!&#xA;Feel free to supplement everyone :-)&#xA;1. Project Name All lowercase, for example cms, workdesk, jobserver, etc.&#xA;2. Java-related Naming Class naming: First letter of each syllable word capitalized, for example FieldInfo, Expression, etc.&#xA;Regular variables (including variable reference naming in Spring): First word lowercase, then first letter of each subsequent word capitalized, for example: password, primaryFlag</description>
+    </item>
+    <item>
+      <title>Mybatis Notes</title>
+      <link>https://m1nttee.github.io/posts/mybatis-notes/</link>
+      <pubDate>Sat, 30 May 2020 17:34:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/mybatis-notes/</guid>
+      <description>Finally, I finished the month-long DDL battle and picked up my old love again.&#xA;In the next few days, I&amp;rsquo;ll go through the process: Mybatis -&amp;gt; Spring -&amp;gt; Spring MVC!&#xA;1. XML Configuration and Basic CRUD with XML Maven XML Dependencies &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;4.13&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;log4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;log4j&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.12&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;8.0.19&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.mybatis&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mybatis&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.5.5&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; Mybatis Config XML &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34; ?</description>
+    </item>
+    <item>
+      <title>ModuleNotFoundError Solutions</title>
+      <link>https://m1nttee.github.io/posts/modulenotfounderror/</link>
+      <pubDate>Tue, 14 Apr 2020 23:12:54 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/modulenotfounderror/</guid>
+      <description>Today I encountered a very strange thing. When I tried to use the mmdetection toolkit&#xA;This is what I entered:&#xA;$ python tools/test.py configs/faster_rcnn_r50_fpn_1x.py checkpoints/faster_rcnn_r50_fpn_1x_20181010-3d1b3351.pth modeltest And this is how it reported the error:&#xA;Traceback (most recent call last): File &amp;#34;tools/test.py&amp;#34;, line 13, in &amp;lt;module&amp;gt; from tools.fuse_conv_bn import fuse_module ModuleNotFoundError Solutions: No module named &amp;#39;tools&amp;#39; I was really depressed. Why would this be an error???&#xA;Clearly PyCharm told me it was working fine!</description>
+    </item>
+    <item>
+      <title>[Solved] Missing cl.exe error under Anaconda</title>
+      <link>https://m1nttee.github.io/posts/lack-of-cl-exe/</link>
+      <pubDate>Tue, 14 Apr 2020 18:14:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/lack-of-cl-exe/</guid>
+      <description>Today I was very frustrated. To configure the environment required for mmdetection, I really went through a lot of trouble. Here&amp;rsquo;s a record of an error that kept me stuck.&#xA;cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\lib\site-packages\numpy\core\include&amp;#34; &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&amp;#34; &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&amp;#34; /EHsc /Tp./mmcv/video/optflow_warp/flow_warp.cpp /Fobuild\temp.win-amd64-3.7\Release\./mmcv/video/optflow_warp/flow_warp.obj error: command &amp;#39;cl.exe&amp;#39; failed: No such file or directory That&amp;rsquo;s weird. Why would it report an error that cl.exe cannot be found? I installed Visual Studio Tool?</description>
+    </item>
+    <item>
+      <title>Jupyter &#43; PyCharm &#43; Anaconda Setup Issues</title>
+      <link>https://m1nttee.github.io/posts/jupyter-pycharm-anaconda-bug/</link>
+      <pubDate>Mon, 13 Apr 2020 17:28:22 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/jupyter-pycharm-anaconda-bug/</guid>
+      <description>Today I suddenly discovered that Jupyter can actually be integrated into PyCharm!&#xA;Then, I excitedly went to implement the Jupyter + PyCharm + Anaconda environment deployment&amp;hellip;&#xA;However&amp;hellip; things weren&amp;rsquo;t as simple as I imagined..&#xA;After successfully installing the environment, I happily (and confidently) clicked Run Cell. Here&amp;rsquo;s the error:&#xA;Traceback (most recent call last): File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\web.py&amp;#34;, line 1703, in _execute result = await result File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 742, in run yielded = self.</description>
+    </item>
+    <item>
+      <title>Deep Learning Journal - Convolutional Neural Network Implementation</title>
+      <link>https://m1nttee.github.io/posts/deeplearning-journal/</link>
+      <pubDate>Wed, 08 Apr 2020 21:23:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/deeplearning-journal/</guid>
+      <description>Outline of the Assignment Convolution functions, including: Zero Padding Convolve window Convolution forward Pooling functions, including: Pooling forward Create mask Distribute value Convolution function Zero Padding Firstly, we need to implement a function called Zero Padding, the code is as below.&#xA;def zero_pad(X, pad): X_pad = np.pad(X, ((0,0), (pad, pad), (pad, pad), (0,0)), mode=&amp;#39;constant&amp;#39;, constant_values = (0,0)) return X_pad We can see that with using numpy, it is very easy to be implement.</description>
+    </item>
+    <item>
+      <title>Housing Auto Pricing (Part 3) - Neural Network</title>
+      <link>https://m1nttee.github.io/posts/housing-evaluation-auto-part-3/</link>
+      <pubDate>Mon, 06 Apr 2020 21:21:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/housing-evaluation-auto-part-3/</guid>
+      <description>Data scraping and preprocessing are done. Now, I&amp;rsquo;ll use a simple BP neural network to fit the data. I&amp;rsquo;m using TensorFlow 2.1.0.&#xA;Input/Output Selection Since we&amp;rsquo;re just testing the BP neural network, let&amp;rsquo;s keep inputs and outputs simple.&#xA;INPUT: place_id, house_type, house_area, house_towards&#xA;OUTPUT: house_price&#xA;The four input data are:&#xA;Area ID (I&amp;rsquo;ve numbered each area, e.g., Andingmen: 1) House type (also numbered, e.g., Board-style: 0) House area (in square meters) House direction/towards (also numbered, e.</description>
+    </item>
+    <item>
+      <title>Housing Auto Pricing (Part 2) - Data Preprocessing</title>
+      <link>https://m1nttee.github.io/posts/housing-evaluation-auto-part-2/</link>
+      <pubDate>Sun, 05 Apr 2020 21:02:58 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/housing-evaluation-auto-part-2/</guid>
+      <description>Data Preprocessing Yesterday, I successfully scraped the dataset. But to make the machine learning algorithm run smoothly later, I think it&amp;rsquo;s necessary to do data preprocessing.&#xA;Before preprocessing, let me show you my database structure.&#xA;Although it&amp;rsquo;s a quick glance, we can find that many data formats are not consistent, and some show &amp;ldquo;No Data&amp;rdquo;.&#xA;Let&amp;rsquo;s standardize each column!&#xA;house_title This column clearly has duplicate data with &amp;ldquo;** square meters&amp;rdquo; at the end and the house_area column.</description>
+    </item>
+    <item>
+      <title>Housing Auto Pricing (Part 1)</title>
+      <link>https://m1nttee.github.io/posts/housing-evaluation-auto-part-1/</link>
+      <pubDate>Sat, 04 Apr 2020 11:08:39 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/housing-evaluation-auto-part-1/</guid>
+      <description>The Beginning So, the real estate auto-pricing is actually a project. And the story of this project is a long one. I remember taking on this project around May last year, then stumbling through it for a while, and finally giving up because the technical skills weren&amp;rsquo;t up to par (definitely not recommending this kind of academic spirit!).&#xA;But this matter wasn&amp;rsquo;t that simple&amp;hellip;&#xA;Soon, around June, we&amp;rsquo;ll have to present the results.</description>
+    </item>
+    <item>
+      <title>Binary Tree Traversal - Pre-order, In-order, and Post-order</title>
+      <link>https://m1nttee.github.io/posts/preorder-inorder-and-postorder/</link>
+      <pubDate>Thu, 02 Apr 2020 12:52:44 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/preorder-inorder-and-postorder/</guid>
+      <description>Introduction It&amp;rsquo;s been almost a month since I set up this blog.&#xA;But&amp;hellip; why can&amp;rsquo;t I write a single blog post!?&#xA;I really wanted to be a blogger, you know!&#xA;I decided to start writing technical posts. I&amp;rsquo;m currently studying binary trees, so let me share my understanding of Pre-order, In-order, and Post-order traversal!&#xA;Binary Tree Structure To talk about the three traversal methods, we must first understand binary trees.</description>
+    </item>
+    <item>
+      <title>About</title>
+      <link>https://m1nttee.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/about/</guid>
+      <description>About Me I&amp;rsquo;m a software engineer with a passion for building reliable, scalable systems. Currently pursuing my Master&amp;rsquo;s degree at Carnegie Mellon University.&#xA;I have a cat named Mint (薄荷).&#xA;Education Carnegie Mellon University MS in Information Networking | 2025 - Present | GPA: 3.91&#xA;Beijing-Dublin International College BS in Software Engineering | 2018 - 2022 | GPA: 3.93&#xA;Experience Software Development Engineer 2 TikTok 2024 - 2025 Software Development Engineer 1 TikTok 2022 - 2024 Teaching Assistant University College Dublin 2019 - 2022 Software Development Engineer Intern Meituan 2021 Skills C C++ Java Python Go SQL Spring Boot Flask MySQL PostgreSQL MongoDB Redis Kafka Docker Kubernetes AWS </description>
+    </item>
+  </channel>
+</rss>

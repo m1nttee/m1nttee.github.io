@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jupyter &#43; PyCharm &#43; Anaconda Setup Issues | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/jupyter-pycharm-anaconda-bug/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Jupyter &#43; PyCharm &#43; Anaconda Setup Issues</h1>
+    <time>April 13, 2020</time>
+  </header>
+  <div class="post-content">
+    <p>Today I suddenly discovered that Jupyter can actually be integrated into PyCharm!</p>
+<p>Then, I excitedly went to implement the Jupyter + PyCharm + Anaconda environment deployment&hellip;</p>
+<p>However&hellip; things weren&rsquo;t as simple as I imagined..</p>
+<p><img alt="img" src="/img/05A03442.jpg"></p>
+<hr>
+<p>After successfully installing the environment, I happily (and confidently) clicked Run Cell. Here&rsquo;s the error:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Traceback <span style="color:#000;font-weight:bold">(</span>most recent call last<span style="color:#000;font-weight:bold">)</span>:
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\web.py&#34;</span>, line 1703, in _execute
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">result</span> <span style="color:#000;font-weight:bold">=</span> await result
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&#34;</span>, line 742, in run
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">yielded</span> <span style="color:#000;font-weight:bold">=</span> self.gen.throw<span style="color:#000;font-weight:bold">(</span>*exc_info<span style="color:#000;font-weight:bold">)</span>  <span style="color:#998;font-style:italic"># type: ignore</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\notebook\services\sessions\handlers.py&#34;</span>, line 72, in post
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">type</span><span style="color:#000;font-weight:bold">=</span>mtype<span style="color:#000;font-weight:bold">))</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&#34;</span>, line 735, in run
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">value</span> <span style="color:#000;font-weight:bold">=</span> future.result<span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&#34;</span>, line 742, in run
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">yielded</span> <span style="color:#000;font-weight:bold">=</span> self.gen.throw<span style="color:#000;font-weight:bold">(</span>*exc_info<span style="color:#000;font-weight:bold">)</span>  <span style="color:#998;font-style:italic"># type: ignore</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\notebook\services\sessions\sessionmanager.py&#34;</span>, line 88, in create_session
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">kernel_id</span> <span style="color:#000;font-weight:bold">=</span> yield self.start_kernel_for_session<span style="color:#000;font-weight:bold">(</span>session_id, path, name, type, kernel_name<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&#34;</span>, line 735, in run
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">value</span> <span style="color:#000;font-weight:bold">=</span> future.result<span style="color:#000;font-weight:bold">()</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&#34;</span>, line 742, in run
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">yielded</span> <span style="color:#000;font-weight:bold">=</span> self.gen.throw<span style="color:#000;font-weight:bold">(</span>*exc_info<span style="color:#000;font-weight:bold">)</span>  <span style="color:#998;font-style:italic"># type: ignore</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\jupyter_client\kernelmanager.py&#34;</span>, line 168, in start_kernel
+</span></span><span style="display:flex;"><span>    super<span style="color:#000;font-weight:bold">(</span>MappingKernelManager, self<span style="color:#000;font-weight:bold">)</span>.start_kernel<span style="color:#000;font-weight:bold">(</span>**kwargs<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\jupyter_client\multikernelmanager.py&#34;</span>, line 158, in start_kernel
+</span></span><span style="display:flex;"><span>    km.start_kernel<span style="color:#000;font-weight:bold">(</span>**kwargs<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\jupyter_client\manager.py&#34;</span>, line 305, in start_kernel
+</span></span><span style="display:flex;"><span>    self.kernel <span style="color:#000;font-weight:bold">=</span> self._launch_kernel<span style="color:#000;font-weight:bold">(</span>kernel_cmd, **kw<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\jupyter_client\manager.py&#34;</span>, line 212, in _launch_kernel
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> launch_kernel<span style="color:#000;font-weight:bold">(</span>kernel_cmd, **kw<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\jupyter_client\launcher.py&#34;</span>, line 135, in launch_kernel
+</span></span><span style="display:flex;"><span>    <span style="color:#008080">proc</span> <span style="color:#000;font-weight:bold">=</span> Popen<span style="color:#000;font-weight:bold">(</span>cmd, **kwargs<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\subprocess.py&#34;</span>, line 800, in __init__
+</span></span><span style="display:flex;"><span>    restore_signals, start_new_session<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>  File <span style="color:#d14">&#34;D:\Program Files\anaconda\envs\torchPro\lib\subprocess.py&#34;</span>, line 1207, in _execute_child
+</span></span><span style="display:flex;"><span>    startupinfo<span style="color:#000;font-weight:bold">)</span>
+</span></span><span style="display:flex;"><span>FileNotFoundError: <span style="color:#000;font-weight:bold">[</span>WinError 2<span style="color:#000;font-weight:bold">]</span> The system cannot find the file specified.
+</span></span></code></pre></div><p>Next, I went to the error file: D:\Program Files\anaconda\envs\torchPro\lib\subprocess.py</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>hp, ht, pid, tid <span style="color:#000;font-weight:bold">=</span> _winapi<span style="color:#000;font-weight:bold">.</span>CreateProcess(executable, args,
+</span></span><span style="display:flex;"><span>                                         <span style="color:#998;font-style:italic"># no special security</span>
+</span></span><span style="display:flex;"><span>                                         <span style="color:#000;font-weight:bold">None</span>, <span style="color:#000;font-weight:bold">None</span>,
+</span></span><span style="display:flex;"><span>                                         <span style="color:#0086b3">int</span>(<span style="color:#000;font-weight:bold">not</span> close_fds),
+</span></span><span style="display:flex;"><span>                                         creationflags,
+</span></span><span style="display:flex;"><span>                                         env,
+</span></span><span style="display:flex;"><span>                                         os<span style="color:#000;font-weight:bold">.</span>fspath(cwd) <span style="color:#000;font-weight:bold">if</span> cwd <span style="color:#000;font-weight:bold">is</span> <span style="color:#000;font-weight:bold">not</span> <span style="color:#000;font-weight:bold">None</span> <span style="color:#000;font-weight:bold">else</span> <span style="color:#000;font-weight:bold">None</span>,
+</span></span><span style="display:flex;"><span>                                         startupinfo)
+</span></span></code></pre></div><p>I genuinely searched online with this code for quite a few rounds, but still couldn&rsquo;t find where the problem was. o(╥﹏╥)o</p>
+<p>However, when I switched back to the PyCharm running interface, I found</p>
+<p><img alt="image-20200413194003178" src="/img/image-20200413194003178.png"></p>
+<p>I had selected the one above before, and didn&rsquo;t really understand what was going on, but after selecting Python 3, it was resolved.。</p>
+<p><img alt="image-20200413194213258" src="/img/image-20200413194213258.png"></p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

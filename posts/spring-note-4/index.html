@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring Notes (4) - Transaction Management | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/spring-note-4/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Spring Notes (4) - Transaction Management</h1>
+    <time>June 10, 2020</time>
+  </header>
+  <div class="post-content">
+    <h1 id="transaction-reference-propagation-behaviors">Transaction Reference propagation behaviors</h1>
+<p>Transaction: <a href="https://segmentfault.com/a/1190000013341344">https://segmentfault.com/a/1190000013341344</a></p>
+<h3 id="transaction-isolation-levels">Transaction Isolation Levels</h3>
+<ul>
+<li><strong>isolation</strong>: Specifies transaction isolation level. Default is DEFAULT (use database&rsquo;s default).</li>
+</ul>
+<h3 id="transaction-propagation">Transaction Propagation</h3>
+<ul>
+<li><strong>propagation</strong>: Specifies transaction propagation behavior. Default is REQUIRED (for insert/update/delete). Use SUPPORTS for queries.</li>
+</ul>
+<h3 id="transaction-properties">Transaction Properties</h3>
+<ul>
+<li><strong>read-only</strong>: Specifies if transaction is read-only. Use true for queries, default is false.</li>
+<li><strong>timeout</strong>: Transaction timeout in seconds. Default is -1 (no timeout).</li>
+<li><strong>rollback-for</strong>: Specifies an exception that triggers rollback. Any other exceptions won&rsquo;t trigger rollback. Default is any exception triggers rollback.</li>
+<li><strong>no-rollback-for</strong>: Specifies an exception that doesn&rsquo;t trigger rollback. Any other exceptions trigger rollback.</li>
+</ul>
+<h3 id="programmatic-transaction-management">Programmatic Transaction Management</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Autowired</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">private</span><span style="color:#bbb"> </span>DataSourceTransactionManager<span style="color:#bbb"> </span>transactionManager;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">transfer</span>()<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>TransactionDefinition<span style="color:#bbb"> </span>definition<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>DefaultTransactionDefinition();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>TransactionStatus<span style="color:#bbb"> </span>status<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>transactionManager.<span style="color:#008080">getTransaction</span>(definition);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">try</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#998;font-style:italic">// business logic</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>transactionManager.<span style="color:#008080">commit</span>(status);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">catch</span><span style="color:#bbb"> </span>(Exception<span style="color:#bbb"> </span>e)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span>transactionManager.<span style="color:#008080">rollback</span>(status);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><h3 id="declarative-transaction-management-xml">Declarative Transaction Management (XML)</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#000080">&lt;bean</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;transactionManager&#34;</span> <span style="color:#008080">class=</span><span style="color:#d14">&#34;org.springframework.jdbc.datasource.DataSourceTransactionManager&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;property</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;dataSource&#34;</span> <span style="color:#008080">ref=</span><span style="color:#d14">&#34;dataSource&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/bean&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;tx:advice</span> <span style="color:#008080">id=</span><span style="color:#d14">&#34;txAdvice&#34;</span> <span style="color:#008080">transaction-manager=</span><span style="color:#d14">&#34;transactionManager&#34;</span><span style="color:#000080">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;tx:attributes&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;tx:method</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;*&#34;</span> <span style="color:#008080">propagation=</span><span style="color:#d14">&#34;REQUIRED&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000080">&lt;tx:method</span> <span style="color:#008080">name=</span><span style="color:#d14">&#34;find*&#34;</span> <span style="color:#008080">propagation=</span><span style="color:#d14">&#34;SUPPORTS&#34;</span> <span style="color:#008080">read-only=</span><span style="color:#d14">&#34;true&#34;</span><span style="color:#000080">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000080">&lt;/tx:attributes&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000080">&lt;/tx:advice&gt;</span>
+</span></span></code></pre></div><h3 id="declarative-transaction-management-annotation">Declarative Transaction Management (Annotation)</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#3c5d5d;font-weight:bold">@Transactional</span>(propagation<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>Propagation.<span style="color:#008080">REQUIRED</span>)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">void</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">transfer</span>(String<span style="color:#bbb"> </span>from,<span style="color:#bbb"> </span>String<span style="color:#bbb"> </span>to,<span style="color:#bbb"> </span><span style="color:#458;font-weight:bold">double</span><span style="color:#bbb"> </span>amount)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#998;font-style:italic">// business logic</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><hr>
+<h1 id="summary">Summary</h1>
+<p>Spring provides flexible transaction management through both programmatic and declarative approaches.</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

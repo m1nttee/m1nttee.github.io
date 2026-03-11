@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>房地产自动定价（三） | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/housing-evaluation-auto-part-3/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>房地产自动定价（三）</h1>
+    <time>April 6, 2020</time>
+  </header>
+  <div class="post-content">
+    <p>数据的爬取和预处理都结束了。接下来，我打算利用简单的BP网络模型去对这些数据进行一个简单的拟合。这里，我用到了TensorFlow的2.1.0版本。</p>
+<hr>
+<h1 id="输入输出选择">输入输出选择</h1>
+<p>因为打算先跑跑BP神经网络看看效果，所以输入输出先不选的过于复杂。</p>
+<p>INPUT: place_id, house_type, house_area, house_towards</p>
+<p>OUTPUT: house_price</p>
+<p>这四个输入数据分别是</p>
+<ol>
+<li>地区的id（我已经自行为每个地区进行了编号，例如安定门：1）</li>
+<li>房屋的类型（我也已编了号，例如板楼：0）</li>
+<li>房屋的面积（单位为平方米）</li>
+<li>房屋的朝向（我也编了号，例如南：0)</li>
+</ol>
+<p>而输出数据为房屋的成交价格（单位万元）</p>
+<hr>
+<h1 id="数据处理">数据处理</h1>
+<p>将数据集整理并扁平化之后，输入数据X_data变成了一个大小为（150731，310）的数据集，其中310=4+8+297+1；我采用了one_hot的编码方式将房屋的朝向、类型以及面积均变成了一个个列向量，在这之后我把他们合并到一起，其中4代表的是4种房屋类型，8代表的是8种朝向，297代表的是297种地区，这个列向量的最后一个元素是房屋的面积。</p>
+<hr>
+<h1 id="开始模型搭建">开始模型搭建</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">model_build</span>(n):
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># shape of X_train: (120584, 310), shape of X_test: (30147, 310)</span>
+</span></span><span style="display:flex;"><span>    model <span style="color:#000;font-weight:bold">=</span> tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>models<span style="color:#000;font-weight:bold">.</span>Sequential([
+</span></span><span style="display:flex;"><span>        tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">64</span>, input_shape<span style="color:#000;font-weight:bold">=</span>(n,)),
+</span></span><span style="display:flex;"><span>        tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Activation(<span style="color:#d14">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>        tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">64</span>),
+</span></span><span style="display:flex;"><span>        tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Activation(<span style="color:#d14">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>        tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>    ])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    model<span style="color:#000;font-weight:bold">.</span>compile(optimizer<span style="color:#000;font-weight:bold">=</span>Adam(learning_rate<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.1</span>), loss<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;mse&#39;</span>, metrics<span style="color:#000;font-weight:bold">=</span>[<span style="color:#d14">&#39;mae&#39;</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> model
+</span></span></code></pre></div><p>这里采用了两层RELU去进行拟合。</p>
+<hr>
+<h1 id="模型的初尝试">模型的初尝试</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">scheduler</span>(epoch):
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># 每隔100个epoch，学习率减小为原来的1/3</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> epoch <span style="color:#000;font-weight:bold">%</span> <span style="color:#099">100</span> <span style="color:#000;font-weight:bold">==</span> <span style="color:#099">0</span> <span style="color:#000;font-weight:bold">and</span> epoch <span style="color:#000;font-weight:bold">!=</span> <span style="color:#099">0</span>:
+</span></span><span style="display:flex;"><span>        lr <span style="color:#000;font-weight:bold">=</span> tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>backend<span style="color:#000;font-weight:bold">.</span>get_value(model<span style="color:#000;font-weight:bold">.</span>optimizer<span style="color:#000;font-weight:bold">.</span>lr)
+</span></span><span style="display:flex;"><span>        tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>backend<span style="color:#000;font-weight:bold">.</span>set_value(model<span style="color:#000;font-weight:bold">.</span>optimizer<span style="color:#000;font-weight:bold">.</span>lr, lr <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">0.3</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#0086b3">print</span>(<span style="color:#d14">&#34;lr changed to </span><span style="color:#d14">{}</span><span style="color:#d14">&#34;</span><span style="color:#000;font-weight:bold">.</span>format(lr <span style="color:#000;font-weight:bold">*</span> <span style="color:#099">0.3</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>backend<span style="color:#000;font-weight:bold">.</span>get_value(model<span style="color:#000;font-weight:bold">.</span>optimizer<span style="color:#000;font-weight:bold">.</span>lr)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">if</span> __name__ <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># print(f&#34;X&#39;s shape: {X.shape}, Y&#39;s shape: {Y.shape}&#34;)</span>
+</span></span><span style="display:flex;"><span>    EPOCHS <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">200</span>
+</span></span><span style="display:flex;"><span>    X_train, Y_train, X_test, Y_test <span style="color:#000;font-weight:bold">=</span> load_div_dataset()  <span style="color:#998;font-style:italic"># load data set</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># data normalization</span>
+</span></span><span style="display:flex;"><span>    mean <span style="color:#000;font-weight:bold">=</span> X_train<span style="color:#000;font-weight:bold">.</span>mean(axis<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>    std <span style="color:#000;font-weight:bold">=</span> X_train<span style="color:#000;font-weight:bold">.</span>std(axis<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>    X_train <span style="color:#000;font-weight:bold">-=</span> mean
+</span></span><span style="display:flex;"><span>    X_train <span style="color:#000;font-weight:bold">/=</span> std
+</span></span><span style="display:flex;"><span>    X_test <span style="color:#000;font-weight:bold">-=</span> mean
+</span></span><span style="display:flex;"><span>    X_test <span style="color:#000;font-weight:bold">/=</span> std
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    reduce_lr <span style="color:#000;font-weight:bold">=</span> LearningRateScheduler(scheduler)
+</span></span><span style="display:flex;"><span>    model <span style="color:#000;font-weight:bold">=</span> model_build(X_train<span style="color:#000;font-weight:bold">.</span>shape[<span style="color:#099">1</span>])  <span style="color:#998;font-style:italic"># build model</span>
+</span></span><span style="display:flex;"><span>    model<span style="color:#000;font-weight:bold">.</span>summary()  <span style="color:#998;font-style:italic"># print the structure of model</span>
+</span></span><span style="display:flex;"><span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># training begin</span>
+</span></span><span style="display:flex;"><span>    history <span style="color:#000;font-weight:bold">=</span> model<span style="color:#000;font-weight:bold">.</span>fit(X_train, Y_train, epochs<span style="color:#000;font-weight:bold">=</span>EPOCHS, batch_size<span style="color:#000;font-weight:bold">=</span><span style="color:#099">128</span>, validation_split<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0.2</span>,
+</span></span><span style="display:flex;"><span>                        verbose<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>, callbacks<span style="color:#000;font-weight:bold">=</span>[reduce_lr])
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># save the model</span>
+</span></span><span style="display:flex;"><span>    model<span style="color:#000;font-weight:bold">.</span>save(<span style="color:#d14">&#34;model</span><span style="color:#d14">\\</span><span style="color:#d14">model_weight.model&#34;</span>, overwrite<span style="color:#000;font-weight:bold">=</span><span style="color:#000;font-weight:bold">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># evaluate model</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#0086b3">print</span>(<span style="color:#d14">&#34;train data: &#34;</span>, end<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>    model<span style="color:#000;font-weight:bold">.</span>evaluate(X_train, Y_train, verbose<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#0086b3">print</span>(<span style="color:#d14">&#34;test data: &#34;</span>, end<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>    model<span style="color:#000;font-weight:bold">.</span>evaluate(X_test, Y_test, verbose<span style="color:#000;font-weight:bold">=</span><span style="color:#099">2</span>)
+</span></span></code></pre></div><hr>
+<h1 id="第一次结果">第一次结果</h1>
+<p>不得不说，看到了第一次的结果之后我是崩溃的。</p>
+<p><img alt="img" src="/img/331C896B.gif"></p>
+<p>为什么loss和mae这么高，我明明已经。很努力了啊！</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>train data: <span style="color:#099">120584</span><span style="color:#000;font-weight:bold">/</span><span style="color:#099">120584</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">7</span>s <span style="color:#000;font-weight:bold">-</span> loss: <span style="color:#099">105549.9276</span> <span style="color:#000;font-weight:bold">-</span> mae: <span style="color:#099">218.9371</span>
+</span></span><span style="display:flex;"><span>test data: <span style="color:#099">30147</span><span style="color:#000;font-weight:bold">/</span><span style="color:#099">30147</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">2</span>s <span style="color:#000;font-weight:bold">-</span> loss: <span style="color:#099">105881.7860</span> <span style="color:#000;font-weight:bold">-</span> mae: <span style="color:#099">217.9669</span>
+</span></span></code></pre></div><p>你可能对mae不太了解？？</p>
+<p>大概就是说，对每一笔预测，都会有大概218万元的误差。。。。</p>
+<p>那还预测个锤子啊hhh</p>
+<hr>
+<h1 id="一些改良">一些改良</h1>
+<p>休息了一会儿平静了一下，我发现，这个结果至少说明了我们的代码能跑，至少说明了没有过拟合O(∩_∩)O。</p>
+<p>分析之后发现，这么离谱的结果反映的是bias偏大。那么有几个解决的措施：</p>
+<ol>
+<li>加训练数据</li>
+<li>加深网络</li>
+<li>加长训练时间</li>
+<li>用更好的优化方法</li>
+<li>换个神经网络结构</li>
+</ol>
+<p>我发现。。好像除了优化神经网络我没什么可以做的~</p>
+<p>于是，我回头去把网络加深了一层。。但突然意识到！诶，我用的是one_hot那么之前的那段normalization是不是有问题！</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># data normalization</span>
+</span></span><span style="display:flex;"><span>mean <span style="color:#000;font-weight:bold">=</span> X_train<span style="color:#000;font-weight:bold">.</span>mean(axis<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>std <span style="color:#000;font-weight:bold">=</span> X_train<span style="color:#000;font-weight:bold">.</span>std(axis<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>X_train <span style="color:#000;font-weight:bold">-=</span> mean
+</span></span><span style="display:flex;"><span>X_train <span style="color:#000;font-weight:bold">/=</span> std
+</span></span><span style="display:flex;"><span>X_test <span style="color:#000;font-weight:bold">-=</span> mean
+</span></span><span style="display:flex;"><span>X_test <span style="color:#000;font-weight:bold">/=</span> std
+</span></span></code></pre></div><p>这样做法，我的std必是0啊，那肯定会出问题的！！</p>
+<p>所以，经过深思熟虑，我把我的normalization part改成了下面这样：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#998;font-style:italic"># data normalization</span>
+</span></span><span style="display:flex;"><span>mean_area <span style="color:#000;font-weight:bold">=</span> X_train[:, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>]<span style="color:#000;font-weight:bold">.</span>mean(axis<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>std_area <span style="color:#000;font-weight:bold">=</span> X_train[:, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>]<span style="color:#000;font-weight:bold">.</span>std(axis<span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">print</span>(<span style="color:#d14">f</span><span style="color:#d14">&#34;X_train_area_data: </span><span style="color:#d14">{</span>X_train[:, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>]<span style="color:#d14">}</span><span style="color:#d14">&#34;</span>)
+</span></span><span style="display:flex;"><span>X_train[:, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">-=</span> mean_area
+</span></span><span style="display:flex;"><span>X_train[:, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">/=</span> std_area
+</span></span><span style="display:flex;"><span>X_test[:, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">-=</span> mean_area
+</span></span><span style="display:flex;"><span>X_test[:, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">/=</span> std_area
+</span></span><span style="display:flex;"><span><span style="color:#0086b3">print</span>(<span style="color:#d14">f</span><span style="color:#d14">&#34;After normalization: X_train_area_data: </span><span style="color:#d14">{</span>X_train[:, <span style="color:#000;font-weight:bold">-</span><span style="color:#099">1</span>]<span style="color:#d14">}</span><span style="color:#d14">&#34;</span>)
+</span></span></code></pre></div><p>这么改完之后，我又顺便把我的网络加深了一层：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>model <span style="color:#000;font-weight:bold">=</span> tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>models<span style="color:#000;font-weight:bold">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">128</span>, input_shape<span style="color:#000;font-weight:bold">=</span>(n,)),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Activation(<span style="color:#d14">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">128</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Activation(<span style="color:#d14">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">128</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Activation(<span style="color:#d14">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#000;font-weight:bold">.</span>keras<span style="color:#000;font-weight:bold">.</span>layers<span style="color:#000;font-weight:bold">.</span>Dense(<span style="color:#099">1</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span></code></pre></div><p>果不其然，这么一改之后，在epoch=200的时候mae就下降到了100左右：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>train data: <span style="color:#099">120584</span><span style="color:#000;font-weight:bold">/</span><span style="color:#099">120584</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">7</span>s <span style="color:#000;font-weight:bold">-</span> loss: <span style="color:#099">21548.4162</span> <span style="color:#000;font-weight:bold">-</span> mae: <span style="color:#099">102.1043</span>
+</span></span><span style="display:flex;"><span>test data: <span style="color:#099">30147</span><span style="color:#000;font-weight:bold">/</span><span style="color:#099">30147</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#099">2</span>s <span style="color:#000;font-weight:bold">-</span> loss: <span style="color:#099">24309.7117</span> <span style="color:#000;font-weight:bold">-</span> mae: <span style="color:#099">106.6957</span>
+</span></span></code></pre></div><p><img alt="image-20200412122802652" src="/img/image-20200412122802652.png"></p>
+<p><img alt="image-20200412122814216" src="/img/image-20200412122814216.png"></p>
+<p>虽然依旧很高，但是比起之前来说好很多了呢</p>
+<p><img alt="img" src="/img/332F77F9.jpg"></p>
+<p>今天暂时先这样吧，先睡一觉，想想是不是能有什么好方法ε=(´ο｀*)))唉</p>
+<hr>
+<p>git仓库链接：https://github.com/AIINIRII/HousingEvaluation/</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

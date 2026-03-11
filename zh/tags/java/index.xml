@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/java/</link>
+    <description>Recent content in Java on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 17 Jun 2020 11:05:52 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Postalk</title>
+      <link>https://m1nttee.github.io/zh/posts/postalk/</link>
+      <pubDate>Wed, 17 Jun 2020 11:05:52 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/postalk/</guid>
+      <description>Postalk 0. 简介 这个项目是一个基于Spring boot, Mybatis, Druid, MySQL技术的web应用，其功能为发帖+聊天。该文章将会记录开发过程以及在过程之中所遇到的问题。&#xA;1. 设计部分 数据库设计 为了使开发更为顺利，我首先按照各实体类之间的关系，设计了该ER图。&#xA;User表：&#xA;id username password sex age phone_number email registration_date 序号 用户名 密码 性别（F表示女性，M表示男性） 年龄 电话号码 电子邮箱 注册时间 Text表：&#xA;id uid content time 序号 用户序号 文本内容 发文时间 Comment表：&#xA;tid pid 对应文本的序号 对应评价文本的序号 Post表：&#xA;tid 对应文本的序号 Like表：&#xA;uid tid 对应用户的序号 对应文本的序号 Friend表：&#xA;uid_1 uid_2 since_time 用户1的序号 用户2的序号 从何时开始成为朋友 Conversation表：&#xA;id to_user from_user conversation_id time content read 该段对话的序号 发送人序号 接收人序号 相同两人之间的对话集合的序号 对话时间 对话内容 是否已读 RESTful风格架构设计 功能 请求URI 请求方式 用户登录 /user/login GET 跳转到添加用户界面 /user/ GET 查询用户 /user/{id} GET 用户注册 /user/ POST 跳转到对应用户的主页 /user/myPage GET 跳转到添加帖子界面 /post/ GET 添加帖子 /post/ POST 查询所有帖子 /posts/ GET 查询所有该id对应的用户发的帖子 /post/{id} GET 修改帖子 /post/ PUT 删除帖子 /post/{id} DELETE 点赞或取消赞 /like/ POST 获得当前登录用户对应的所有朋友名单 /friends/ GET 跳转到朋友搜索界面 /friend/ GET 根据输入条件查找用户 /friend/search/ GET 添加朋友 /friend/ POST 删除朋友 /friend/{id} DELETE 2.</description>
+    </item>
+    <item>
+      <title>spring-boot-note</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-boot-note/</link>
+      <pubDate>Sat, 13 Jun 2020 15:38:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-boot-note/</guid>
+      <description>注入 @Value&amp;amp;ConfigurationProperties @ConfigurationProperties @Value 功能 批量注入配置文件中的属性 一个个指定（较麻烦） SpEL 不支持 支持 松散绑定（松散语法） 支持 不支持 JSR303数据校验（@Email） 支持 不支持（加了之后无效） 复杂类型封装 支持 不支持 @PropertySource: 加载指定的配置文件 @ImportResource: 加载Spring配置文件&#xA;@ImportResource(location = {&amp;#34;xmlFilePath&amp;#34;}) 推荐使用全注解的方式：&#xA;// Bean id is the name of the method // the return value is the object in IOC container. @Configuration public class ConfigurationClass{ @Bean public BeanMethod beanMethod(){ ... return new Bean; } ... } Profile创建多个环境 默认application.properties&#xA;格式application-{name}.properties&#xA;配置方式：&#xA;yaml&#xA;用文档块来分环境&#xA;server: port: 8080 spring: profiles: active: {env} --- server: port: 8081 spring: profiles: dev --- server: port: 8082 spring: profiles: prod properties</description>
+    </item>
+    <item>
+      <title>Spring MVC</title>
+      <link>https://m1nttee.github.io/zh/posts/springmvc-note-1/</link>
+      <pubDate>Fri, 12 Jun 2020 11:47:13 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/springmvc-note-1/</guid>
+      <description>三层架构 REVIEW 表现层 Spring MVC 业务层 Spring 持久层 Mybatis 表现层需要做：&#xA;接收请求 响应结果 MVC REVIEW Model （模型） java bean View （视图） jsp || HTML Controller （控制器） servlet Spring MVC 优势 角色划分清晰 前端控制器（DispatcherServlet） 请求到处理器映射（HandlerMapping） 处理器适配器（HandlerAdapter） 视图解析器（ViewResolver） 处理器或页面控制器（Controller） 验证器（ Validator） 命令对象（Command 请求参数绑定到的对象就叫命令对象） 表单对象（Form Object 提供给表单展示和提交到的对象就叫表单对象） 执行流程 Client &amp;ndash; Request -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for Handler -&amp;gt; HandlerMapping HandllerMapping find the Method position HandlerMapping &amp;ndash; Response an executable chain -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for execute -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Execute -&amp;gt; Handler/Controller Handler/Controller &amp;ndash; Response Model and View -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Response Model and View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for view resolve -&amp;gt; ViewResolver ViewResolver &amp;ndash; Response the View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Apply Colors to a Drawing -&amp;gt; View DispatcherServlet &amp;ndash; Response -&amp;gt; Client 常用注解 @RequestParam @RequestMapping(&amp;#34;/Path&amp;#34;) public String method(@RequestParam(name = &amp;#34;nameInRequest&amp;#34;) String username) { .</description>
+    </item>
+    <item>
+      <title>Spring 笔记（四）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-4/</link>
+      <pubDate>Wed, 10 Jun 2020 16:31:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-4/</guid>
+      <description>收藏 有关事务传播行为：https://segmentfault.com/a/1190000013341344&#xA;有关事务隔离行为：&#xA;isolation：用于指定事务的隔离级别。默认是DEFALUT，表示使用数据库的默认隔离级别。 propagation：用于指定事物的传播行为，默认值是REQUIRED，这是增删改的选择。查询可用SUPPORTS。 read-only：用于指定事务是否只读，查询为true，默认为false。 timeout：用于指定事务的超时时间，默认为-1永不超时。以秒为单位。 rollback-for：用于指定一个异常，当产生这个异常时，事务回滚，产生其他异常时，事务不回滚。没有默认值，表示任何异常都会滚。 no-rollback-for：用于指定一个异常，当产生这个异常时，事务不回滚，产生其他异常时，事务回滚。没有默认值，表示任何异常都会滚。 </description>
+    </item>
+    <item>
+      <title>Spring 笔记（三）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-3/</link>
+      <pubDate>Wed, 10 Jun 2020 09:00:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-3/</guid>
+      <description>AOP: Aspect Oriented Programing 面向切面编程&#xA;使用动态代理实现AOP&#xA;传统方法：&#xA;基于接口的动态代理：Proxy.newProxyInstance 基于子类的动态代理：Enhancer.create 术语：&#xA;JoinPoint（连接点）：所代理类的所有方法。 Pointcut（切入点）：被增强的方法是切入点。 Advice（通知/增强）：拦截到JoinPoint之后要做的事情。 前置通知 事务前 后置通知 事务后 异常通知 catch中 最终通知 finally中 环绕通知 整个invoke Target（目标对象\被代理对象） Introduction（引介）：特殊的通知 Weaving（织入）：根据目标对象创建代理对象的过程 Proxy（代理）：织入增强后产生的代理类 Aspect（切面）：切入点和通知的结合 基于Spring的AOP编程 基于XML的AOP 配置XML文件 &amp;lt;bean id=&amp;#34;logger&amp;#34; class=&amp;#34;xyz.aiinirii.spring.utils.Logger&amp;#34;/&amp;gt; &amp;lt;aop:config&amp;gt; &amp;lt;aop:aspect id=&amp;#34;logAdvice&amp;#34; ref=&amp;#34;logger&amp;#34;&amp;gt; &amp;lt;!-- 类比在事务之前所做的事情 --&amp;gt; &amp;lt;aop:before method=&amp;#34;beforePrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 类比在事务成功之后所做的事情 例如 commit --&amp;gt; &amp;lt;aop:after-returning method=&amp;#34;afterReturningPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 例如回滚 --&amp;gt; &amp;lt;aop:after-throwing method=&amp;#34;afterThrowingPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 例如关闭链接 --&amp;gt; &amp;lt;aop:after method=&amp;#34;afterPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;/aop:aspect&amp;gt; &amp;lt;/aop:config&amp;gt; 运行效果，saveAccount方法得到了增强：</description>
+    </item>
+    <item>
+      <title>Spring 笔记（二）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-2/</link>
+      <pubDate>Tue, 09 Jun 2020 10:18:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-2/</guid>
+      <description>基于注解的IOC配置 xml配置 需要首先扫描包。&#xA;&amp;lt;!-- 添加命名空间 --&amp;gt; &amp;lt;beans xmlns=&amp;#34;http://www.springframework.org/schema/beans&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xmlns:context=&amp;#34;http://www.springframework.org/schema/context&amp;#34; xsi:schemaLocation=&amp;#34;http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd&amp;#34;&amp;gt; &amp;lt;!-- 扫描包 --&amp;gt; &amp;lt;context:component-scan base-package=&amp;#34;xyz.aiinirii&amp;#34;/&amp;gt; 注解格式 @Component（是以下三种注解的父类）： 作用：把当前类对象存入IOC中 属性： value：用于指定bean的ID，默认值是当前类名首字母小写。 @Controller：表现层 @Service：业务层 @Repository：持久层 以上四种注释方式仅仅名字不同，这样区分可以让我们的三层对象更加清晰。&#xA;注解注入 Bean 类型 @Autowired：&#xA;根据类型注入，只要容器中有唯一一个bean对象的类型和要注入的变量类型匹配，就注入成功。 如果有两个匹配类型，那么就按照变量名称来筛选bean id（选那个和bean id一样的）。 @Qualifier：&#xA;不能独立使用&#xA;@Autowired @Qualifier(&amp;#34;BeanId&amp;#34;) private BeanClass beanName = null; @Source:&#xA;独立使用&#xA;@Resource(&amp;#34;BeanId&amp;#34;) private BeanClass beanName = null; 基本类型和String类型 @Value： 属性： value：用SpEL（spring的EL表达式）方式写 - ${param} 集合类型 只能用xml实现&#xA;其他注解 作用范围 - @Scope - 同上次笔记中的scope 初始化 - @PostConstruct - 初始化对象 销毁 - @PreDestory - 销毁对象 配置文件（@Configuration） @Configuration @ComponentScan(&amp;#34;PackageName&amp;#34;) public class Configuration { @Bean(name = &amp;#34;BeanId&amp;#34;) public BeanClass createBeanMethod(ParamClass param){ return beanObject; } @Bean(name = &amp;#34;param&amp;#34;) publi ParamClass createParamMethod() { return paramObject; } } 此时构造ApplicationContext时需要选择：</description>
+    </item>
+    <item>
+      <title>Spring 笔记（一）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note/</link>
+      <pubDate>Sun, 07 Jun 2020 15:37:11 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note/</guid>
+      <description>为什么要用 Spring 为了解耦！&#xA;那么何为解耦？&#xA;耦合 指程序间的依赖关系：&#xA;包括类之间的依赖&#xA;包括方法之间的依赖&#xA;解耦 降低程序间的依赖关系&#xA;做到编译的时候不依赖（报错？），运行时才依赖。&#xA;思路 用反射来创建对象。 读取配置文件来读取要创建的对象的全限定类名。 IOC 容器详解 IOC: Inversion of Control&#xA;关键词：工厂模式，单例模式，线程安全。&#xA;单例模式实现思路：新建静态 Map 共享 value 。 原来：&#xA;private IUserDao userDao = new UserDaoImpl(); IOC 实现：&#xA;private IUserDao userDao = (IUserDao) BeanFactory.getBean(&amp;#34;userDao&amp;#34;); 作用：控制反转，将控制权转移给 BeanFactory，从而割断与 Dao 层的直接联系，从而达到解耦。&#xA;注：以上的例子里，userDao 的新建对象任务已经交给了工厂。这样操作之后，编译时不会有依赖，但是运行时会有依赖。&#xA;IOC 的本质：把创建对象的权力交给框架。&#xA;Spring 中的 IOC ApplicationContext 的三个常用实现类：&#xA;ClassPathXmlApplicationContext：加载类路径下的配置文件，必须要在类路径下，否则免谈。（常用） FileSystemXmlApplicationContext：加载磁盘任意路径下的配置文件。 AnnotationConfigApplicationContext：用于读取注解容器。（常用） ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&amp;#34;applicationContext.xml&amp;#34;); // 运行这行时已经创建了对象。 IAccountService accountService = applicationContext.getBean(&amp;#34;accountService&amp;#34;, IAccountService.class); IAccountDao accountDao = applicationContext.</description>
+    </item>
+    <item>
+      <title>Maven 项目目录管理</title>
+      <link>https://m1nttee.github.io/zh/posts/maven-catalogue/</link>
+      <pubDate>Fri, 05 Jun 2020 13:46:15 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/maven-catalogue/</guid>
+      <description>最近在尝试用 Maven 写项目，但奈何功夫不到家，刚开始就被 Maven 项目的目录安排给难住了。&#xA;先介绍一下情况，我的项目（project）将会分为若干模块（module）。&#xA;大概是下面这样的情况：&#xA;- project - module 1 - module 2 - module 3 而我仔细一想，这个问题其实可以分成几个小问题：&#xA;如何命名项目的 groupId 和 artifactId。 子 Maven 项目和父 Maven 项目之间的关系。 话不多说，切入正题。&#xA;如何命名项目的 groupId 和 artifactId 首先，我们需要知道的是这里的 groupId 和 artifactId 其实代表的是项目的坐标。&#xA;举个例子，&#xA;&amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt; 这两行实际上就可以帮助我们定位这个项目，它将会在 org/apache/maven/plugins/maven-compiler-plugin/ 这个文件夹下。&#xA;那其实我们的问题就迎刃而解了，假如说，在 aiinirii.xyz 这个域名下我想要建一个名为 proj 的项目。&#xA;这里要注意的，Location 其实和 GroupId 并无关系，其实只是源代码的存储路径，在 Maven 项目 Install 之后其实会直接被载入本地的 Maven 仓库中的 xyz/aiinirii/proj 目录下，只需要保证不会与其他坐标产生冲突就可以。&#xA;子 Maven 项目和父 Maven 项目之间的关系 讲清楚了如何命名项目，接下来再介绍一下如果像我一样，多项目之间有父子依赖关系怎么办？&#xA;首先，我们需要建一个父项目，例如设置 groupId 和 artifactId 分别为：</description>
+    </item>
+    <item>
+      <title>项目命名宝典</title>
+      <link>https://m1nttee.github.io/zh/posts/name-the-project/</link>
+      <pubDate>Tue, 02 Jun 2020 13:13:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/name-the-project/</guid>
+      <description>如何给项目命名？想必各位 coder 都常为此苦恼不已。这里我稍微整理了一下几个比较规范的命名规则，主要还是自己看啦！&#xA;欢迎大家补充哦 :-)&#xA;一、项目名 全部小写，比如 cms、workdesk、jobserver 等&#xA;二、java相关命名 类命名：每音节单词前的第一个字母大写，比如 FieldInfo、Expression 等&#xA;普通变量(包括spring里的变量引用命名)：第一个单词前小写，以后每个单词第一个字母大写，比如：password、primaryFlag&#xA;静态变量：全部大写，多个单词则以_分开，比如BOOLEAN_FLAG&#xA;包package命名：全部小写,比如 com.joinspider.workdesk&#xA;类名、变量名是名字组合，多名词顺序和中文顺序一样，比如 ScriptEngine&#xA;属性也可以是形容词 + 名词&#xA;常量可使用上述规则，如果为了体现多个常量是一组的概念，也可以被修饰前置，比如：VAR_START，VAR_END.&#xA;方法是动词 + 名字或者只有动词&#xA;Import 需要指出 import 哪一个类，禁止 import 整个 package&#xA;import java.util.*; //错误 import java.util.HashMap; //正确 Test Class 名的格式为“测试对象 Class 名 **+ Test **”&#xA;进行测试或 Package 测试的所有的 Class 名的格式为“**AllTest **”或“Package 名 + Test”&#xA;生成 Object 的 Method 名的格式是“**&amp;ldquo;create&amp;rdquo; + **Object 名”&#xA;转换 Method 名的格式是“&amp;ldquo;to&amp;rdquo; + Object 名”</description>
+    </item>
+    <item>
+      <title>Mybatis 笔记</title>
+      <link>https://m1nttee.github.io/zh/posts/mybatis-notes/</link>
+      <pubDate>Sat, 30 May 2020 17:34:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/mybatis-notes/</guid>
+      <description>终于，本:herb::baby_chick:结束了长达一个多月的DDL战争，重拾旧爱。&#xA;接下来几天要开始按照 Mybatis -&amp;gt; Spring -&amp;gt; Spring MVC 的流程爬一遍！&#xA;一、 XML 配置 与基础 CURD 的 XML 实现 Maven XML dependencies 配置 &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;4.13&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;log4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;log4j&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.12&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;5.1.49&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.mybatis&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mybatis&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.5.4&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; SqlMapConfig.xml &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34; ?&amp;gt; &amp;lt;!DOCTYPE configuration PUBLIC &amp;#34;-//mybatis.org//DTD Config 3.0//EN&amp;#34; &amp;#34;http://mybatis.org/dtd/mybatis-3-config.dtd&amp;#34;&amp;gt; &amp;lt;configuration&amp;gt; &amp;lt;environments default=&amp;#34;mysql&amp;#34;&amp;gt; &amp;lt;environment id=&amp;#34;mysql&amp;#34;&amp;gt; &amp;lt;transactionManager type=&amp;#34;JDBC&amp;#34;/&amp;gt; &amp;lt;dataSource type=&amp;#34;POOLED&amp;#34;&amp;gt; &amp;lt;property name=&amp;#34;driver&amp;#34; value=&amp;#34;com.mysql.jdbc.Driver&amp;#34;/&amp;gt; &amp;lt;property name=&amp;#34;url&amp;#34; value=&amp;#34;jdbc:mysql://localhost:3306/mybatisdb&amp;#34;/&amp;gt; &amp;lt;property name=&amp;#34;username&amp;#34; value=&amp;#34;***&amp;#34;/&amp;gt; &amp;lt;property name=&amp;#34;password&amp;#34; value=&amp;#34;***&amp;#34;/&amp;gt; &amp;lt;/dataSource&amp;gt; &amp;lt;/environment&amp;gt; &amp;lt;/environments&amp;gt; &amp;lt;mappers&amp;gt; &amp;lt;mapper resource=&amp;#34;mybatis\dao\IUserMapper.</description>
+    </item>
+  </channel>
+</rss>

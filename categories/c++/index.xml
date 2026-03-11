@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C&#43;&#43; on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/categories/c&#43;&#43;/</link>
+    <description>Recent content in C&#43;&#43; on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 11 Mar 2026 11:50:00 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/categories/c++/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Design Pattern - Factory Pattern</title>
+      <link>https://m1nttee.github.io/posts/design-pattern-factory-pattern/</link>
+      <pubDate>Wed, 11 Mar 2026 11:50:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/design-pattern-factory-pattern/</guid>
+      <description>01 Factory Pattern Background When writing code, we often encounter such scenarios:&#xA;Need to create different objects based on different types of user input. For example, based on the database type in the configuration file, create connection objects for MySQL, PostgreSQL, or MongoDB. The object&amp;rsquo;s creation logic is complex. If scattered throughout the code, it will cause maintenance difficulties. Want to unify the management of object creation to facilitate adding new product types.</description>
+    </item>
+  </channel>
+</rss>

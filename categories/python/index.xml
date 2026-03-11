@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/categories/python/</link>
+    <description>Recent content in Python on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Wed, 24 Jun 2020 23:41:42 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/categories/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Notes for: IterDet: Iterative Scheme for Object Detection in Crowded Environments</title>
+      <link>https://m1nttee.github.io/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</guid>
+      <description>Abstract In this work, we develop an alternative iterative scheme where a new subset of objects is detected at each iteration. Detected boxes from previous iterations are passed to the network in subsequent iterations to ensure that the same object is not detected twice. This iterative scheme can be applied to both one-stage and two-stage object detectors with minor modifications to the training and inference processes.&#xA;Problem Description Modern algorithms like NMS cannot handle crowded environments, treating two crowded objects as one object.</description>
+    </item>
+    <item>
+      <title>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection</title>
+      <link>https://m1nttee.github.io/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</guid>
+      <description>Overview STAC:&#xA;Semi-Supervised Learning (SSL) Deploys highly confident localized object pseudo-labels from unlabeled images Updates the model by enforcing consistency through data augmentation Introduction to SSL Provides methods to use unlabeled data to improve model performance when large-scale annotated data is not available First provides artificial labels for unlabeled data. Then uses semantic-preserving methods to predict and update these labels with other labels. Data Augmentation Improves robustness of neural networks Very powerful for SSL image classification!</description>
+    </item>
+    <item>
+      <title>ModuleNotFoundError Solutions</title>
+      <link>https://m1nttee.github.io/posts/modulenotfounderror/</link>
+      <pubDate>Tue, 14 Apr 2020 23:12:54 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/modulenotfounderror/</guid>
+      <description>Today I encountered a very strange thing. When I tried to use the mmdetection toolkit&#xA;This is what I entered:&#xA;$ python tools/test.py configs/faster_rcnn_r50_fpn_1x.py checkpoints/faster_rcnn_r50_fpn_1x_20181010-3d1b3351.pth modeltest And this is how it reported the error:&#xA;Traceback (most recent call last): File &amp;#34;tools/test.py&amp;#34;, line 13, in &amp;lt;module&amp;gt; from tools.fuse_conv_bn import fuse_module ModuleNotFoundError Solutions: No module named &amp;#39;tools&amp;#39; I was really depressed. Why would this be an error???&#xA;Clearly PyCharm told me it was working fine!</description>
+    </item>
+    <item>
+      <title>[Solved] Missing cl.exe error under Anaconda</title>
+      <link>https://m1nttee.github.io/posts/lack-of-cl-exe/</link>
+      <pubDate>Tue, 14 Apr 2020 18:14:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/lack-of-cl-exe/</guid>
+      <description>Today I was very frustrated. To configure the environment required for mmdetection, I really went through a lot of trouble. Here&amp;rsquo;s a record of an error that kept me stuck.&#xA;cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\lib\site-packages\numpy\core\include&amp;#34; &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&amp;#34; &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&amp;#34; /EHsc /Tp./mmcv/video/optflow_warp/flow_warp.cpp /Fobuild\temp.win-amd64-3.7\Release\./mmcv/video/optflow_warp/flow_warp.obj error: command &amp;#39;cl.exe&amp;#39; failed: No such file or directory That&amp;rsquo;s weird. Why would it report an error that cl.exe cannot be found? I installed Visual Studio Tool?</description>
+    </item>
+    <item>
+      <title>Jupyter &#43; PyCharm &#43; Anaconda Setup Issues</title>
+      <link>https://m1nttee.github.io/posts/jupyter-pycharm-anaconda-bug/</link>
+      <pubDate>Mon, 13 Apr 2020 17:28:22 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/jupyter-pycharm-anaconda-bug/</guid>
+      <description>Today I suddenly discovered that Jupyter can actually be integrated into PyCharm!&#xA;Then, I excitedly went to implement the Jupyter + PyCharm + Anaconda environment deployment&amp;hellip;&#xA;However&amp;hellip; things weren&amp;rsquo;t as simple as I imagined..&#xA;After successfully installing the environment, I happily (and confidently) clicked Run Cell. Here&amp;rsquo;s the error:&#xA;Traceback (most recent call last): File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\web.py&amp;#34;, line 1703, in _execute result = await result File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 742, in run yielded = self.</description>
+    </item>
+    <item>
+      <title>Deep Learning Journal - Convolutional Neural Network Implementation</title>
+      <link>https://m1nttee.github.io/posts/deeplearning-journal/</link>
+      <pubDate>Wed, 08 Apr 2020 21:23:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/deeplearning-journal/</guid>
+      <description>Outline of the Assignment Convolution functions, including: Zero Padding Convolve window Convolution forward Pooling functions, including: Pooling forward Create mask Distribute value Convolution function Zero Padding Firstly, we need to implement a function called Zero Padding, the code is as below.&#xA;def zero_pad(X, pad): X_pad = np.pad(X, ((0,0), (pad, pad), (pad, pad), (0,0)), mode=&amp;#39;constant&amp;#39;, constant_values = (0,0)) return X_pad We can see that with using numpy, it is very easy to be implement.</description>
+    </item>
+    <item>
+      <title>Housing Auto Pricing (Part 3) - Neural Network</title>
+      <link>https://m1nttee.github.io/posts/housing-evaluation-auto-part-3/</link>
+      <pubDate>Mon, 06 Apr 2020 21:21:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/housing-evaluation-auto-part-3/</guid>
+      <description>Data scraping and preprocessing are done. Now, I&amp;rsquo;ll use a simple BP neural network to fit the data. I&amp;rsquo;m using TensorFlow 2.1.0.&#xA;Input/Output Selection Since we&amp;rsquo;re just testing the BP neural network, let&amp;rsquo;s keep inputs and outputs simple.&#xA;INPUT: place_id, house_type, house_area, house_towards&#xA;OUTPUT: house_price&#xA;The four input data are:&#xA;Area ID (I&amp;rsquo;ve numbered each area, e.g., Andingmen: 1) House type (also numbered, e.g., Board-style: 0) House area (in square meters) House direction/towards (also numbered, e.</description>
+    </item>
+    <item>
+      <title>Housing Auto Pricing (Part 2) - Data Preprocessing</title>
+      <link>https://m1nttee.github.io/posts/housing-evaluation-auto-part-2/</link>
+      <pubDate>Sun, 05 Apr 2020 21:02:58 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/housing-evaluation-auto-part-2/</guid>
+      <description>Data Preprocessing Yesterday, I successfully scraped the dataset. But to make the machine learning algorithm run smoothly later, I think it&amp;rsquo;s necessary to do data preprocessing.&#xA;Before preprocessing, let me show you my database structure.&#xA;Although it&amp;rsquo;s a quick glance, we can find that many data formats are not consistent, and some show &amp;ldquo;No Data&amp;rdquo;.&#xA;Let&amp;rsquo;s standardize each column!&#xA;house_title This column clearly has duplicate data with &amp;ldquo;** square meters&amp;rdquo; at the end and the house_area column.</description>
+    </item>
+    <item>
+      <title>Housing Auto Pricing (Part 1)</title>
+      <link>https://m1nttee.github.io/posts/housing-evaluation-auto-part-1/</link>
+      <pubDate>Sat, 04 Apr 2020 11:08:39 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/housing-evaluation-auto-part-1/</guid>
+      <description>The Beginning So, the real estate auto-pricing is actually a project. And the story of this project is a long one. I remember taking on this project around May last year, then stumbling through it for a while, and finally giving up because the technical skills weren&amp;rsquo;t up to par (definitely not recommending this kind of academic spirit!).&#xA;But this matter wasn&amp;rsquo;t that simple&amp;hellip;&#xA;Soon, around June, we&amp;rsquo;ll have to present the results.</description>
+    </item>
+  </channel>
+</rss>

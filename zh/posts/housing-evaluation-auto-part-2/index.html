@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>房地产自动定价（二） | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/housing-evaluation-auto-part-2/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>房地产自动定价（二）</h1>
+    <time>April 5, 2020</time>
+  </header>
+  <div class="post-content">
+    <hr>
+<h1 id="数据预处理">数据预处理</h1>
+<p>昨天，我确实爬到了我所需要的数据集，但是为了让后期的机器学习算法运行地更为顺利，我觉得非常有必要做一期数据预处理。在进行数据预处理之前，我想先给大家看一下我的数据库结构。</p>
+<p><img alt="image-20200405215248645" src="/img/image-20200405215248645.png"></p>
+<p><img alt="image-20200405215310864" src="/img/image-20200405215310864.png"></p>
+<p>虽说只是草草一撇，但是我们可以发现其中有很多数据格式都不够统一，其中甚至有些显示的是暂无数据。</p>
+<p>不妨来一列列地统一化吧~ヽ(￣▽￣)ノ</p>
+<hr>
+<h2 id="house_title">house_title</h2>
+<p>这列很明显的我们可以看到后面的 “**平米” 的数据和之后的house_area产生了数据重复，我们需要做的是将 “**平米” 数据给剔除。</p>
+<p>因为涉及到字符串切片，我们的流程就只好放在python中了（而非MySQL）。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">house_title_format</span>(<span style="color:#999">self</span>):
+</span></span><span style="display:flex;"><span>    cousor_r <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>db<span style="color:#000;font-weight:bold">.</span>cursor()
+</span></span><span style="display:flex;"><span>    cousor_w <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>db<span style="color:#000;font-weight:bold">.</span>cursor()
+</span></span><span style="display:flex;"><span>    sqlR <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;SELECT house_id, house_title FROM house_info;&#34;</span>
+</span></span><span style="display:flex;"><span>    sqlW <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;UPDATE house_info SET house_title = </span><span style="color:#d14">%s</span><span style="color:#d14">, rooms_type = </span><span style="color:#d14">%s</span><span style="color:#d14"> WHERE house_id = </span><span style="color:#d14">%s</span><span style="color:#d14">;&#34;</span>
+</span></span><span style="display:flex;"><span>    cousor_r<span style="color:#000;font-weight:bold">.</span>execute(sqlR)
+</span></span><span style="display:flex;"><span>    result_set <span style="color:#000;font-weight:bold">=</span> cousor_r<span style="color:#000;font-weight:bold">.</span>fetchall()
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> row <span style="color:#000;font-weight:bold">in</span> result_set:
+</span></span><span style="display:flex;"><span>        house_id <span style="color:#000;font-weight:bold">=</span> row[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>        house_title <span style="color:#000;font-weight:bold">=</span> row[<span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>        title <span style="color:#000;font-weight:bold">=</span> house_title<span style="color:#000;font-weight:bold">.</span>split(<span style="color:#d14">&#34; &#34;</span>)[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>        rooms <span style="color:#000;font-weight:bold">=</span> house_title<span style="color:#000;font-weight:bold">.</span>split(<span style="color:#d14">&#34; &#34;</span>)[<span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>        cousor_w<span style="color:#000;font-weight:bold">.</span>execute(sqlW, (title, rooms, <span style="color:#0086b3">str</span>(house_id)))
+</span></span><span style="display:flex;"><span>    <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>db<span style="color:#000;font-weight:bold">.</span>commit()
+</span></span></code></pre></div><p><img alt="img" src="/img/1929C022.jpg"></p>
+<p>事实上我好像忘了测试就跑原数据集了。还好苍天有眼，没毁了数据。既然想起来了，赶紧先备个份嘻嘻。</p>
+<hr>
+<h2 id="house-towards">house towards</h2>
+<p>好了我回来了，刚刚真是惊心动魄，这下我存好数据库了，实在不行就删库重来呗!</p>
+<p><img alt="img" src="/img/19311CA8.jpg"></p>
+<p><strong>house floor</strong>先不处理，那个太难了。先把<strong>house towards</strong>这列处理下。</p>
+<p>对<strong>house towards</strong>这列做了去重查询之后，发现它们的数据格式大同小异，都是 &quot; 南 北 东 &quot; 类似如此的格式（即<em>方向+空格+方向+&hellip;</em>）除此之外还有一些&quot;暂无数据&quot;的小可爱。那其实就很简单啦。</p>
+<p>在经过了一番操作之后，我成功地按照{&lsquo;南&rsquo;: 0, &lsquo;北&rsquo;: 1, &lsquo;东&rsquo;: 2, &lsquo;西&rsquo;: 3, &lsquo;西南&rsquo;: 4, &lsquo;东南&rsquo;: 5, &lsquo;东北&rsquo;: 6, &lsquo;西北&rsquo;: 7}的方式把数据转化成功了。</p>
+<p>下一个是谁，我来看看(oﾟ▽ﾟ)o</p>
+<hr>
+<h2 id="house_type">house_type</h2>
+<p>因为乍一看其实house_type和house_towards的处理差不多，好啦，那就先处理它。</p>
+<p><img alt="image-20200406211723141" src="/img/image-20200406211723141.png"></p>
+<p>成功了，我按照这个表格进行了转码，这下就都处理完啦。</p>
+<hr>
+<p><img alt="img" src="/img/198DB3D7.jpg"></p>
+<p>那么数据预处理就结束了，接下来，为了让数据更加充足，我想做一下每个地点的经纬度的抓取~希望能成功啊！</p>
+<hr>
+<p>git仓库链接：https://github.com/AIINIRII/HousingEvaluation/</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

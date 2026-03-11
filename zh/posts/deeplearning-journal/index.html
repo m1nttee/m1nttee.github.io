@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>深度学习日记-卷积神经网络实现 | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/deeplearning-journal/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>深度学习日记-卷积神经网络实现</h1>
+    <time>April 8, 2020</time>
+  </header>
+  <div class="post-content">
+    <hr>
+<h1 id="outline-of-the-assignment">Outline of the Assignment</h1>
+<ul>
+<li>Convolution functions, including:
+<ul>
+<li>Zero Padding</li>
+<li>Convolve window</li>
+<li>Convolution forward</li>
+</ul>
+</li>
+<li>Pooling functions, including:
+<ul>
+<li>Pooling forward</li>
+<li>Create mask</li>
+<li>Distribute value</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="convolution-function">Convolution function</h2>
+<hr>
+<h3 id="zero-padding">Zero Padding</h3>
+<p>Firstly, we need to implement a function called Zero Padding, the code is as below.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">zero_pad</span>(X, pad):
+</span></span><span style="display:flex;"><span>    X_pad <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>pad(X, ((<span style="color:#099">0</span>,<span style="color:#099">0</span>), (pad, pad), (pad, pad), (<span style="color:#099">0</span>,<span style="color:#099">0</span>)), mode<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;constant&#39;</span>, constant_values <span style="color:#000;font-weight:bold">=</span> (<span style="color:#099">0</span>,<span style="color:#099">0</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> X_pad
+</span></span></code></pre></div><p>We can see that with using numpy, it is very easy to be implement.</p>
+<hr>
+<h3 id="single-step-of-convolution">Single step of convolution</h3>
+<p>Secondly, we need to implement the single step of convolution.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">conv_single_step</span>(a_slice_prev, W, b):
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Apply one filter defined by parameters W on a single slice (a_slice_prev) of the output activation 
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    of the previous layer.
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Arguments:
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    a_slice_prev -- slice of input data of shape (f, f, n_C_prev)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    W -- Weight parameters contained in a window - matrix of shape (f, f, n_C_prev)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    b -- Bias parameters contained in a window - matrix of shape (1, 1, 1)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Z -- a scalar value, the result of convolving the sliding window (W, b) on a slice x of the input data
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Element-wise product between a_slice_prev and W. Do not add the bias yet.</span>
+</span></span><span style="display:flex;"><span>    s <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>multiply(W, a_slice_prev)
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Sum over all entries of the volume s.</span>
+</span></span><span style="display:flex;"><span>    Z <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>sum(s)
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Add bias b to Z. Cast b to a float() so that Z results in a scalar value.</span>
+</span></span><span style="display:flex;"><span>    Z <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>add(Z, <span style="color:#0086b3">float</span>(b))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> Z
+</span></span></code></pre></div><hr>
+<h3 id="convolutional-neural-networks---forward-pass">Convolutional Neural Networks - Forward pass</h3>
+<p>Then, do the forward pass part, which is using the function before to do the whole layer.</p>
+<p>Where:</p>
+<p>$$ n_H = \lfloor \frac{n_{H_{prev}} - f + 2 \times pad}{stride} \rfloor +1 $$
+$$ n_W = \lfloor \frac{n_{W_{prev}} - f + 2 \times pad}{stride} \rfloor +1 $$
+$$ n_C = \text{number of filters used in the convolution}$$</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">conv_forward</span>(A_prev, W, b, hparameters):
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Implements the forward propagation for a convolution function
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Arguments:
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    A_prev -- output activations of the previous layer, 
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        numpy array of shape (m, n_H_prev, n_W_prev, n_C_prev)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    W -- Weights, numpy array of shape (f, f, n_C_prev, n_C)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    b -- Biases, numpy array of shape (1, 1, 1, n_C)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    hparameters -- python dictionary containing &#34;stride&#34; and &#34;pad&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">        
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Z -- conv output, numpy array of shape (m, n_H, n_W, n_C)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    cache -- cache of values needed for the conv_backward() function
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Retrieve dimensions from A_prev&#39;s shape (≈1 line)  </span>
+</span></span><span style="display:flex;"><span>    (m, n_H_prev, n_W_prev, n_C_prev) <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>shape(A_prev)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Retrieve dimensions from W&#39;s shape (≈1 line)</span>
+</span></span><span style="display:flex;"><span>    (f, f, n_C_prev, n_C) <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>shape(W)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Retrieve information from &#34;hparameters&#34; (≈2 lines)</span>
+</span></span><span style="display:flex;"><span>    stride <span style="color:#000;font-weight:bold">=</span> hparameters[<span style="color:#d14">&#39;stride&#39;</span>]
+</span></span><span style="display:flex;"><span>    pad <span style="color:#000;font-weight:bold">=</span> hparameters[<span style="color:#d14">&#39;pad&#39;</span>]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Compute the dimensions of the CONV output volume using the formula given above. </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Hint: use int() to apply the &#39;floor&#39; operation. (≈2 lines)</span>
+</span></span><span style="display:flex;"><span>    n_H <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">int</span>((n_H_prev <span style="color:#000;font-weight:bold">-</span> f <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">*</span> pad)<span style="color:#000;font-weight:bold">/</span>stride) <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>    n_W <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">int</span>((n_W_prev <span style="color:#000;font-weight:bold">-</span> f <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">2</span> <span style="color:#000;font-weight:bold">*</span> pad)<span style="color:#000;font-weight:bold">/</span>stride) <span style="color:#000;font-weight:bold">+</span> <span style="color:#099">1</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Initialize the output volume Z with zeros. (≈1 line)</span>
+</span></span><span style="display:flex;"><span>    Z <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>zeros((m, n_H, n_W, n_C))
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Create A_prev_pad by padding A_prev</span>
+</span></span><span style="display:flex;"><span>    A_prev_pad <span style="color:#000;font-weight:bold">=</span> zero_pad(X<span style="color:#000;font-weight:bold">=</span>A_prev, pad<span style="color:#000;font-weight:bold">=</span>pad)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(m):               <span style="color:#998;font-style:italic"># loop over the batch of training examples</span>
+</span></span><span style="display:flex;"><span>        a_prev_pad <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>squeeze(A_prev_pad[i, :, :, :])               <span style="color:#998;font-style:italic"># Select ith training example&#39;s padded activation</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> h <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(n_H):           <span style="color:#998;font-style:italic"># loop over vertical axis of the output volume</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># Find the vertical start and end of the current &#34;slice&#34; (≈2 lines)</span>
+</span></span><span style="display:flex;"><span>            vert_start <span style="color:#000;font-weight:bold">=</span> h <span style="color:#000;font-weight:bold">*</span> stride
+</span></span><span style="display:flex;"><span>            vert_end <span style="color:#000;font-weight:bold">=</span> h <span style="color:#000;font-weight:bold">*</span> stride <span style="color:#000;font-weight:bold">+</span> f
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">for</span> w <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(n_W):       <span style="color:#998;font-style:italic"># loop over horizontal axis of the output volume</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#998;font-style:italic"># Find the horizontal start and end of the current &#34;slice&#34; (≈2 lines)</span>
+</span></span><span style="display:flex;"><span>                horiz_start <span style="color:#000;font-weight:bold">=</span> w <span style="color:#000;font-weight:bold">*</span> stride
+</span></span><span style="display:flex;"><span>                horiz_end <span style="color:#000;font-weight:bold">=</span> w <span style="color:#000;font-weight:bold">*</span> stride <span style="color:#000;font-weight:bold">+</span> f
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">for</span> c <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(n_C):   <span style="color:#998;font-style:italic"># loop over channels (= #filters) of the output volume</span>
+</span></span><span style="display:flex;"><span>                                        
+</span></span><span style="display:flex;"><span>                    <span style="color:#998;font-style:italic"># Use the corners to define the (3D) slice of a_prev_pad (See Hint above the cell). (≈1 line)</span>
+</span></span><span style="display:flex;"><span>                    a_slice_prev <span style="color:#000;font-weight:bold">=</span> a_prev_pad[vert_start:vert_end, horiz_start:horiz_end, :]
+</span></span><span style="display:flex;"><span>                    
+</span></span><span style="display:flex;"><span>                    <span style="color:#998;font-style:italic"># Convolve the (3D) slice with the correct filter W and bias b, to get back one output neuron. (≈3 line)</span>
+</span></span><span style="display:flex;"><span>                    weights <span style="color:#000;font-weight:bold">=</span> W[: ,: , :, c]
+</span></span><span style="display:flex;"><span>                    biases <span style="color:#000;font-weight:bold">=</span> b[:, :, :, c]
+</span></span><span style="display:flex;"><span>                    Z[i, h, w, c] <span style="color:#000;font-weight:bold">=</span> conv_single_step(a_slice_prev<span style="color:#000;font-weight:bold">=</span>a_slice_prev, b<span style="color:#000;font-weight:bold">=</span>biases, W<span style="color:#000;font-weight:bold">=</span>weights)
+</span></span><span style="display:flex;"><span>                                  
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Making sure your output shape is correct</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">assert</span>(Z<span style="color:#000;font-weight:bold">.</span>shape <span style="color:#000;font-weight:bold">==</span> (m, n_H, n_W, n_C))
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Save information in &#34;cache&#34; for the backprop</span>
+</span></span><span style="display:flex;"><span>    cache <span style="color:#000;font-weight:bold">=</span> (A_prev, W, b, hparameters)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> Z, cache
+</span></span></code></pre></div><p>DON&rsquo;T FORGET TO MULTIPLY STRIDE!!!</p>
+<hr>
+<h3 id="pooling-layer">Pooling Layer</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">pool_forward</span>(A_prev, hparameters, mode <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14">&#34;max&#34;</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Implements the forward pass of the pooling layer
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Arguments:
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    A_prev -- Input data, numpy array of shape (m, n_H_prev, n_W_prev, n_C_prev)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    hparameters -- python dictionary containing &#34;f&#34; and &#34;stride&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    mode -- the pooling mode you would like to use, defined as a string (&#34;max&#34; or &#34;average&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    Returns:
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    A -- output of the pool layer, a numpy array of shape (m, n_H, n_W, n_C)
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    cache -- cache used in the backward pass of the pooling layer, contains the input and hparameters 
+</span></span></span><span style="display:flex;"><span><span style="color:#d14">    &#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Retrieve dimensions from the input shape</span>
+</span></span><span style="display:flex;"><span>    (m, n_H_prev, n_W_prev, n_C_prev) <span style="color:#000;font-weight:bold">=</span> A_prev<span style="color:#000;font-weight:bold">.</span>shape
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Retrieve hyperparameters from &#34;hparameters&#34;</span>
+</span></span><span style="display:flex;"><span>    f <span style="color:#000;font-weight:bold">=</span> hparameters[<span style="color:#d14">&#34;f&#34;</span>]
+</span></span><span style="display:flex;"><span>    stride <span style="color:#000;font-weight:bold">=</span> hparameters[<span style="color:#d14">&#34;stride&#34;</span>]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Define the dimensions of the output</span>
+</span></span><span style="display:flex;"><span>    n_H <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">int</span>(<span style="color:#099">1</span> <span style="color:#000;font-weight:bold">+</span> (n_H_prev <span style="color:#000;font-weight:bold">-</span> f) <span style="color:#000;font-weight:bold">/</span> stride)
+</span></span><span style="display:flex;"><span>    n_W <span style="color:#000;font-weight:bold">=</span> <span style="color:#0086b3">int</span>(<span style="color:#099">1</span> <span style="color:#000;font-weight:bold">+</span> (n_W_prev <span style="color:#000;font-weight:bold">-</span> f) <span style="color:#000;font-weight:bold">/</span> stride)
+</span></span><span style="display:flex;"><span>    n_C <span style="color:#000;font-weight:bold">=</span> n_C_prev
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Initialize output matrix A</span>
+</span></span><span style="display:flex;"><span>    A <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>zeros((m, n_H, n_W, n_C))              
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(m):                         <span style="color:#998;font-style:italic"># loop over the training examples</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">for</span> h <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(n_H):                     <span style="color:#998;font-style:italic"># loop on the vertical axis of the output volume</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#998;font-style:italic"># Find the vertical start and end of the current &#34;slice&#34; (≈2 lines)</span>
+</span></span><span style="display:flex;"><span>            vert_start <span style="color:#000;font-weight:bold">=</span> h <span style="color:#000;font-weight:bold">*</span> stride 
+</span></span><span style="display:flex;"><span>            vert_end <span style="color:#000;font-weight:bold">=</span> h <span style="color:#000;font-weight:bold">*</span> stride <span style="color:#000;font-weight:bold">+</span> f
+</span></span><span style="display:flex;"><span>            
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">for</span> w <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(n_W):                 <span style="color:#998;font-style:italic"># loop on the horizontal axis of the output volume</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#998;font-style:italic"># Find the vertical start and end of the current &#34;slice&#34; (≈2 lines)</span>
+</span></span><span style="display:flex;"><span>                horiz_start <span style="color:#000;font-weight:bold">=</span> w <span style="color:#000;font-weight:bold">*</span> stride
+</span></span><span style="display:flex;"><span>                horiz_end <span style="color:#000;font-weight:bold">=</span> w <span style="color:#000;font-weight:bold">*</span> stride <span style="color:#000;font-weight:bold">+</span> f
+</span></span><span style="display:flex;"><span>                
+</span></span><span style="display:flex;"><span>                <span style="color:#000;font-weight:bold">for</span> c <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span> (n_C):            <span style="color:#998;font-style:italic"># loop over the channels of the output volume</span>
+</span></span><span style="display:flex;"><span>                    
+</span></span><span style="display:flex;"><span>                    <span style="color:#998;font-style:italic"># Use the corners to define the current slice on the ith training example of A_prev, channel c. (≈1 line)</span>
+</span></span><span style="display:flex;"><span>                    a_prev_slice <span style="color:#000;font-weight:bold">=</span> A_prev[i, vert_start:vert_end, horiz_start:horiz_end, c]
+</span></span><span style="display:flex;"><span>                    
+</span></span><span style="display:flex;"><span>                    <span style="color:#998;font-style:italic"># Compute the pooling operation on the slice. </span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#998;font-style:italic"># Use an if statement to differentiate the modes. </span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#998;font-style:italic"># Use np.max and np.mean.</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#000;font-weight:bold">if</span> mode <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;max&#34;</span>:
+</span></span><span style="display:flex;"><span>                        A[i, h, w, c] <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>max(a_prev_slice)
+</span></span><span style="display:flex;"><span>                    <span style="color:#000;font-weight:bold">elif</span> mode <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;average&#34;</span>:
+</span></span><span style="display:flex;"><span>                        A[i, h, w, c] <span style="color:#000;font-weight:bold">=</span> np<span style="color:#000;font-weight:bold">.</span>mean(a_prev_slice)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Store the input and hparameters in &#34;cache&#34; for pool_backward()</span>
+</span></span><span style="display:flex;"><span>    cache <span style="color:#000;font-weight:bold">=</span> (A_prev, hparameters)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Making sure your output shape is correct</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">assert</span>(A<span style="color:#000;font-weight:bold">.</span>shape <span style="color:#000;font-weight:bold">==</span> (m, n_H, n_W, n_C))
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> A, cache
+</span></span></code></pre></div><p>The code here just like the conv_forward.</p>
+<hr>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

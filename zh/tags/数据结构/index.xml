@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>数据结构 on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</link>
+    <description>Recent content in 数据结构 on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Thu, 02 Apr 2020 12:52:44 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>二叉树的先序遍历、中序遍历以及后序遍历</title>
+      <link>https://m1nttee.github.io/zh/posts/preorder-inorder-and-postorder/</link>
+      <pubDate>Thu, 02 Apr 2020 12:52:44 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/preorder-inorder-and-postorder/</guid>
+      <description>开始前的一些碎碎念 仔细算算，距离我搭建好这个博客已经有进一个月了。&#xA;但。。。。？&#xA;为什么我还是一篇博文也写不出来！？&#xA;明明我也是有个博主梦的好嘛？&#xA;果然这样下去还是不行的，要不用技术贴来水水博客好了。&#xA;说干就干！正好最近在学习二叉树，这次就来聊聊自己对先序遍历 (pre-order) 、中序遍历 (in-order) 和后序遍历 (post-order) 的理解吧！&#xA;二叉树的结构 若要谈三种遍历方式，必定逃不过二叉树本身。先放上二叉树的解释。&#xA;在计算机科学中，二叉树是每个结点最多有两个子树的树结构。通常子树被称作“左子树”（left subtree）和“右子树”（right subtree）。二叉树常被用于实现二叉查找树和二叉堆。&#xA;一棵深度为k，且有2^k-1个结点的二叉树，称为满二叉树。这种树的特点是每一层上的结点数都是最大结点数。而在一棵二叉树中，除最后一层外，若其余层都是满的，并且或者最后一层是满的，或者是在右边缺少连续若干结点，则此二叉树为完全二叉树。具有n个结点的完全二叉树的深度为floor(log2n)+1。深度为k的完全二叉树，至少有2k-1个叶子结点，至多有2k-1个结点。&#xA;来源：百度百科&#xA;我们可以看到，二叉树确实非常非常有用(￣▽￣)~*，而二叉树的结构其实也就是：&#xA;每个节点最多只能有两个子节点 整棵树从根节点（root node）出发，到无元素存储的外部节点（external node）结束。 先序（pre-order）、中序（in-order）和后序（post-order） 一、先序（pre-order） 那么，介绍完二叉树的结构之后问题就来了，什么是先序遍历呢？&#xA;当我们去搜索一棵二叉树上所有元素的时候，我们难免需要遵守一种规律。而先序遍历的规则是这样的：&#xA;首先，我们会去问候根节点，这个时候我们就可以对这个节点干些想干的事情了⁄(⁄⁄•⁄ω⁄•⁄⁄)⁄&#xA;之后呢，我们会按顺序干以下两件事&#xA;a) 问候这个节点的左子节点，并将该节点当成新的根节点，重复步骤1 - 2直到没有新节点可以被访问&#xA;b) 问候这个节点的右子节点，并将该节点当成新的根节点，重复步骤1 - 2直到没有新节点可以被访问&#xA;我们可以很明显地看到，这个其实是一个递归过程，而代码是这样的：&#xA;private void queryNodePreorder(ITree tree, IPosition nowRoot) { /* 这里可以对nowRoot节点干些事情 */ if (tree.isLeaf(nowRoot)) { // 如果nowRoot是叶节点退出递归 return; } else { // 按顺序去访问nowRoot的左右子节点 queryNodePreorder(tree, tree.getLeftChild(nowRoot)); queryNodePreorder(tree, tree.getRightChild(nowRoot)); } } 二、中序（In-order） 其实中序遍历和先序遍历相差无几。下面先给出中序遍历的规则：</description>
+    </item>
+  </channel>
+</rss>

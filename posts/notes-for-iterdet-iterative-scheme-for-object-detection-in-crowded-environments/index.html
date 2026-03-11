@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes for: IterDet: Iterative Scheme for Object Detection in Crowded Environments | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Notes for: IterDet: Iterative Scheme for Object Detection in Crowded Environments</h1>
+    <time>June 24, 2020</time>
+  </header>
+  <div class="post-content">
+    <h2 id="abstract">Abstract</h2>
+<p>In this work, we develop an alternative <strong>iterative scheme</strong> where a new subset of objects is detected at each iteration. Detected boxes from previous iterations are passed to the network in subsequent iterations to ensure that the same object is not detected twice. This iterative scheme can be applied to both one-stage and two-stage object detectors with minor modifications to the training and inference processes.</p>
+<h2 id="problem-description">Problem Description</h2>
+<p>Modern algorithms like NMS cannot handle crowded environments, treating two crowded objects as one object.</p>
+<h2 id="contributions">Contributions</h2>
+<h3 id="object-detectors-can-be-divided-into-two-categories">Object detectors can be divided into two categories:</h3>
+<ul>
+<li>Two-stage detectors (R-CNN series)</li>
+<li>One-stage detectors (YOLO)
+<ul>
+<li>Higher speed, accuracy close to two-stage detectors</li>
+<li>Recently anchor-free algorithms have emerged</li>
+</ul>
+</li>
+</ul>
+<h3 id="shortcomings-of-the-original-nms-algorithm">shortcomings of the original NMS algorithm:</h3>
+<ul>
+<li>The characteristic of selecting detections with high scores causes NMS to have problems in crowded environments</li>
+</ul>
+<h3 id="efforts-made">Efforts made:</h3>
+<ul>
+<li>Clustering problem of NMS</li>
+<li>NMS reformulated as a scoring task</li>
+<li>Application of Soft-NMS</li>
+<li>Combination of Fitness-NMS and Soft-NMS</li>
+<li>Adaptive NMS</li>
+<li>R2NMS predicts both full boxes and visible boxes of objects</li>
+<li>Adding recurrent LSTM layers for training sequence generation through Hungarian loss function</li>
+<li>Layer that estimates Jaccard index as detection quality score, and a novel EM merging unit</li>
+</ul>
+<h3 id="the-algorithm">The algorithm:</h3>
+<p>Iteratively performs detection:</p>
+<ul>
+<li>First search for some simpler objects</li>
+<li>In subsequent iterations, gradually increase suppression parameters and improve accuracy</li>
+</ul>
+<h2 id="verifying-algorithm-feasibility">Verifying Algorithm Feasibility</h2>
+<ul>
+<li>Using AdaptIS Toy V1 and Toy V2 datasets</li>
+<li>Based on MMDetection framework</li>
+<li>SGD optimizer with momentum 0.9, weight decay parameter 0.0001, and initial learning rate 0.02</li>
+<li>Adam lr = 0.0001</li>
+</ul>
+<h2 id="reference">Reference</h2>
+<p>[1] D. Rukhovich, K. Sofiiuk, D. Galeev, O. Barinova, and A. Konushin, &ldquo;IterDet: Iterative Scheme for ObjectDetection in Crowded Environments,&rdquo; 2020, [Online]. Available: <a href="http://arxiv.org/abs/2005.05708">http://arxiv.org/abs/2005.05708</a>.</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

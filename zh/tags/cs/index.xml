@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CS on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/cs/</link>
+    <description>Recent content in CS on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Thu, 13 Aug 2020 21:06:05 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/cs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>透明状态栏实现过程中遇到的问题</title>
+      <link>https://m1nttee.github.io/zh/posts/transparency-state-bar-problem/</link>
+      <pubDate>Thu, 13 Aug 2020 21:06:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/transparency-state-bar-problem/</guid>
+      <description>问题（解决办法在文章末尾） &amp;lt;!-- file inner.xml --&amp;gt; &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; android:id=&amp;#34;@+id/innerLayout&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;530dp&amp;#34; android:fitsSystemWindows=&amp;#34;true&amp;#34; android:orientation=&amp;#34;vertical&amp;#34;&amp;gt; ... &amp;lt;/RelativeLayout&amp;gt; &amp;lt;!-- file outer.xml --&amp;gt; &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;ScrollView xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; android:id=&amp;#34;@+id/outerLayout&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; android:overScrollMode=&amp;#34;never&amp;#34; android:scrollbars=&amp;#34;none&amp;#34; android:visibility=&amp;#34;invisible&amp;#34; android:fitsSystemWindows=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;LinearLayout android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:orientation=&amp;#34;vertical&amp;#34; android:fitsSystemWindows=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;include layout=&amp;#34;@layout/inner&amp;#34; /&amp;gt; &amp;lt;/LinearLayout&amp;gt; &amp;lt;/ScrollView&amp;gt; // file activity.kt class Activity : AppCompatActivity() { override fun onCreate(savedInstanceState: Bundle?) { ... nowLayout.setBackgroundResource(ImageId) ... } } &amp;lt;!-- file AndroidManifest.xml --&amp;gt; &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;manifest xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; package=&amp;#34;xyz.</description>
+    </item>
+    <item>
+      <title>Notes for: IterDet: Iterative Scheme for Object Detection in Crowded Environments</title>
+      <link>https://m1nttee.github.io/zh/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/notes-for-iterdet-iterative-scheme-for-object-detection-in-crowded-environments/</guid>
+      <description>摘要 在这项工作中，我们开发了一种替代的迭代方案，其中在每次迭代中都检测到一个新的对象子集。来自先前迭代的检测到的框在接下来的迭代中传递到网络，以确保不会两次检测到同一对象。只需对训练和推理过程进行较小的修改，就可以将这种迭代方案应用于一级和二级对象检测器。&#xA;问题描述 现代的NMS之类的算法无法处理拥挤的环境，会把拥挤的两个对象看成一个对象。&#xA;所做工作 对象检测器可以分为两类： 两级检测器（R-CNN系列） 一级检测器 （YOCO） 更高的速度，接近两级检测器的精度 最近Anchor-free的算法出现了 原先的NMS算法的缺陷： 选择得分较高的检测的特性，导致了NMS在拥挤环境会出问题 做出的努力： NMS的聚类问题 NMS重新定制为积分任务 Soft-NMS的应用 Fitness-NMS和Soft-NMS的结合 自适应NMS R2NMS同时预测对象的完整框和可见框 加循环LSTM层，用于通过Hungarian loss function训练序列生成 将Jaccard指数估计为检测质量得分的层，以及一个新颖的EM合并单元 该算法： 迭代进行检测：&#xA;第一次先搜索一些比较简单的对象 之后几次慢慢增加抑制参数并提高精度 检验算法可行度 使用AdaptIS Toy V1 and Toy V2数据集 基于MMDetection框架 SGD optimizer with momentum 0.9, weight decay parameter 0.0001, and initial learning rate 0.02 Adam lr = 0.0001 Reference [1] D. Rukhovich, K. Sofiiuk, D. Galeev, O. Barinova, and A. Konushin, “IterDet: Iterative Scheme for ObjectDetection in Crowded Environments,” 2020, [Online].</description>
+    </item>
+    <item>
+      <title>Notes for: A Simple Semi-Supervised Learning Framework for Object Detection</title>
+      <link>https://m1nttee.github.io/zh/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</link>
+      <pubDate>Wed, 24 Jun 2020 23:41:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/notes-for-a-simple-semi-supervised-learning-framework-for-object-detection/</guid>
+      <description>概述 STAC：&#xA;半监督学习（SSL）&#xA;从未标记的图像中部署高度自信的本地化对象伪标签&#xA;通过增强数据来增强一致性，从而更新模型&#xA;SSL简介 提供了在没有大规模注释数据时使用未标记数据来提高模型性能的方法&#xA;首先为未标记的数据提供人工标签。 然后使用语义保留的方法用其他的标签来对这个标签进行预测和更新。 数据增强&#xA;提高神经网络的鲁棒性 对SSL的图像分类功能非常强大！ 在对象检测问题中也需要这种方法，因为标记成本比较昂贵&#xA;方法流程 对数据集进行阶段性培训&#xA;使用所有可用的标记数据训练教师模型 使用标记和未标记的数据训练STAC 使用高阈值来控制伪标签的质量 Train a teacher model on available labeled images.&#xA;Generate pseudo labels of unlabeled images (i.e., bounding boxes and their class labels) using the trained teacher model.&#xA;Apply strong data augmentations to unlabeled images, and augment pseudo labels (i.e. bounding boxes) correspondingly when global geometric transformations are applied.&#xA;Compute unsupervised loss and supervised loss to train a detector.</description>
+    </item>
+    <item>
+      <title>Postalk</title>
+      <link>https://m1nttee.github.io/zh/posts/postalk/</link>
+      <pubDate>Wed, 17 Jun 2020 11:05:52 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/postalk/</guid>
+      <description>Postalk 0. 简介 这个项目是一个基于Spring boot, Mybatis, Druid, MySQL技术的web应用，其功能为发帖+聊天。该文章将会记录开发过程以及在过程之中所遇到的问题。&#xA;1. 设计部分 数据库设计 为了使开发更为顺利，我首先按照各实体类之间的关系，设计了该ER图。&#xA;User表：&#xA;id username password sex age phone_number email registration_date 序号 用户名 密码 性别（F表示女性，M表示男性） 年龄 电话号码 电子邮箱 注册时间 Text表：&#xA;id uid content time 序号 用户序号 文本内容 发文时间 Comment表：&#xA;tid pid 对应文本的序号 对应评价文本的序号 Post表：&#xA;tid 对应文本的序号 Like表：&#xA;uid tid 对应用户的序号 对应文本的序号 Friend表：&#xA;uid_1 uid_2 since_time 用户1的序号 用户2的序号 从何时开始成为朋友 Conversation表：&#xA;id to_user from_user conversation_id time content read 该段对话的序号 发送人序号 接收人序号 相同两人之间的对话集合的序号 对话时间 对话内容 是否已读 RESTful风格架构设计 功能 请求URI 请求方式 用户登录 /user/login GET 跳转到添加用户界面 /user/ GET 查询用户 /user/{id} GET 用户注册 /user/ POST 跳转到对应用户的主页 /user/myPage GET 跳转到添加帖子界面 /post/ GET 添加帖子 /post/ POST 查询所有帖子 /posts/ GET 查询所有该id对应的用户发的帖子 /post/{id} GET 修改帖子 /post/ PUT 删除帖子 /post/{id} DELETE 点赞或取消赞 /like/ POST 获得当前登录用户对应的所有朋友名单 /friends/ GET 跳转到朋友搜索界面 /friend/ GET 根据输入条件查找用户 /friend/search/ GET 添加朋友 /friend/ POST 删除朋友 /friend/{id} DELETE 2.</description>
+    </item>
+    <item>
+      <title>spring-boot-note</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-boot-note/</link>
+      <pubDate>Sat, 13 Jun 2020 15:38:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-boot-note/</guid>
+      <description>注入 @Value&amp;amp;ConfigurationProperties @ConfigurationProperties @Value 功能 批量注入配置文件中的属性 一个个指定（较麻烦） SpEL 不支持 支持 松散绑定（松散语法） 支持 不支持 JSR303数据校验（@Email） 支持 不支持（加了之后无效） 复杂类型封装 支持 不支持 @PropertySource: 加载指定的配置文件 @ImportResource: 加载Spring配置文件&#xA;@ImportResource(location = {&amp;#34;xmlFilePath&amp;#34;}) 推荐使用全注解的方式：&#xA;// Bean id is the name of the method // the return value is the object in IOC container. @Configuration public class ConfigurationClass{ @Bean public BeanMethod beanMethod(){ ... return new Bean; } ... } Profile创建多个环境 默认application.properties&#xA;格式application-{name}.properties&#xA;配置方式：&#xA;yaml&#xA;用文档块来分环境&#xA;server: port: 8080 spring: profiles: active: {env} --- server: port: 8081 spring: profiles: dev --- server: port: 8082 spring: profiles: prod properties</description>
+    </item>
+    <item>
+      <title>Spring MVC</title>
+      <link>https://m1nttee.github.io/zh/posts/springmvc-note-1/</link>
+      <pubDate>Fri, 12 Jun 2020 11:47:13 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/springmvc-note-1/</guid>
+      <description>三层架构 REVIEW 表现层 Spring MVC 业务层 Spring 持久层 Mybatis 表现层需要做：&#xA;接收请求 响应结果 MVC REVIEW Model （模型） java bean View （视图） jsp || HTML Controller （控制器） servlet Spring MVC 优势 角色划分清晰 前端控制器（DispatcherServlet） 请求到处理器映射（HandlerMapping） 处理器适配器（HandlerAdapter） 视图解析器（ViewResolver） 处理器或页面控制器（Controller） 验证器（ Validator） 命令对象（Command 请求参数绑定到的对象就叫命令对象） 表单对象（Form Object 提供给表单展示和提交到的对象就叫表单对象） 执行流程 Client &amp;ndash; Request -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for Handler -&amp;gt; HandlerMapping HandllerMapping find the Method position HandlerMapping &amp;ndash; Response an executable chain -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for execute -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Execute -&amp;gt; Handler/Controller Handler/Controller &amp;ndash; Response Model and View -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Response Model and View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for view resolve -&amp;gt; ViewResolver ViewResolver &amp;ndash; Response the View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Apply Colors to a Drawing -&amp;gt; View DispatcherServlet &amp;ndash; Response -&amp;gt; Client 常用注解 @RequestParam @RequestMapping(&amp;#34;/Path&amp;#34;) public String method(@RequestParam(name = &amp;#34;nameInRequest&amp;#34;) String username) { .</description>
+    </item>
+    <item>
+      <title>Spring 笔记（四）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-4/</link>
+      <pubDate>Wed, 10 Jun 2020 16:31:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-4/</guid>
+      <description>收藏 有关事务传播行为：https://segmentfault.com/a/1190000013341344&#xA;有关事务隔离行为：&#xA;isolation：用于指定事务的隔离级别。默认是DEFALUT，表示使用数据库的默认隔离级别。 propagation：用于指定事物的传播行为，默认值是REQUIRED，这是增删改的选择。查询可用SUPPORTS。 read-only：用于指定事务是否只读，查询为true，默认为false。 timeout：用于指定事务的超时时间，默认为-1永不超时。以秒为单位。 rollback-for：用于指定一个异常，当产生这个异常时，事务回滚，产生其他异常时，事务不回滚。没有默认值，表示任何异常都会滚。 no-rollback-for：用于指定一个异常，当产生这个异常时，事务不回滚，产生其他异常时，事务回滚。没有默认值，表示任何异常都会滚。 </description>
+    </item>
+    <item>
+      <title>Spring 笔记（三）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-3/</link>
+      <pubDate>Wed, 10 Jun 2020 09:00:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-3/</guid>
+      <description>AOP: Aspect Oriented Programing 面向切面编程&#xA;使用动态代理实现AOP&#xA;传统方法：&#xA;基于接口的动态代理：Proxy.newProxyInstance 基于子类的动态代理：Enhancer.create 术语：&#xA;JoinPoint（连接点）：所代理类的所有方法。 Pointcut（切入点）：被增强的方法是切入点。 Advice（通知/增强）：拦截到JoinPoint之后要做的事情。 前置通知 事务前 后置通知 事务后 异常通知 catch中 最终通知 finally中 环绕通知 整个invoke Target（目标对象\被代理对象） Introduction（引介）：特殊的通知 Weaving（织入）：根据目标对象创建代理对象的过程 Proxy（代理）：织入增强后产生的代理类 Aspect（切面）：切入点和通知的结合 基于Spring的AOP编程 基于XML的AOP 配置XML文件 &amp;lt;bean id=&amp;#34;logger&amp;#34; class=&amp;#34;xyz.aiinirii.spring.utils.Logger&amp;#34;/&amp;gt; &amp;lt;aop:config&amp;gt; &amp;lt;aop:aspect id=&amp;#34;logAdvice&amp;#34; ref=&amp;#34;logger&amp;#34;&amp;gt; &amp;lt;!-- 类比在事务之前所做的事情 --&amp;gt; &amp;lt;aop:before method=&amp;#34;beforePrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 类比在事务成功之后所做的事情 例如 commit --&amp;gt; &amp;lt;aop:after-returning method=&amp;#34;afterReturningPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 例如回滚 --&amp;gt; &amp;lt;aop:after-throwing method=&amp;#34;afterThrowingPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 例如关闭链接 --&amp;gt; &amp;lt;aop:after method=&amp;#34;afterPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;/aop:aspect&amp;gt; &amp;lt;/aop:config&amp;gt; 运行效果，saveAccount方法得到了增强：</description>
+    </item>
+    <item>
+      <title>Spring 笔记（二）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-2/</link>
+      <pubDate>Tue, 09 Jun 2020 10:18:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-2/</guid>
+      <description>基于注解的IOC配置 xml配置 需要首先扫描包。&#xA;&amp;lt;!-- 添加命名空间 --&amp;gt; &amp;lt;beans xmlns=&amp;#34;http://www.springframework.org/schema/beans&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xmlns:context=&amp;#34;http://www.springframework.org/schema/context&amp;#34; xsi:schemaLocation=&amp;#34;http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd&amp;#34;&amp;gt; &amp;lt;!-- 扫描包 --&amp;gt; &amp;lt;context:component-scan base-package=&amp;#34;xyz.aiinirii&amp;#34;/&amp;gt; 注解格式 @Component（是以下三种注解的父类）： 作用：把当前类对象存入IOC中 属性： value：用于指定bean的ID，默认值是当前类名首字母小写。 @Controller：表现层 @Service：业务层 @Repository：持久层 以上四种注释方式仅仅名字不同，这样区分可以让我们的三层对象更加清晰。&#xA;注解注入 Bean 类型 @Autowired：&#xA;根据类型注入，只要容器中有唯一一个bean对象的类型和要注入的变量类型匹配，就注入成功。 如果有两个匹配类型，那么就按照变量名称来筛选bean id（选那个和bean id一样的）。 @Qualifier：&#xA;不能独立使用&#xA;@Autowired @Qualifier(&amp;#34;BeanId&amp;#34;) private BeanClass beanName = null; @Source:&#xA;独立使用&#xA;@Resource(&amp;#34;BeanId&amp;#34;) private BeanClass beanName = null; 基本类型和String类型 @Value： 属性： value：用SpEL（spring的EL表达式）方式写 - ${param} 集合类型 只能用xml实现&#xA;其他注解 作用范围 - @Scope - 同上次笔记中的scope 初始化 - @PostConstruct - 初始化对象 销毁 - @PreDestory - 销毁对象 配置文件（@Configuration） @Configuration @ComponentScan(&amp;#34;PackageName&amp;#34;) public class Configuration { @Bean(name = &amp;#34;BeanId&amp;#34;) public BeanClass createBeanMethod(ParamClass param){ return beanObject; } @Bean(name = &amp;#34;param&amp;#34;) publi ParamClass createParamMethod() { return paramObject; } } 此时构造ApplicationContext时需要选择：</description>
+    </item>
+    <item>
+      <title>Spring 笔记（一）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note/</link>
+      <pubDate>Sun, 07 Jun 2020 15:37:11 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note/</guid>
+      <description>为什么要用 Spring 为了解耦！&#xA;那么何为解耦？&#xA;耦合 指程序间的依赖关系：&#xA;包括类之间的依赖&#xA;包括方法之间的依赖&#xA;解耦 降低程序间的依赖关系&#xA;做到编译的时候不依赖（报错？），运行时才依赖。&#xA;思路 用反射来创建对象。 读取配置文件来读取要创建的对象的全限定类名。 IOC 容器详解 IOC: Inversion of Control&#xA;关键词：工厂模式，单例模式，线程安全。&#xA;单例模式实现思路：新建静态 Map 共享 value 。 原来：&#xA;private IUserDao userDao = new UserDaoImpl(); IOC 实现：&#xA;private IUserDao userDao = (IUserDao) BeanFactory.getBean(&amp;#34;userDao&amp;#34;); 作用：控制反转，将控制权转移给 BeanFactory，从而割断与 Dao 层的直接联系，从而达到解耦。&#xA;注：以上的例子里，userDao 的新建对象任务已经交给了工厂。这样操作之后，编译时不会有依赖，但是运行时会有依赖。&#xA;IOC 的本质：把创建对象的权力交给框架。&#xA;Spring 中的 IOC ApplicationContext 的三个常用实现类：&#xA;ClassPathXmlApplicationContext：加载类路径下的配置文件，必须要在类路径下，否则免谈。（常用） FileSystemXmlApplicationContext：加载磁盘任意路径下的配置文件。 AnnotationConfigApplicationContext：用于读取注解容器。（常用） ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&amp;#34;applicationContext.xml&amp;#34;); // 运行这行时已经创建了对象。 IAccountService accountService = applicationContext.getBean(&amp;#34;accountService&amp;#34;, IAccountService.class); IAccountDao accountDao = applicationContext.</description>
+    </item>
+    <item>
+      <title>Maven 项目目录管理</title>
+      <link>https://m1nttee.github.io/zh/posts/maven-catalogue/</link>
+      <pubDate>Fri, 05 Jun 2020 13:46:15 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/maven-catalogue/</guid>
+      <description>最近在尝试用 Maven 写项目，但奈何功夫不到家，刚开始就被 Maven 项目的目录安排给难住了。&#xA;先介绍一下情况，我的项目（project）将会分为若干模块（module）。&#xA;大概是下面这样的情况：&#xA;- project - module 1 - module 2 - module 3 而我仔细一想，这个问题其实可以分成几个小问题：&#xA;如何命名项目的 groupId 和 artifactId。 子 Maven 项目和父 Maven 项目之间的关系。 话不多说，切入正题。&#xA;如何命名项目的 groupId 和 artifactId 首先，我们需要知道的是这里的 groupId 和 artifactId 其实代表的是项目的坐标。&#xA;举个例子，&#xA;&amp;lt;groupId&amp;gt;org.apache.maven.plugins&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;maven-compiler-plugin&amp;lt;/artifactId&amp;gt; 这两行实际上就可以帮助我们定位这个项目，它将会在 org/apache/maven/plugins/maven-compiler-plugin/ 这个文件夹下。&#xA;那其实我们的问题就迎刃而解了，假如说，在 aiinirii.xyz 这个域名下我想要建一个名为 proj 的项目。&#xA;这里要注意的，Location 其实和 GroupId 并无关系，其实只是源代码的存储路径，在 Maven 项目 Install 之后其实会直接被载入本地的 Maven 仓库中的 xyz/aiinirii/proj 目录下，只需要保证不会与其他坐标产生冲突就可以。&#xA;子 Maven 项目和父 Maven 项目之间的关系 讲清楚了如何命名项目，接下来再介绍一下如果像我一样，多项目之间有父子依赖关系怎么办？&#xA;首先，我们需要建一个父项目，例如设置 groupId 和 artifactId 分别为：</description>
+    </item>
+    <item>
+      <title>项目命名宝典</title>
+      <link>https://m1nttee.github.io/zh/posts/name-the-project/</link>
+      <pubDate>Tue, 02 Jun 2020 13:13:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/name-the-project/</guid>
+      <description>如何给项目命名？想必各位 coder 都常为此苦恼不已。这里我稍微整理了一下几个比较规范的命名规则，主要还是自己看啦！&#xA;欢迎大家补充哦 :-)&#xA;一、项目名 全部小写，比如 cms、workdesk、jobserver 等&#xA;二、java相关命名 类命名：每音节单词前的第一个字母大写，比如 FieldInfo、Expression 等&#xA;普通变量(包括spring里的变量引用命名)：第一个单词前小写，以后每个单词第一个字母大写，比如：password、primaryFlag&#xA;静态变量：全部大写，多个单词则以_分开，比如BOOLEAN_FLAG&#xA;包package命名：全部小写,比如 com.joinspider.workdesk&#xA;类名、变量名是名字组合，多名词顺序和中文顺序一样，比如 ScriptEngine&#xA;属性也可以是形容词 + 名词&#xA;常量可使用上述规则，如果为了体现多个常量是一组的概念，也可以被修饰前置，比如：VAR_START，VAR_END.&#xA;方法是动词 + 名字或者只有动词&#xA;Import 需要指出 import 哪一个类，禁止 import 整个 package&#xA;import java.util.*; //错误 import java.util.HashMap; //正确 Test Class 名的格式为“测试对象 Class 名 **+ Test **”&#xA;进行测试或 Package 测试的所有的 Class 名的格式为“**AllTest **”或“Package 名 + Test”&#xA;生成 Object 的 Method 名的格式是“**&amp;ldquo;create&amp;rdquo; + **Object 名”&#xA;转换 Method 名的格式是“&amp;ldquo;to&amp;rdquo; + Object 名”</description>
+    </item>
+    <item>
+      <title>Mybatis 笔记</title>
+      <link>https://m1nttee.github.io/zh/posts/mybatis-notes/</link>
+      <pubDate>Sat, 30 May 2020 17:34:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/mybatis-notes/</guid>
+      <description>终于，本:herb::baby_chick:结束了长达一个多月的DDL战争，重拾旧爱。&#xA;接下来几天要开始按照 Mybatis -&amp;gt; Spring -&amp;gt; Spring MVC 的流程爬一遍！&#xA;一、 XML 配置 与基础 CURD 的 XML 实现 Maven XML dependencies 配置 &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;4.13&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;log4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;log4j&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.12&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;5.1.49&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.mybatis&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mybatis&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.5.4&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; SqlMapConfig.xml &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34; ?&amp;gt; &amp;lt;!DOCTYPE configuration PUBLIC &amp;#34;-//mybatis.org//DTD Config 3.0//EN&amp;#34; &amp;#34;http://mybatis.org/dtd/mybatis-3-config.dtd&amp;#34;&amp;gt; &amp;lt;configuration&amp;gt; &amp;lt;environments default=&amp;#34;mysql&amp;#34;&amp;gt; &amp;lt;environment id=&amp;#34;mysql&amp;#34;&amp;gt; &amp;lt;transactionManager type=&amp;#34;JDBC&amp;#34;/&amp;gt; &amp;lt;dataSource type=&amp;#34;POOLED&amp;#34;&amp;gt; &amp;lt;property name=&amp;#34;driver&amp;#34; value=&amp;#34;com.mysql.jdbc.Driver&amp;#34;/&amp;gt; &amp;lt;property name=&amp;#34;url&amp;#34; value=&amp;#34;jdbc:mysql://localhost:3306/mybatisdb&amp;#34;/&amp;gt; &amp;lt;property name=&amp;#34;username&amp;#34; value=&amp;#34;***&amp;#34;/&amp;gt; &amp;lt;property name=&amp;#34;password&amp;#34; value=&amp;#34;***&amp;#34;/&amp;gt; &amp;lt;/dataSource&amp;gt; &amp;lt;/environment&amp;gt; &amp;lt;/environments&amp;gt; &amp;lt;mappers&amp;gt; &amp;lt;mapper resource=&amp;#34;mybatis\dao\IUserMapper.</description>
+    </item>
+    <item>
+      <title>ModuleNotFoundError</title>
+      <link>https://m1nttee.github.io/zh/posts/modulenotfounderror/</link>
+      <pubDate>Tue, 14 Apr 2020 23:12:54 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/modulenotfounderror/</guid>
+      <description>今天碰到一件十分奇怪的的事情。当我尝试着使用mmdetection的工具包时&#xA;我是这样输入的：&#xA;$ python tools/test.py configs/faster_rcnn_r50_fpn_1x.py checkpoints/faster_rcnn_r50_fpn_1x_20181010-3d1b3351.pth modeltest 而他是这样报错的：&#xA;Traceback (most recent call last): File &amp;#34;tools/test.py&amp;#34;, line 13, in &amp;lt;module&amp;gt; from tools.fuse_conv_bn import fuse_module ModuleNotFoundError: No module named &amp;#39;tools&amp;#39; 我真的太郁闷了，为什么这会有错？？&#xA;明明pycharm告诉我它好得很啊！？？？&#xA;我拓麻真的是馹嘞勾勒&#xA;你们来品品哈，这是import行&#xA;from tools.fuse_conv_bn import fuse_module 我我我经过了一晚上的冥思苦想之后终于恍然大悟，原来是因为tools没有加到运行环境里。。好吧(╯▽╰)我是莎笔&#xA;于是。我加了一句&#xA;import sys sys.path.append(&amp;#34;E:\\code\\python_code\\mmdetection&amp;#34;) 神奇地搞定了哈哈哈！！&#xA;果然遇到bug不要慌，先冷静冷静喝杯茶。</description>
+    </item>
+    <item>
+      <title>「解决」anaconda下cl.exe缺失的报错</title>
+      <link>https://m1nttee.github.io/zh/posts/lack-of-cl-exe/</link>
+      <pubDate>Tue, 14 Apr 2020 18:14:42 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/lack-of-cl-exe/</guid>
+      <description>今天很崩溃，为了配置mmdetection所需的环境，我真可谓是煞费苦心。这里记录一个让我止步不前的报错。&#xA;cl.exe /c /nologo /Ox /W3 /GL /DNDEBUG /MD &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\lib\site-packages\numpy\core\include&amp;#34; &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&amp;#34; &amp;#34;-ID:\Program Files\anaconda\envs\open_mmlab\include&amp;#34; /EHsc /Tp./mmcv/video/optflow_warp/flow_warp.cpp /Fobuild\temp.win-amd64-3.7\Release\./mmcv/video/optflow_warp/flow_warp.obj error: command &amp;#39;cl.exe&amp;#39; failed: No such file or directory 奇怪了啊，为什么会报错找不到cl.exe呢？我是装了vstool的啊？？？&#xA;在网上找了一圈之后，也没有任何解答。&#xA;后来突然，当我不小心没activate就进行安装指令的时候。。。我发现。。他他他可以了？？&#xA;原来是anaconda的锅。&#xA;于是去网上就这个问题找了一会儿，发现原理其实很简单，就是anaconda环境里没有Cpython。于是：&#xA;pip install cpython 就解决了。</description>
+    </item>
+    <item>
+      <title>Jupyter&#43;Pycharm&#43;anaconda 环境搭建时的报错</title>
+      <link>https://m1nttee.github.io/zh/posts/jupyter-pycharm-anaconda-bug/</link>
+      <pubDate>Mon, 13 Apr 2020 17:28:22 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/jupyter-pycharm-anaconda-bug/</guid>
+      <description>今天突然发现，Pycharm里原来也可以集成Jupyter！&#xA;然后，本人便兴冲冲地去实现了Jupyter+Pycharm+anaconda的环境部署。。。&#xA;然而。。。事情并没有想象的那么简单。。&#xA;在成功地安装完了环境之后，本人十分愉（zi）快（xin）地点击了运行cell，以下是报错：&#xA;Traceback (most recent call last): File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\web.py&amp;#34;, line 1703, in _execute result = await result File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 742, in run yielded = self.gen.throw(*exc_info) # type: ignore File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\notebook\services\sessions\handlers.py&amp;#34;, line 72, in post type=mtype)) File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 735, in run value = future.result() File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\tornado\gen.py&amp;#34;, line 742, in run yielded = self.gen.throw(*exc_info) # type: ignore File &amp;#34;D:\Program Files\anaconda\envs\torchPro\lib\site-packages\notebook\services\sessions\sessionmanager.py&amp;#34;, line 88, in create_session kernel_id = yield self.</description>
+    </item>
+    <item>
+      <title>深度学习日记-卷积神经网络实现</title>
+      <link>https://m1nttee.github.io/zh/posts/deeplearning-journal/</link>
+      <pubDate>Wed, 08 Apr 2020 21:23:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/deeplearning-journal/</guid>
+      <description>Outline of the Assignment Convolution functions, including: Zero Padding Convolve window Convolution forward Pooling functions, including: Pooling forward Create mask Distribute value Convolution function Zero Padding Firstly, we need to implement a function called Zero Padding, the code is as below.&#xA;def zero_pad(X, pad): X_pad = np.pad(X, ((0,0), (pad, pad), (pad, pad), (0,0)), mode=&amp;#39;constant&amp;#39;, constant_values = (0,0)) return X_pad We can see that with using numpy, it is very easy to be implement.</description>
+    </item>
+    <item>
+      <title>房地产自动定价（三）</title>
+      <link>https://m1nttee.github.io/zh/posts/housing-evaluation-auto-part-3/</link>
+      <pubDate>Mon, 06 Apr 2020 21:21:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/housing-evaluation-auto-part-3/</guid>
+      <description>数据的爬取和预处理都结束了。接下来，我打算利用简单的BP网络模型去对这些数据进行一个简单的拟合。这里，我用到了TensorFlow的2.1.0版本。&#xA;输入输出选择 因为打算先跑跑BP神经网络看看效果，所以输入输出先不选的过于复杂。&#xA;INPUT: place_id, house_type, house_area, house_towards&#xA;OUTPUT: house_price&#xA;这四个输入数据分别是&#xA;地区的id（我已经自行为每个地区进行了编号，例如安定门：1） 房屋的类型（我也已编了号，例如板楼：0） 房屋的面积（单位为平方米） 房屋的朝向（我也编了号，例如南：0) 而输出数据为房屋的成交价格（单位万元）&#xA;数据处理 将数据集整理并扁平化之后，输入数据X_data变成了一个大小为（150731，310）的数据集，其中310=4+8+297+1；我采用了one_hot的编码方式将房屋的朝向、类型以及面积均变成了一个个列向量，在这之后我把他们合并到一起，其中4代表的是4种房屋类型，8代表的是8种朝向，297代表的是297种地区，这个列向量的最后一个元素是房屋的面积。&#xA;开始模型搭建 def model_build(n): # shape of X_train: (120584, 310), shape of X_test: (30147, 310) model = tf.keras.models.Sequential([ tf.keras.layers.Dense(64, input_shape=(n,)), tf.keras.layers.Activation(&amp;#39;relu&amp;#39;), tf.keras.layers.Dense(64), tf.keras.layers.Activation(&amp;#39;relu&amp;#39;), tf.keras.layers.Dense(1) ]) model.compile(optimizer=Adam(learning_rate=0.1), loss=&amp;#39;mse&amp;#39;, metrics=[&amp;#39;mae&amp;#39;]) return model 这里采用了两层RELU去进行拟合。&#xA;模型的初尝试 def scheduler(epoch): # 每隔100个epoch，学习率减小为原来的1/3 if epoch % 100 == 0 and epoch != 0: lr = tf.keras.backend.get_value(model.optimizer.lr) tf.keras.backend.set_value(model.optimizer.lr, lr * 0.3) print(&amp;#34;lr changed to {}&amp;#34;.</description>
+    </item>
+    <item>
+      <title>房地产自动定价（二）</title>
+      <link>https://m1nttee.github.io/zh/posts/housing-evaluation-auto-part-2/</link>
+      <pubDate>Sun, 05 Apr 2020 21:02:58 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/housing-evaluation-auto-part-2/</guid>
+      <description>数据预处理 昨天，我确实爬到了我所需要的数据集，但是为了让后期的机器学习算法运行地更为顺利，我觉得非常有必要做一期数据预处理。在进行数据预处理之前，我想先给大家看一下我的数据库结构。&#xA;虽说只是草草一撇，但是我们可以发现其中有很多数据格式都不够统一，其中甚至有些显示的是暂无数据。&#xA;不妨来一列列地统一化吧~ヽ(￣▽￣)ノ&#xA;house_title 这列很明显的我们可以看到后面的 “**平米” 的数据和之后的house_area产生了数据重复，我们需要做的是将 “**平米” 数据给剔除。&#xA;因为涉及到字符串切片，我们的流程就只好放在python中了（而非MySQL）。&#xA;def house_title_format(self): cousor_r = self.db.cursor() cousor_w = self.db.cursor() sqlR = &amp;#34;SELECT house_id, house_title FROM house_info;&amp;#34; sqlW = &amp;#34;UPDATE house_info SET house_title = %s, rooms_type = %s WHERE house_id = %s;&amp;#34; cousor_r.execute(sqlR) result_set = cousor_r.fetchall() for row in result_set: house_id = row[0] house_title = row[1] title = house_title.split(&amp;#34; &amp;#34;)[0] rooms = house_title.split(&amp;#34; &amp;#34;)[1] cousor_w.execute(sqlW, (title, rooms, str(house_id))) self.db.commit() 事实上我好像忘了测试就跑原数据集了。还好苍天有眼，没毁了数据。既然想起来了，赶紧先备个份嘻嘻。</description>
+    </item>
+    <item>
+      <title>房地产自动定价（一）</title>
+      <link>https://m1nttee.github.io/zh/posts/housing-evaluation-auto-part-1/</link>
+      <pubDate>Sat, 04 Apr 2020 11:08:39 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/housing-evaluation-auto-part-1/</guid>
+      <description>一切的开始 这房地产自动定价呢，其实是个项目。而这个项目的故事则说来话长了。记得大概是去年5月接了这个项目，后来浑浑噩噩地做了一段时间，最后似乎是因为技术上不过关就放弃了治疗（十分不提倡这种学术精神！）。&#xA;但这件事情可没有这么简单。。。&#xA;很快，大概六月份我们就要结题了。&#xA;相比于混过最后这段日子，我觉得，还是冲一冲吧！&#xA;这个系列博文将会记录我冲击路上所将经历的坎坷。&#xA;爬虫部分 在数据挖掘之前肯定需要做一个数据集，不同于以往，这次我打算用scrapy框架来爬取房地产网站的有关数据。&#xA;首先，我们来用scrapy来自动生成一个基础框架：&#xA;(HousingEvaluation) E:\code\python_code\HousingEvaluation&amp;gt;scrapy startproject HousingDataScrawler Fatal error in launcher: Unable to create process using &amp;#39;&amp;#34;d:\bld\scrapy_1584555977003\_h_env\python.exe&amp;#34; &amp;#34;D:\Program Files\anaconda\envs\HousingEvaluation\Scripts \scrapy.exe&amp;#34; startproject HousingDataScrawler&amp;#39;: ??????????? 哎呀！报错了！在网上查了一圈之后发现原来使需要用以下命令来执行，感觉错的好冤枉！o(╥﹏╥)o：&#xA;python -m scrapy startproject xxx 这里可以看一下生成之后的程序结构。&#xA;然后我们选好我们希望爬取房源信息的网站。这里选的是链家。&#xA;房屋户型 所在楼层 建筑面积 户型结构 套内面积 建筑类型 房屋朝向 2室1厅1厨1卫 中楼层(共4层) 54.14㎡ 平层 37.7㎡ 板楼 南 北 建成年代 装修情况 建筑结构 供暖方式 梯户比例 产权年限 配备电梯 1990 精装 混合结构 集中供暖 一梯两户 70年 无 之后我们点开网站，发现每个房源都会有这么一系列的信息，而这些信息中大部分都是有用的。这里我们选取**房屋户型(house_type)、所在楼层(house_floor)、套内面积(house_area)、建筑类型(house_type)、房屋朝向(house_towards)、建成年代(completion_time)、装修情况(house_finish)、梯户比例(elevator_ratio)、配备电梯(have_elevator)以及页面上的房屋标题(house_title)、房屋价格(house_price)、交易时间(trading_date)**进行爬取。&#xA;以下是HouseDataItem的构成。&#xA;class HouseDataItem(scrapy.</description>
+    </item>
+    <item>
+      <title>二叉树的先序遍历、中序遍历以及后序遍历</title>
+      <link>https://m1nttee.github.io/zh/posts/preorder-inorder-and-postorder/</link>
+      <pubDate>Thu, 02 Apr 2020 12:52:44 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/preorder-inorder-and-postorder/</guid>
+      <description>开始前的一些碎碎念 仔细算算，距离我搭建好这个博客已经有进一个月了。&#xA;但。。。。？&#xA;为什么我还是一篇博文也写不出来！？&#xA;明明我也是有个博主梦的好嘛？&#xA;果然这样下去还是不行的，要不用技术贴来水水博客好了。&#xA;说干就干！正好最近在学习二叉树，这次就来聊聊自己对先序遍历 (pre-order) 、中序遍历 (in-order) 和后序遍历 (post-order) 的理解吧！&#xA;二叉树的结构 若要谈三种遍历方式，必定逃不过二叉树本身。先放上二叉树的解释。&#xA;在计算机科学中，二叉树是每个结点最多有两个子树的树结构。通常子树被称作“左子树”（left subtree）和“右子树”（right subtree）。二叉树常被用于实现二叉查找树和二叉堆。&#xA;一棵深度为k，且有2^k-1个结点的二叉树，称为满二叉树。这种树的特点是每一层上的结点数都是最大结点数。而在一棵二叉树中，除最后一层外，若其余层都是满的，并且或者最后一层是满的，或者是在右边缺少连续若干结点，则此二叉树为完全二叉树。具有n个结点的完全二叉树的深度为floor(log2n)+1。深度为k的完全二叉树，至少有2k-1个叶子结点，至多有2k-1个结点。&#xA;来源：百度百科&#xA;我们可以看到，二叉树确实非常非常有用(￣▽￣)~*，而二叉树的结构其实也就是：&#xA;每个节点最多只能有两个子节点 整棵树从根节点（root node）出发，到无元素存储的外部节点（external node）结束。 先序（pre-order）、中序（in-order）和后序（post-order） 一、先序（pre-order） 那么，介绍完二叉树的结构之后问题就来了，什么是先序遍历呢？&#xA;当我们去搜索一棵二叉树上所有元素的时候，我们难免需要遵守一种规律。而先序遍历的规则是这样的：&#xA;首先，我们会去问候根节点，这个时候我们就可以对这个节点干些想干的事情了⁄(⁄⁄•⁄ω⁄•⁄⁄)⁄&#xA;之后呢，我们会按顺序干以下两件事&#xA;a) 问候这个节点的左子节点，并将该节点当成新的根节点，重复步骤1 - 2直到没有新节点可以被访问&#xA;b) 问候这个节点的右子节点，并将该节点当成新的根节点，重复步骤1 - 2直到没有新节点可以被访问&#xA;我们可以很明显地看到，这个其实是一个递归过程，而代码是这样的：&#xA;private void queryNodePreorder(ITree tree, IPosition nowRoot) { /* 这里可以对nowRoot节点干些事情 */ if (tree.isLeaf(nowRoot)) { // 如果nowRoot是叶节点退出递归 return; } else { // 按顺序去访问nowRoot的左右子节点 queryNodePreorder(tree, tree.getLeftChild(nowRoot)); queryNodePreorder(tree, tree.getRightChild(nowRoot)); } } 二、中序（In-order） 其实中序遍历和先序遍历相差无几。下面先给出中序遍历的规则：</description>
+    </item>
+  </channel>
+</rss>

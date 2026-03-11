@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>项目命名宝典 | 陈明天</title>
+  <meta name="description" content="软件工程师">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="陈明天" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/zh/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/zh/">陈明天</a></h1>
+        <p class="site-tagline">软件工程师</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/zh/">关于</a>
+            
+              <a href="/zh/posts/">博客</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/posts/name-the-project/">English</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>项目命名宝典</h1>
+    <time>June 2, 2020</time>
+  </header>
+  <div class="post-content">
+    <p>如何给项目命名？想必各位 coder 都常为此苦恼不已。这里我稍微整理了一下几个比较规范的命名规则，主要还是自己看啦！</p>
+<p>欢迎大家补充哦 :-)</p>
+<hr>
+<h2 id="一项目名">一、项目名</h2>
+<p>全部小写，比如 cms、workdesk、jobserver 等</p>
+<h2 id="二java相关命名">二、java相关命名</h2>
+<ol>
+<li>
+<p>类命名：每音节单词前的第一个字母大写，比如 FieldInfo、Expression 等</p>
+</li>
+<li>
+<p>普通变量(包括spring里的变量引用命名)：第一个单词前小写，以后每个单词第一个字母大写，比如：password、primaryFlag</p>
+</li>
+<li>
+<p>静态变量：全部大写，多个单词则以_分开，比如BOOLEAN_FLAG</p>
+</li>
+<li>
+<p>包package命名：全部小写,比如 com.joinspider.workdesk</p>
+</li>
+<li>
+<p>类名、变量名是名字组合，多名词顺序和中文顺序一样，比如 ScriptEngine</p>
+</li>
+<li>
+<p>属性也可以是形容词 + 名词</p>
+</li>
+<li>
+<p>常量可使用上述规则，如果为了体现多个常量是一组的概念，也可以被修饰前置，比如：VAR_START，VAR_END.</p>
+</li>
+<li>
+<p>方法是动词 + 名字或者只有动词</p>
+</li>
+<li>
+<p>Import 需要指出 import 哪一个类，禁止 import 整个 package</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">java.util.*</span>;<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">//错误</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">import</span><span style="color:#bbb"> </span><span style="color:#555">java.util.HashMap</span>;<span style="color:#bbb"> </span><span style="color:#998;font-style:italic">//正确</span><span style="color:#bbb">
+</span></span></span></code></pre></div></li>
+<li>
+<p>Test Class 名的格式为“测试对象 Class 名 **+ Test **”</p>
+</li>
+<li>
+<p>进行测试或 Package 测试的所有的 Class 名的格式为“**AllTest **”或“Package 名 <strong>+ Test</strong>”</p>
+</li>
+<li>
+<p>生成 Object 的 Method 名的格式是“**&ldquo;create&rdquo; + **Object 名”</p>
+</li>
+<li>
+<p>转换 Method 名的格式是“<strong>&ldquo;to&rdquo; +</strong> Object 名”</p>
+</li>
+<li>
+<p>在查询方法中应使用find作为前缀</p>
+</li>
+</ol>
+<h2 id="三属性文件properties定义变量命名">三、属性文件.properties定义变量命名</h2>
+<p>object.a_b_c 格式，全部小写，其中 object 是宿主，a_b_c 多个单词下划线分开。</p>
+<p>例：hibernate.cache.use_second_level_cache、hibernate.cache.provider_class、hibernate.cache.provider_configuration_file_resource_path</p>
+<h2 id="四xml-文件命名">四、xml 文件命名</h2>
+<p>全部小写，-符号是其 xml 的用途说明，类似 applicationContext 属习惯命名。比如 springmvc-servlet.xml、workdesk-manager.xml、workdesk-servlet.xml、applicationContext-basic.xml 等
+xml里的内容多个字符间以-隔开，比如 param-name、filter-mapping等</p>
+<h2 id="五普通文件命名-jsp-js-img-等">五、普通文件命名( jsp, js, img 等)</h2>
+<p>和 Java 普通变量规范相同</p>
+<h2 id="六属性文件-properties">六、属性文件 properties</h2>
+<p>以下划线隔开：errors_zh_CN.properties，hibernate_test.properties</p>
+<h2 id="七数据库命名">七、数据库命名：</h2>
+<p>表、字段命名全部大写，多个单词以_隔开</p>
+<h2 id="八包名命名规范">八、包名命名规范</h2>
+<p>我们知道，一般公司命名为“com.公司名.项目名.模块名…”。</p>
+<p>这里事实上 “com” 代表的是该公司的域名。</p>
+<p>除了 com 之外，域又分为 org、com、cn 等等许多，其中 org 为非营利组织，com 为商业组织。</p>
+<p><strong>如果没有域名的话，你可以以自创的独一无二的域名开头，最重要的其实是防止发生冲突。</strong></p>
+<hr>
+<h1 id="参考">参考</h1>
+<p>[1] <a href="https://blog.csdn.net/weixin_42618873/article/details/90694514">https://blog.csdn.net/weixin_42618873/article/details/90694514</a></p>
+<p>[2] <a href="https://blog.csdn.net/youyaecho/article/details/51179023">https://blog.csdn.net/youyaecho/article/details/51179023</a></p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

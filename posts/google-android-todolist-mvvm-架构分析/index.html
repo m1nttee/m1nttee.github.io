@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Google Android TodoList MVVM Architecture Analysis | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/google-android-todolist-mvvm-%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Google Android TodoList MVVM Architecture Analysis</h1>
+    <time>August 31, 2020</time>
+  </header>
+  <div class="post-content">
+    <p>These few days I planned to write an Android program, but after setting up the project, I felt overwhelmed and realized that as someone who pursues ultimate code aesthetics, I should first figure out the current mainstream Android program structure before diving in.</p>
+<p>After browsing CSDN, as a beginner I learned that there are two relatively mature architectural patterns in the market: MVP and MVVM. After careful consideration, I chose MVVM architecture as the structure for my first Android program.</p>
+<p>So I followed the trail, (clues), and finally discovered that Android officials had long ago published their understanding of MVVM architecture on GitHub (GitHub link: <a href="https://github.com/android/architecture-samples">https://github.com/android/architecture-samples</a>).</p>
+<h1 id="overall-architecture">Overall Architecture</h1>
+<p>Let&rsquo;s first look at the overall structure of this program (we won&rsquo;t focus on Test code here):</p>
+<p><img alt="image-20200831204959627" src="/img/image-20200831204959627.png"></p>
+<p>We can find that Android officials have divided the entire program into several parts:</p>
+<ol>
+<li>
+<p>data - package related to data processing</p>
+</li>
+<li>
+<p>util - various custom utility classes</p>
+</li>
+<li>
+<p>tasks, taskdetail, statistics, addedittask - various packages divided by functionality containing ViewModel and Activity</p>
+</li>
+<li>
+<p>ViewModelFactory - ViewModel factory</p>
+</li>
+<li>
+<p>ScrollChildSwipeRefreshLayout - custom component</p>
+</li>
+<li>
+<p>SingleLiveEvent - This is quite strange, it has all comments inside. Here&rsquo;s Google&rsquo;s explanation for this class:</p>
+<blockquote>
+<p>Looking for the SingleLiveEvent class? We are now using the Event class.</p>
+</blockquote>
+</li>
+<li>
+<p>Event - Event-based encapsulation for data</p>
+</li>
+</ol>
+<h1 id="data-package-analysis">Data Package Analysis</h1>
+<p>Actually, everything else is easy to understand, but the arrangement in the data package needs some analysis:</p>
+<p><img alt="image-20200831203339387" src="/img/image-20200831203339387.png"></p>
+<p>We can find that for a piece of data, its lifecycle can be analyzed according to the following flowchart:</p>
+<p><img alt="image-20200831212018062" src="/img/image-20200831212018062.png"></p>
+<p>With this, the analysis of Google&rsquo;s official MVVM architecture is pretty much complete. Learning from books feels incomplete in the end; to truly understand, one must practice personally. Time to put it into practice (escaping</p>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

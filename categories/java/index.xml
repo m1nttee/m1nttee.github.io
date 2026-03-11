@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on Mingtian Chen</title>
+    <link>https://m1nttee.github.io/categories/java/</link>
+    <description>Recent content in Java on Mingtian Chen</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Mon, 25 Oct 2021 16:00:51 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Design Pattern - Prototype Pattern</title>
+      <link>https://m1nttee.github.io/posts/design-pattern-prototype-pattern/</link>
+      <pubDate>Mon, 25 Oct 2021 16:00:51 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/design-pattern-prototype-pattern/</guid>
+      <description>01 Prototype Pattern Background When writing code, we might encounter these scenarios:&#xA;After performing a database query, we successfully create an entity, and at this point, we need to obtain another entity from the same data source using the same method. If we know that others haven&amp;rsquo;t performed any write operations on the data source, the best approach is to directly copy the already queried data without going through the data source.</description>
+    </item>
+    <item>
+      <title>Postalk - Android Note App</title>
+      <link>https://m1nttee.github.io/posts/postalk/</link>
+      <pubDate>Wed, 17 Jun 2020 11:05:52 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/postalk/</guid>
+      <description>Postalk - Android Note App 0. Introduction This project is a web application based on Spring Boot, Mybatis, Druid, and MySQL. Its function is posting + chat. This article will record the development process and problems encountered.&#xA;1. Design Database Design To make development smoother, I first designed an ER diagram based on the relationships between entities.&#xA;User Table:&#xA;id username password sex age phone_number email registration_date Technology Stack Backend: Spring Boot, Spring MVC ORM: Mybatis Connection Pool: Druid Database: MySQL Frontend: Android (for the app) Project Structure src/ ├── main/ │ ├── java/ │ │ └── xyz.</description>
+    </item>
+    <item>
+      <title>Spring Boot Notes</title>
+      <link>https://m1nttee.github.io/posts/spring-boot-note/</link>
+      <pubDate>Sat, 13 Jun 2020 15:38:05 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-boot-note/</guid>
+      <description>Injection @Value&amp;amp;ConfigurationProperties @ConfigurationProperties @Value Function Batch inject properties from config file Specify one by one (more cumbersome) SpEL Not supported Supported Loose binding (loose syntax) Supported Not supported JSR303 data validation (@Email) Supported Not supported (ineffective if added) Complex type encapsulation Supported Not supported @PropertySource: Load specified configuration file @ImportResource: Load Spring configuration file&#xA;@ImportResource(location = {&amp;#34;xmlFilePath&amp;#34;}) Recommended to use full annotation method:&#xA;// Bean id is the name of the method // the return value is the object in IOC container.</description>
+    </item>
+    <item>
+      <title>Spring MVC</title>
+      <link>https://m1nttee.github.io/posts/springmvc-note-1/</link>
+      <pubDate>Fri, 12 Jun 2020 11:47:13 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/springmvc-note-1/</guid>
+      <description>Three-Tier Architecture REVIEW Presentation Layer Spring MVC Business Layer Spring Persistence Layer Mybatis What the presentation layer needs to do:&#xA;Receive requests Return responses MVC REVIEW Model java bean View jsp || HTML Controller servlet Advantages of Spring MVC Clear role separation Front Controller (DispatcherServlet) Mapping from requests to handlers (HandlerMapping) Handler adapter (HandlerAdapter) View resolver (ViewResolver) Handler or page controller (Controller) Validator Command object (the object that request parameters are bound to is called a command object) Form object (the object provided for form display and submission is called a form object) Execution Flow Client &amp;ndash; Request -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for Handler -&amp;gt; HandlerMapping HandllerMapping find the Method position HandlerMapping &amp;ndash; Response an executable chain -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for execute -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Execute -&amp;gt; Handler/Controller Handler/Controller &amp;ndash; Response Model and View -&amp;gt; HandlerAdapter HandlerAdapter &amp;ndash; Response Model and View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Request for view resolve -&amp;gt; ViewResolver ViewResolver &amp;ndash; Response the View -&amp;gt; DispatcherServlet DispatcherServlet &amp;ndash; Apply Colors to a Drawing -&amp;gt; View DispatcherServlet &amp;ndash; Response -&amp;gt; Client Common Annotations @RequestParam @RequestMapping(&amp;#34;/Path&amp;#34;) public String method(@RequestParam(name = &amp;#34;nameInRequest&amp;#34;) String username) { .</description>
+    </item>
+    <item>
+      <title>Spring Notes (4) - Transaction Management</title>
+      <link>https://m1nttee.github.io/posts/spring-note-4/</link>
+      <pubDate>Wed, 10 Jun 2020 16:31:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-note-4/</guid>
+      <description>Transaction Reference propagation behaviors Transaction: https://segmentfault.com/a/1190000013341344&#xA;Transaction Isolation Levels isolation: Specifies transaction isolation level. Default is DEFAULT (use database&amp;rsquo;s default). Transaction Propagation propagation: Specifies transaction propagation behavior. Default is REQUIRED (for insert/update/delete). Use SUPPORTS for queries. Transaction Properties read-only: Specifies if transaction is read-only. Use true for queries, default is false. timeout: Transaction timeout in seconds. Default is -1 (no timeout). rollback-for: Specifies an exception that triggers rollback. Any other exceptions won&amp;rsquo;t trigger rollback.</description>
+    </item>
+    <item>
+      <title>Spring Notes (3) - AOP</title>
+      <link>https://m1nttee.github.io/posts/spring-note-3/</link>
+      <pubDate>Wed, 10 Jun 2020 09:00:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-note-3/</guid>
+      <description>AOP: Aspect Oriented Programming&#xA;Implemented using dynamic proxy.&#xA;Traditional Methods Interface-based dynamic proxy: Proxy.newProxyInstance Subclass-based dynamic proxy: Enhancer.create Terminology JoinPoint: All methods in the proxied class. Pointcut: The methods that are enhanced/advised. Advice/Enhancement: What to do after intercepting JoinPoint. Before Advice: Before transaction After Advice: After transaction AOP Implementation in Spring &amp;lt;aop:config&amp;gt; &amp;lt;aop:aspect id=&amp;#34;logAspect&amp;#34; ref=&amp;#34;loggingAspect&amp;#34;&amp;gt; &amp;lt;aop:before method=&amp;#34;beforeLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii..*.*(..))&amp;#34;/&amp;gt; &amp;lt;/aop:aspect&amp;gt; &amp;lt;/aop:config&amp;gt; Using Annotations @Aspect @Component public class LoggingAspect { @Before(&amp;#34;execution(* xyz.</description>
+    </item>
+    <item>
+      <title>Spring Notes (2) - Annotation-based IOC Configuration</title>
+      <link>https://m1nttee.github.io/posts/spring-note-2/</link>
+      <pubDate>Tue, 09 Jun 2020 10:18:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-note-2/</guid>
+      <description>Annotation-based IOC Configuration XML Configuration First, you need to scan the packages.&#xA;&amp;lt;!-- Add namespace --&amp;gt; &amp;lt;beans xmlns=&amp;#34;http://www.springframework.org/schema/beans&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xmlns:context=&amp;#34;http://www.springframework.org/schema/context&amp;#34; xsi:schemaLocation=&amp;#34;http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd&amp;#34;&amp;gt; &amp;lt;!-- Scan package --&amp;gt; &amp;lt;context:component-scan base-package=&amp;#34;xyz.aiinirii&amp;#34;/&amp;gt; Common Annotations @Component @Component(&amp;#34;userService&amp;#34;) public class UserService { // ... } @Service @Service public class UserService { // ... } @Repository @Repository public class UserDao { // ... } @Controller @Controller public class UserController { // ... } @Autowired @Service public class UserService { @Autowired private UserDao userDao; } @Qualifier @Service public class UserService { @Autowired @Qualifier(&amp;#34;userDaoImpl&amp;#34;) private UserDao userDao; } @Value @Component public class ValueDemo { @Value(&amp;#34;test&amp;#34;) private String str; @Value(&amp;#34;${jdbc.</description>
+    </item>
+    <item>
+      <title>Spring Notes (1)</title>
+      <link>https://m1nttee.github.io/posts/spring-note/</link>
+      <pubDate>Sun, 07 Jun 2020 15:37:11 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/spring-note/</guid>
+      <description>Why Use Spring? For decoupling!&#xA;What is decoupling?&#xA;Coupling Refers to dependencies between programs:&#xA;Dependencies between classes Dependencies between methods Decoupling Reduce dependencies between programs Don&amp;rsquo;t depend on compile-time (error?), depend at runtime instead. Approach Use reflection to create objects. Read configuration files to get the fully qualified class names to create. IOC Container Details IOC: Inversion of Control&#xA;Keywords: Factory Pattern, Singleton Pattern, Thread Safety.&#xA;Singleton Pattern: Use static Map to share values.</description>
+    </item>
+    <item>
+      <title>Maven Project Directory Management</title>
+      <link>https://m1nttee.github.io/posts/maven-catalogue/</link>
+      <pubDate>Fri, 05 Jun 2020 13:46:15 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/maven-catalogue/</guid>
+      <description>Recently I&amp;rsquo;ve been trying to write projects with Maven, but unfortunately my skills aren&amp;rsquo;t good enough. I got stuck at the beginning by the Maven project directory arrangement.&#xA;Let me first introduce the situation. My project will be divided into several modules.&#xA;It&amp;rsquo;s roughly like this:&#xA;- project - module 1 - module 2 - module 3 And after thinking about it carefully, this problem can actually be divided into several small problems:</description>
+    </item>
+    <item>
+      <title>Project Naming Guide</title>
+      <link>https://m1nttee.github.io/posts/name-the-project/</link>
+      <pubDate>Tue, 02 Jun 2020 13:13:27 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/name-the-project/</guid>
+      <description>How to name a project? I&amp;rsquo;m sure all you coders often feel troubled by this. Here I&amp;rsquo;ve slightly organized some relatively standard naming rules, mainly for my own reference!&#xA;Feel free to supplement everyone :-)&#xA;1. Project Name All lowercase, for example cms, workdesk, jobserver, etc.&#xA;2. Java-related Naming Class naming: First letter of each syllable word capitalized, for example FieldInfo, Expression, etc.&#xA;Regular variables (including variable reference naming in Spring): First word lowercase, then first letter of each subsequent word capitalized, for example: password, primaryFlag</description>
+    </item>
+    <item>
+      <title>Mybatis Notes</title>
+      <link>https://m1nttee.github.io/posts/mybatis-notes/</link>
+      <pubDate>Sat, 30 May 2020 17:34:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/posts/mybatis-notes/</guid>
+      <description>Finally, I finished the month-long DDL battle and picked up my old love again.&#xA;In the next few days, I&amp;rsquo;ll go through the process: Mybatis -&amp;gt; Spring -&amp;gt; Spring MVC!&#xA;1. XML Configuration and Basic CRUD with XML Maven XML Dependencies &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;4.13&amp;lt;/version&amp;gt; &amp;lt;scope&amp;gt;test&amp;lt;/scope&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;log4j&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;log4j&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.12&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;mysql&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mysql-connector-java&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;8.0.19&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.mybatis&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;mybatis&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;3.5.5&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; Mybatis Config XML &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;UTF-8&amp;#34; ?</description>
+    </item>
+  </channel>
+</rss>

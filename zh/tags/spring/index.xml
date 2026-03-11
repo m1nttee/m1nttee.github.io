@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring on 陈明天</title>
+    <link>https://m1nttee.github.io/zh/tags/spring/</link>
+    <description>Recent content in Spring on 陈明天</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Wed, 10 Jun 2020 16:31:08 +0000</lastBuildDate>
+    <atom:link href="https://m1nttee.github.io/zh/tags/spring/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring 笔记（四）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-4/</link>
+      <pubDate>Wed, 10 Jun 2020 16:31:08 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-4/</guid>
+      <description>收藏 有关事务传播行为：https://segmentfault.com/a/1190000013341344&#xA;有关事务隔离行为：&#xA;isolation：用于指定事务的隔离级别。默认是DEFALUT，表示使用数据库的默认隔离级别。 propagation：用于指定事物的传播行为，默认值是REQUIRED，这是增删改的选择。查询可用SUPPORTS。 read-only：用于指定事务是否只读，查询为true，默认为false。 timeout：用于指定事务的超时时间，默认为-1永不超时。以秒为单位。 rollback-for：用于指定一个异常，当产生这个异常时，事务回滚，产生其他异常时，事务不回滚。没有默认值，表示任何异常都会滚。 no-rollback-for：用于指定一个异常，当产生这个异常时，事务不回滚，产生其他异常时，事务回滚。没有默认值，表示任何异常都会滚。 </description>
+    </item>
+    <item>
+      <title>Spring 笔记（三）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-3/</link>
+      <pubDate>Wed, 10 Jun 2020 09:00:00 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-3/</guid>
+      <description>AOP: Aspect Oriented Programing 面向切面编程&#xA;使用动态代理实现AOP&#xA;传统方法：&#xA;基于接口的动态代理：Proxy.newProxyInstance 基于子类的动态代理：Enhancer.create 术语：&#xA;JoinPoint（连接点）：所代理类的所有方法。 Pointcut（切入点）：被增强的方法是切入点。 Advice（通知/增强）：拦截到JoinPoint之后要做的事情。 前置通知 事务前 后置通知 事务后 异常通知 catch中 最终通知 finally中 环绕通知 整个invoke Target（目标对象\被代理对象） Introduction（引介）：特殊的通知 Weaving（织入）：根据目标对象创建代理对象的过程 Proxy（代理）：织入增强后产生的代理类 Aspect（切面）：切入点和通知的结合 基于Spring的AOP编程 基于XML的AOP 配置XML文件 &amp;lt;bean id=&amp;#34;logger&amp;#34; class=&amp;#34;xyz.aiinirii.spring.utils.Logger&amp;#34;/&amp;gt; &amp;lt;aop:config&amp;gt; &amp;lt;aop:aspect id=&amp;#34;logAdvice&amp;#34; ref=&amp;#34;logger&amp;#34;&amp;gt; &amp;lt;!-- 类比在事务之前所做的事情 --&amp;gt; &amp;lt;aop:before method=&amp;#34;beforePrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 类比在事务成功之后所做的事情 例如 commit --&amp;gt; &amp;lt;aop:after-returning method=&amp;#34;afterReturningPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 例如回滚 --&amp;gt; &amp;lt;aop:after-throwing method=&amp;#34;afterThrowingPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;!-- 例如关闭链接 --&amp;gt; &amp;lt;aop:after method=&amp;#34;afterPrintLog&amp;#34; pointcut=&amp;#34;execution(* xyz.aiinirii.spring.service.impl.*.*(..))&amp;#34;/&amp;gt; &amp;lt;/aop:aspect&amp;gt; &amp;lt;/aop:config&amp;gt; 运行效果，saveAccount方法得到了增强：</description>
+    </item>
+    <item>
+      <title>Spring 笔记（二）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note-2/</link>
+      <pubDate>Tue, 09 Jun 2020 10:18:31 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note-2/</guid>
+      <description>基于注解的IOC配置 xml配置 需要首先扫描包。&#xA;&amp;lt;!-- 添加命名空间 --&amp;gt; &amp;lt;beans xmlns=&amp;#34;http://www.springframework.org/schema/beans&amp;#34; xmlns:xsi=&amp;#34;http://www.w3.org/2001/XMLSchema-instance&amp;#34; xmlns:context=&amp;#34;http://www.springframework.org/schema/context&amp;#34; xsi:schemaLocation=&amp;#34;http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd&amp;#34;&amp;gt; &amp;lt;!-- 扫描包 --&amp;gt; &amp;lt;context:component-scan base-package=&amp;#34;xyz.aiinirii&amp;#34;/&amp;gt; 注解格式 @Component（是以下三种注解的父类）： 作用：把当前类对象存入IOC中 属性： value：用于指定bean的ID，默认值是当前类名首字母小写。 @Controller：表现层 @Service：业务层 @Repository：持久层 以上四种注释方式仅仅名字不同，这样区分可以让我们的三层对象更加清晰。&#xA;注解注入 Bean 类型 @Autowired：&#xA;根据类型注入，只要容器中有唯一一个bean对象的类型和要注入的变量类型匹配，就注入成功。 如果有两个匹配类型，那么就按照变量名称来筛选bean id（选那个和bean id一样的）。 @Qualifier：&#xA;不能独立使用&#xA;@Autowired @Qualifier(&amp;#34;BeanId&amp;#34;) private BeanClass beanName = null; @Source:&#xA;独立使用&#xA;@Resource(&amp;#34;BeanId&amp;#34;) private BeanClass beanName = null; 基本类型和String类型 @Value： 属性： value：用SpEL（spring的EL表达式）方式写 - ${param} 集合类型 只能用xml实现&#xA;其他注解 作用范围 - @Scope - 同上次笔记中的scope 初始化 - @PostConstruct - 初始化对象 销毁 - @PreDestory - 销毁对象 配置文件（@Configuration） @Configuration @ComponentScan(&amp;#34;PackageName&amp;#34;) public class Configuration { @Bean(name = &amp;#34;BeanId&amp;#34;) public BeanClass createBeanMethod(ParamClass param){ return beanObject; } @Bean(name = &amp;#34;param&amp;#34;) publi ParamClass createParamMethod() { return paramObject; } } 此时构造ApplicationContext时需要选择：</description>
+    </item>
+    <item>
+      <title>Spring 笔记（一）</title>
+      <link>https://m1nttee.github.io/zh/posts/spring-note/</link>
+      <pubDate>Sun, 07 Jun 2020 15:37:11 +0000</pubDate>
+      <guid>https://m1nttee.github.io/zh/posts/spring-note/</guid>
+      <description>为什么要用 Spring 为了解耦！&#xA;那么何为解耦？&#xA;耦合 指程序间的依赖关系：&#xA;包括类之间的依赖&#xA;包括方法之间的依赖&#xA;解耦 降低程序间的依赖关系&#xA;做到编译的时候不依赖（报错？），运行时才依赖。&#xA;思路 用反射来创建对象。 读取配置文件来读取要创建的对象的全限定类名。 IOC 容器详解 IOC: Inversion of Control&#xA;关键词：工厂模式，单例模式，线程安全。&#xA;单例模式实现思路：新建静态 Map 共享 value 。 原来：&#xA;private IUserDao userDao = new UserDaoImpl(); IOC 实现：&#xA;private IUserDao userDao = (IUserDao) BeanFactory.getBean(&amp;#34;userDao&amp;#34;); 作用：控制反转，将控制权转移给 BeanFactory，从而割断与 Dao 层的直接联系，从而达到解耦。&#xA;注：以上的例子里，userDao 的新建对象任务已经交给了工厂。这样操作之后，编译时不会有依赖，但是运行时会有依赖。&#xA;IOC 的本质：把创建对象的权力交给框架。&#xA;Spring 中的 IOC ApplicationContext 的三个常用实现类：&#xA;ClassPathXmlApplicationContext：加载类路径下的配置文件，必须要在类路径下，否则免谈。（常用） FileSystemXmlApplicationContext：加载磁盘任意路径下的配置文件。 AnnotationConfigApplicationContext：用于读取注解容器。（常用） ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&amp;#34;applicationContext.xml&amp;#34;); // 运行这行时已经创建了对象。 IAccountService accountService = applicationContext.getBean(&amp;#34;accountService&amp;#34;, IAccountService.class); IAccountDao accountDao = applicationContext.</description>
+    </item>
+  </channel>
+</rss>

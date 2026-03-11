@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design Pattern - Prototype Pattern | Mingtian Chen</title>
+  <meta name="description" content="Software Engineer">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="alternate" type="application/rss+xml" title="Mingtian Chen" href="https://m1nttee.github.io/index.xml">
+  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <script>mermaid.initialize({ startOnLoad: true });</script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <a href="/" class="avatar-link">
+          <img src="/img/avatar.png" alt="Mingtian Chen" class="avatar">
+        </a>
+        <h1 class="site-name"><a href="/">Mingtian Chen</a></h1>
+        <p class="site-tagline">Software Engineer</p>
+        <nav class="site-nav">
+          
+          
+          
+            
+              <a href="/">About</a>
+            
+              <a href="/posts/">Blog</a>
+            
+          
+        </nav>
+        <div class="social-links">
+          <a href="mailto:martychen.work@gmail.com">Email</a>
+          <a href="https://github.com/m1nttee" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://linkedin.com/in/mingtian-chen" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <div class="lang-switch">
+          
+            
+              <a href="/zh/posts/design-pattern-prototype-pattern/">中文</a>
+            
+          
+        </div>
+      </div>
+    </aside>
+    <main class="content">
+      
+<article class="post">
+  
+  <header class="post-header">
+    <h1>Design Pattern - Prototype Pattern</h1>
+    <time>October 25, 2021</time>
+  </header>
+  <div class="post-content">
+    <h1 id="01-prototype-pattern">01 Prototype Pattern</h1>
+<h2 id="background">Background</h2>
+<p>When writing code, we might encounter these scenarios:</p>
+<ol>
+<li>After performing a database query, we successfully create an entity, and at this point, we need to obtain another entity from the same data source using the same method. If we know that others haven&rsquo;t performed any write operations on the data source, the best approach is to directly copy the already queried data without going through the data source. This way, we can avoid occupying expensive database connection resources again and avoid high-latency database query requests.</li>
+<li>Or, after going through multiple recursive reflections with great difficulty, we successfully analyze a class and get the object corresponding to its parsing result. If we need to use this parsed object at this time, the best approach is to use this object as a prototype and directly copy its various properties, thus skipping the extremely time-consuming Java reflection process and quickly generating the parsing result object.</li>
+<li>Or, as a programmer, after decorating one cell in an Excel table with various styles, although we enjoy the beautification process, after finishing the beautification, if we need to re-assign the same style to a second cell or another cell with the same style in another Excel file, we would feel considerable pain. The best approach at this time is to copy from the already beautified cell, and then just slightly modify the text in the cell.</li>
+</ol>
+<p>Therefore, Prototype Pattern came into being. As one of the creational patterns, it can save some expensive costs during the creation process and replace it with simple and mindless cloning.</p>
+<h2 id="analysis">Analysis</h2>
+<p>Here is its UML diagram:</p>
+<p><img alt="Prototype UML" src="/img/1920px-Prototype_UML.svg.png"></p>
+<p>It essentially performs a cloning operation, borrowing an existing entity, performing a clone, thereby creating an identical entity. The UML diagram is very simple, but in practice we usually don&rsquo;t use it alone. Instead, we often use it as a auxiliary tool to quickly and accurately create a new object.</p>
+<h2 id="example">Example</h2>
+<p>In Spring Boot, we have a class called BeanDefinition. The objects corresponding to this class are all related to Bean creation, which can be said to be a very core class. For example:</p>
+<ul>
+<li>
+<p>In Spring&rsquo;s core method org.springframework.beans.factory.support.AbstractBeanFactory#doGetBean, when we need to create a new Bean object for the program to use, we first need to parse the class and generate the corresponding BeanDefinition object mbd (RootBeanDefinition).</p>
+<blockquote>
+<p>For those who don&rsquo;t know about mdb: mdb is a BeanDefinition object that contains many properties of this Bean that need to be specified during the configuration period - for example isPrototype, isSingleton, resolvedTargetType, and so on.</p>
+<p>And mdb will participate in this important pipeline:</p>
+<p>We set some characteristics of this Bean through xml files or Java annotations, such as its corresponding class and whether it is a singleton. Then we create a MutablePropertyValues object and turn the previous configuration into a key-value map. In this map, the key is the Java field name of the property in the Bean Definition, and the value is the value we specified. After successfully generating MutablePropertyValues, we generate beanDefinition through new RootBeanDefinition(className, null, mutablePropertyValues) and inject it into the ApplicationContext. This way, next time we need a Bean, we just need to execute applicationContext.getBean(className) to let the beanFactory generate the corresponding bean Object according to the beanDefinition&rsquo;s definition.</p>
+<pre class="mermaid">
+flowchart LR
+	1(xml/Java annotation) -->|File parsing and assignment| 2(MutablePropertyValues - a map)
+	2 -->|Construct BeanDefinition instance| 3(beanDefinition)
+	3 -->|Inject into container| 4(application context)
+	4 -->|getBean| 5(bean Object)
+</pre>
+</blockquote>
+<p>In this process, because xml/Java annotation parsing involves quite time-consuming file parsing and Java reflection processes, and the subsequent MutablePropertyValues -&gt; beanDefinition process also requires using Java reflection technology to assign values to beanDefinition. Therefore, the time consumption before beanDefinition generation is considerable. Clever you may have discovered that this can be avoided because our configuration files don&rsquo;t change. Of course, Spring is not stupid either. In its source code, for each class, it only generates a beanDefinition object once. After that, it uses the method org.springframework.beans.factory.support.RootBeanDefinition#RootBeanDefinition(org.springframework.beans.factory.support.RootBeanDefinition) to copy the RootBeanDefinition for use.</p>
+<p>Someone might ask, this is a constructor method, shouldn&rsquo;t the Prototype Pattern we talk about be implemented using clone? Don&rsquo;t worry, please take a close look at the implementation of this method. It actually does this cloning:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">RootBeanDefinition</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">extends</span><span style="color:#bbb"> </span>AbstractBeanDefinition<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">RootBeanDefinition</span>(RootBeanDefinition<span style="color:#bbb"> </span>original)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">super</span>(original);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">decoratedDefinition</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>original.<span style="color:#008080">decoratedDefinition</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">qualifiedElement</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>original.<span style="color:#008080">qualifiedElement</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">allowCaching</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>original.<span style="color:#008080">allowCaching</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">isFactoryMethodUnique</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>original.<span style="color:#008080">isFactoryMethodUnique</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">targetType</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>original.<span style="color:#008080">targetType</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">this</span>.<span style="color:#008080">factoryMethodToIntrospect</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>original.<span style="color:#008080">factoryMethodToIntrospect</span>;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span><span style="color:#000;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">abstract</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">AbstractBeanDefinition</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">extends</span><span style="color:#bbb"> </span>BeanMetadataAttributeAccessor<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">implements</span><span style="color:#bbb"> </span>BeanDefinition,<span style="color:#bbb"> </span>Cloneable<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#000;font-weight:bold">protected</span><span style="color:#bbb"> </span><span style="color:#900;font-weight:bold">AbstractBeanDefinition</span>(BeanDefinition<span style="color:#bbb"> </span>original)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>setParentName(original.<span style="color:#008080">getParentName</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>setBeanClassName(original.<span style="color:#008080">getBeanClassName</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>setScope(original.<span style="color:#008080">getScope</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>setAbstract(original.<span style="color:#008080">isAbstract</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>setFactoryBeanName(original.<span style="color:#008080">getFactoryBeanName</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>setFactoryMethodName(original.<span style="color:#008080">getFactoryMethodName</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>setRole(original.<span style="color:#008080">getRole</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>setSource(original.<span style="color:#008080">getSource</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>copyAttributesFrom(original);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(original<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">instanceof</span><span style="color:#bbb"> </span>AbstractBeanDefinition)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>AbstractBeanDefinition<span style="color:#bbb"> </span>originalAbd<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>(AbstractBeanDefinition)<span style="color:#bbb"> </span>original;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(originalAbd.<span style="color:#008080">hasBeanClass</span>())<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">				</span>setBeanClass(originalAbd.<span style="color:#008080">getBeanClass</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(originalAbd.<span style="color:#008080">hasConstructorArgumentValues</span>())<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">				</span>setConstructorArgumentValues(<span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>ConstructorArgumentValues(original.<span style="color:#008080">getConstructorArgumentValues</span>()));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(originalAbd.<span style="color:#008080">hasPropertyValues</span>())<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">				</span>setPropertyValues(<span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>MutablePropertyValues(original.<span style="color:#008080">getPropertyValues</span>()));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(originalAbd.<span style="color:#008080">hasMethodOverrides</span>())<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">				</span>setMethodOverrides(<span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>MethodOverrides(originalAbd.<span style="color:#008080">getMethodOverrides</span>()));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>Boolean<span style="color:#bbb"> </span>lazyInit<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">=</span><span style="color:#bbb"> </span>originalAbd.<span style="color:#008080">getLazyInit</span>();<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span><span style="color:#000;font-weight:bold">if</span><span style="color:#bbb"> </span>(lazyInit<span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">!=</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">null</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">				</span>setLazyInit(lazyInit);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setAutowireMode(originalAbd.<span style="color:#008080">getAutowireMode</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setDependencyCheck(originalAbd.<span style="color:#008080">getDependencyCheck</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setDependsOn(originalAbd.<span style="color:#008080">getDependsOn</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setAutowireCandidate(originalAbd.<span style="color:#008080">isAutowireCandidate</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setPrimary(originalAbd.<span style="color:#008080">isPrimary</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>copyQualifiersFrom(originalAbd);<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setInstanceSupplier(originalAbd.<span style="color:#008080">getInstanceSupplier</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setNonPublicAccessAllowed(originalAbd.<span style="color:#008080">isNonPublicAccessAllowed</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setLenientConstructorResolution(originalAbd.<span style="color:#008080">isLenientConstructorResolution</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setInitMethodName(originalAbd.<span style="color:#008080">getInitMethodName</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setEnforceInitMethod(originalAbd.<span style="color:#008080">isEnforceInitMethod</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setDestroyMethodName(originalAbd.<span style="color:#008080">getDestroyMethodName</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setEnforceDestroyMethod(originalAbd.<span style="color:#008080">isEnforceDestroyMethod</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setSynthetic(originalAbd.<span style="color:#008080">isSynthetic</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setResource(originalAbd.<span style="color:#008080">getResource</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span><span style="color:#000;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setConstructorArgumentValues(<span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>ConstructorArgumentValues(original.<span style="color:#008080">getConstructorArgumentValues</span>()));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setPropertyValues(<span style="color:#000;font-weight:bold">new</span><span style="color:#bbb"> </span>MutablePropertyValues(original.<span style="color:#008080">getPropertyValues</span>()));<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setLazyInit(original.<span style="color:#008080">isLazyInit</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">			</span>setResourceDescription(original.<span style="color:#008080">getResourceDescription</span>());<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">		</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">	</span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>...<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>As can be seen, with this, the overhead is indeed much less. No file parsing is needed, and no Java reflection either.</p>
+</li>
+</ul>
+
+  </div>
+</article>
+
+      <footer class="site-footer">
+        <p>&copy; 2026 Mingtian Chen</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
